@@ -1,11 +1,26 @@
 from django.db import models
 from apps.core.models.base_model import BaseModel
+from apps.core.constants.default_values import AppointmentStatus
 
-class Appoinment(BaseModel):
-    appointment_date = models.DateTimeField(verbose_name="Appointment Date")
-    patient_name = models.CharField(max_length=255, verbose_name="Patient Name")
-    doctor_name = models.CharField(max_length=255, verbose_name="Doctor Name")
-    notes = models.TextField(blank=True, null=True, verbose_name="Notes")
+class Appointment(BaseModel):
+    appointment_date = models.DateField()
+    appointment_time = models.TimeField()
+    appointment_status = models.IntegerField(
+        choices=[(status.value, status.name) for status in AppointmentStatus],
+        default=AppointmentStatus.PENDING.value
+    )
+    patient = models.ForeignKey(
+        'accounts.User',
+        on_delete=models.CASCADE,
+        related_name='fk_patient_appointment_user_id'
+    )
+    doctor = models.ForeignKey(
+        'accounts.User',
+        on_delete=models.CASCADE,
+        related_name='fk_doctor_appointment_user_id'
+    )
+    
+    notes = models.TextField(max_length=255, blank=True, null=True)
 
     class Meta:
         db_table = 'appointment'
@@ -14,5 +29,4 @@ class Appoinment(BaseModel):
         ordering = ['appointment_date']
 
     def __str__(self):
-        return f"{self.patient_name} - {self.doctor_name} on {self.appointment_date}"
-
+        return f"{self.patient.get_full_name()} - {self.doctor.user.get_full_name()} on {self.appointment_date}"

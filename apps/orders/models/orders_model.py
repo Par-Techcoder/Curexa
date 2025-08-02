@@ -1,10 +1,14 @@
 from django.db import models
 from apps.core.models.base_model import BaseModel
+from apps.core.constants.default_values import OrderStatus
 
-class Orders(BaseModel):
-    order_id = models.CharField(max_length=100, unique=True, verbose_name="Order ID")
-    customer_name = models.CharField(max_length=255, verbose_name="Customer Name")
-    order_date = models.DateTimeField(auto_now_add=True, verbose_name="Order Date")
+class Order(BaseModel):
+    customer = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='fk_orders_orders_user_id')
+    order_date = models.DateTimeField(auto_now_add=True)
+    order_status = models.IntegerField(
+        choices=[(status, status.value) for status in OrderStatus ],
+        default=OrderStatus.PROCESSING.value,
+    )
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Total Amount")
 
     class Meta:
@@ -14,5 +18,5 @@ class Orders(BaseModel):
         ordering = ['-order_date']
 
     def __str__(self):
-        return f"Order {self.order_id} by {self.customer_name}"
+        return f"Order {self.id} by {self.customer_name}"
     
