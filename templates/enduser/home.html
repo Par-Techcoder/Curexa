@@ -38,6 +38,12 @@
         .footer {
             background-color: #f8f9fa;
         }
+        .navbar-brand img {
+            background: none;
+            max-height: 70px;
+            width: auto;
+        }
+
     </style>
 </head>
 <body>
@@ -45,7 +51,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <img src="{%  static 'images/curexa_logo.jpg' %}" alt="Curexa Logo">
+                <img src="{%  static 'images/curexa_logo_transparent.png' %}" alt="Curexa Logo">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -136,6 +142,84 @@
                 </div>
             </div>
         </div>
+    </section>
+
+    <section class="container my-5">
+    <h3 class="mb-4 fw-bold">Browse by Health Conditions</h3>
+    <div class="row row-cols-2 row-cols-md-4 row-cols-lg-5 g-3">
+        
+        <!-- Card Item -->
+        <div class="col">
+        <div class="border rounded p-3 text-center">
+            <img src="{% static 'images/icons/diabetes.png' %}" alt="Diabetes Care" class="mb-2" height="40">
+            <div>Diabetes Care</div>
+        </div>
+        </div>
+
+        <div class="col">
+        <div class="border rounded p-3 text-center">
+            <img src="{% static 'images/icons/cardiac.png' %}" alt="Cardiac Care" class="mb-2" height="40">
+            <div>Cardiac Care</div>
+        </div>
+        </div>
+
+        <div class="col">
+        <div class="border rounded p-3 text-center">
+            <img src="{% static 'images/icons/stomach.png' %}" alt="Stomach Care" class="mb-2" height="40">
+            <div>Stomach Care</div>
+        </div>
+        </div>
+
+        <div class="col">
+        <div class="border rounded p-3 text-center">
+            <img src="{% static 'images/icons/pain.png' %}" alt="Pain Relief" class="mb-2" height="40">
+            <div>Pain Relief</div>
+        </div>
+        </div>
+
+        <div class="col">
+        <div class="border rounded p-3 text-center">
+            <img src="{% static 'images/icons/liver.png' %}" alt="Liver Care" class="mb-2" height="40">
+            <div>Liver Care</div>
+        </div>
+        </div>
+
+        <div class="col">
+        <div class="border rounded p-3 text-center">
+            <img src="{% static 'images/icons/oral.png' %}" alt="Oral Care" class="mb-2" height="40">
+            <div>Oral Care</div>
+        </div>
+        </div>
+
+        <div class="col">
+        <div class="border rounded p-3 text-center">
+            <img src="{% static 'images/icons/respiratory.png' %}" alt="Respiratory" class="mb-2" height="40">
+            <div>Respiratory</div>
+        </div>
+        </div>
+
+        <div class="col">
+        <div class="border rounded p-3 text-center">
+            <img src="{% static 'images/icons/sexual.png' %}" alt="Sexual Health" class="mb-2" height="40">
+            <div>Sexual Health</div>
+        </div>
+        </div>
+
+        <div class="col">
+        <div class="border rounded p-3 text-center">
+            <img src="{% static 'images/icons/elderly.png' %}" alt="Elderly Care" class="mb-2" height="40">
+            <div>Elderly Care</div>
+        </div>
+        </div>
+
+        <div class="col">
+        <div class="border rounded p-3 text-center">
+            <img src="{% static 'images/icons/cold.png' %}" alt="Cold & Immunity" class="mb-2" height="40">
+            <div>Cold & Immunity</div>
+        </div>
+        </div>
+
+    </div>
     </section>
 
     <!-- Doctor Consultation Section -->
@@ -280,7 +364,7 @@
             <hr>
             <div class="row">
                 <div class="col-md-6">
-                    <p class="mb-0">© 2023 Curexa. All rights reserved.</p>
+                    <p class="mb-0">© 2025 Curexa. All rights reserved.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <p class="mb-0">Made with <i class="fas fa-heart text-danger"></i> in India</p>
