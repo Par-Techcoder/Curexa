@@ -9,6 +9,7 @@ class Availability(BaseModel):
     end_time = models.TimeField()
 
     class Meta:
+        db_table = 'availability'
         unique_together = ('doctor', 'day_of_week', 'start_time')
         ordering = ['day_of_week', 'start_time']
 
