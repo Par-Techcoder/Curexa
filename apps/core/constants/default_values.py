@@ -49,7 +49,12 @@ class InventoryAction(Enum):
     REMOVED = 2
     RETURNED = 3
     DAMAGED = 4
-    
+
+class ResponseMessageType(Enum):
+    SUCCESS = "success"
+    ERROR = "error"
+    WARNING = "warning"
+    INFO = "info"    
     
 DAYS_OF_WEEK = [
     ('Monday', 'Monday'),

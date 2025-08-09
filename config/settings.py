@@ -89,6 +89,15 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Caching
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "otp-cache"
+    }
+}
+
+
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -111,3 +120,13 @@ STATICFILES_DIRS = [
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Email settings
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = env("EMAIL_ID")
+EMAIL_HOST_PASSWORD = env("EMAIL_PASSWORD")
+SITE_URL = env("SITE_URL", default="http://localhost:8000")
+DEFAULT_FROM_EMAIL = env("EMAIL_ID")
