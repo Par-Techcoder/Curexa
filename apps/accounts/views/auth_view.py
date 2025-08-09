@@ -2,19 +2,12 @@ from django.views import View
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from apps.core.utilities.otp_service import send_otp_code, verify_otp_code
+from django.contrib.auth import login
+from apps.accounts.services import user_service
 
-
-class RegisterView(View):
-    def get(self, request):
-        return render(request, 'auth/register.html')
-
-    def post(self, request):
-        # Handle registration logic here
-        return redirect('home')  # Redirect to home after registration
-    
 class LoginView(View):
     def get(self, request):
-        return render(request, 'enduser/login.html')
+        return
 
     def post(self, request):
         # Handle login logic here
@@ -38,6 +31,14 @@ def verify_otp_view(request):
             return JsonResponse({"status": "error", "message": "Missing fields"}, status=400)
 
         if verify_otp_code(contact, otp_code, purpose="login"):
-            return JsonResponse({"status": "success", "message": "OTP verified"})
+            
+             # Create or fetch user
+            user, created = user_service.user_create_or_check(contact)
+
+            # Log the user in (sets session cookie)
+            login(request, user)
+            
+            # OTP verified successfully
+            return JsonResponse({"status": "success", "message": "OTP verified"})            
         else:
             return JsonResponse({"status": "error", "message": "Invalid or expired OTP"}, status=400)
