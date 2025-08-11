@@ -1,0 +1,418 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">    
+  <title>{% block title %}Curexa Admin{% endblock %}</title>
+
+  <!-- Bootstrap CSS & Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha256-3gQJhtmj7YnV1fmtbVcnAV6eI4ws0Tr48bVZCThtCGQ=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha256-PI8n5gCcz9cQqQXm3PEtDuPG8qx9oFsFctPg0S5zb8g=" crossorigin="anonymous">
+
+  <!-- Bootstrap Bundle & jQuery -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" integrity="sha256-9kPW/n5nn53j4WMRYAxe9c1rCY96Oogo/MKSVdKzPmI=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+  <!-- Font-Awesome CSS & Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/fontawesome.min.css" integrity="sha256-TBe0l9PhFaVR3DwHmA2jQbUf1y6yQ22RBgJKKkNkC50=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/js/all.min.js" integrity="sha256-BAR0H3Qu2PCfoVr6CtZrcnbK3VKenmUF9C6IqgsNsNU=" crossorigin="anonymous"></script>
+
+  <!-- Toast Message Implemention-->
+   
+  <script>
+    window.djangoMessages = [
+      {% for message in messages %}
+        {
+          "tags": "{{ message.tags }}",
+          "message": "{{ message|escapejs }}"
+        }{% if not forloop.last %},{% endif %}
+      {% endfor %}
+    ];
+    console.log("djangoMessages:", window.djangoMessages);  // Debug output
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.17.2/dist/sweetalert2.all.min.js" integrity="sha256-lCHT/LfuZjRp+PdpWns/vKrnSn367D/g1E6Ju18wiH0=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.17.2/dist/sweetalert2.min.css" integrity="sha256-SCRy3fXoOamBaidKByHs9iJVLYJ65R/v6ycZNN4JhmE=" crossorigin="anonymous">
+  
+  <!-- Include external toast script -->
+  <script src="{% static 'js/toast_message.js' %}"></script>
+<!-- End Toast -->
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Apply saved theme from localStorage if available
+    if (localStorage.getItem("theme") === "dark") {
+      document.body.classList.add("dark-theme");
+      document.getElementById("themeIcon").classList.replace("bi-moon", "bi-sun");
+    }
+    
+    const themeToggle = document.getElementById("themeToggle");
+    const themeIcon = document.getElementById("themeIcon");
+    
+    if (themeToggle) {
+      themeToggle.addEventListener("click", function() {
+        // Toggle the dark theme class on body
+        document.body.classList.toggle("dark-theme");
+        
+        // Update icon and localStorage based on the new theme state
+        if (document.body.classList.contains("dark-theme")) {
+          themeIcon.classList.replace("bi-moon", "bi-sun");
+          localStorage.setItem("theme", "dark");
+        } else {
+          themeIcon.classList.replace("bi-sun", "bi-moon");
+          localStorage.setItem("theme", "light");
+        }
+      });
+    }
+  });
+</script>
+
+ <style>
+
+    body {
+      background-color: #CCFFFF;
+    }
+    .navbar {
+      z-index: 1030;
+    }
+    /* Sidebar: collapsed = 60px; expanded = 250px */
+    #sidebar {
+      position: fixed;
+      top: 56px; /* below navbar */
+      left: 0;
+      height: calc(100vh - 56px);
+      background-color: #fff;
+      border-right: 1px solid #ddd;
+      transition: width 0.3s ease;
+      overflow: visible; /* allow submenu to pop outside */
+      width: 60px;
+      z-index: 1020;
+    }
+    #sidebar.expanded {
+      width: 250px;
+    }
+    /* Profile Section */
+    .profile-section {
+      padding: 1rem;
+      border-bottom: 1px solid #ddd;
+      background-color: #f8f9fa;
+      display: flex;
+      align-items: center;
+    }
+    .profile-section img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+    }
+    #sidebar .profile-text {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      margin-left: 10px;
+      white-space: nowrap;
+    }
+    #sidebar.expanded .profile-text {
+      opacity: 1;
+    }
+    /* Menu Items */
+    #sidebar .list-group-item {
+      border: none;
+      height: 50px;
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      position: relative;
+      transition: background-color 0.3s ease;
+    }
+    .sidebar-icon {
+      display: inline-block;
+      width: 30px;
+      text-align: center;
+    }
+    .sidebar-text {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      margin-left: 10px;
+      white-space: nowrap;
+    }
+    #sidebar.expanded .sidebar-text {
+      opacity: 1;
+    }
+    /* Dropdown caret: hidden in collapsed mode, visible in expanded mode */
+    #sidebar:not(.expanded) .sidebar-caret {
+      display: none;
+    }
+    #sidebar.expanded .sidebar-caret {
+      display: inline-block;
+      margin-left: auto;
+    }
+    /* Force parent items in expanded mode to use flex layout */
+    #sidebar.expanded .list-group-item.parent-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    /* Sidebar Dropdown container */
+    .sidebar-dropdown {
+      position: relative;
+    }
+    /* Highlight effect for parent items in collapsed mode */
+    #sidebar:not(.expanded) .sidebar-dropdown:hover > .list-group-item,
+    #sidebar:not(.expanded) .dashboard:hover {
+      background-color: #e0e0e0;
+      border-right: 4px solid #007bff;
+    }
+    /* Custom submenu styles */
+    .submenu {
+      display: none;
+    }
+    /* In collapsed mode, show submenu on hover attached to the parent container */
+    #sidebar:not(.expanded) .sidebar-dropdown:hover .submenu {
+      display: block !important;
+      position: absolute;
+      top: 0;
+      left: 60px; /* right next to collapsed sidebar */
+      width: 200px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+      z-index: 1100;
+    }
+    /* Expanded mode: animate submenu open/close */
+    #sidebar.expanded .sidebar-dropdown .submenu {
+      display: block;  /* Always block in expanded mode */
+      position: static;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+    }
+    #sidebar.expanded .sidebar-dropdown.open .submenu {
+      max-height: 100px; /* Adjust based on content height */
+      opacity: 1;
+    }
+    /* Add header and divider for submenu pop-up in collapsed mode */
+    .submenu-header {
+      font-weight: bold;
+      padding: 0.5rem 1rem;
+      background-color: #f8f9fa;
+    }
+    .submenu-divider {
+      margin: 0;
+      border-top: 1px solid #ddd;
+    }
+    /* Hide submenu header and divider in expanded mode */
+    #sidebar.expanded .submenu .submenu-header,
+    #sidebar.expanded .submenu .submenu-divider {
+      display: none;
+    }
+    /* Style submenu links */
+    .submenu a {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: #000;
+      text-decoration: none;
+      background-color: #f1f1f1;
+    }
+    .submenu a:hover {
+      background-color: #e2e2e2;
+    }
+    /* Dashboard hover tooltip effect in collapsed mode */
+    #sidebar:not(.expanded) .dashboard:hover::after {
+      content: attr(data-title);
+      position: absolute;
+      left: 60px;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: #fff;
+      border: 1px solid #ddd;
+      padding: 0.75rem 1rem;
+      min-width: 120px;
+      z-index: 1100;
+      white-space: nowrap;
+      font-size: 14px;
+    }
+    /* Main Content Area */
+    .center-bodycontent {
+      margin-top: 90px;
+      margin-left: 60px;
+      transition: margin-left 0.3s ease;
+      height: calc(100vh - 56px);
+    }
+    .center-bodycontent.expanded {
+      margin-left: 250px;
+    }
+    .list-group-item:first-child {
+      border-top-left-radius: 0 !important;
+      border-top-right-radius: 0 !important;
+    }
+
+    .sidebar-icon {
+      display: inline-block;
+      width: 30px;
+      text-align: center;
+    }
+    
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-info fixed-top">
+    <div class="container-fluid">
+      <button class="btn btn-info me-3" id="sidebarToggle">
+        <i class="bi bi-list"></i>
+      </button>
+      {% block navbar_extra %}{% endblock %}
+      <div class="ms-auto">
+        <!-- Theme toggle button -->
+        <button id="themeToggle" class="btn btn-outline-light me-2">
+          <i id="themeIcon" class="bi bi-moon"></i>
+        </button>
+        <!-- Logout button -->
+        <a href="" class="btn btn-outline-light me-2">Logout</a>
+      </div>
+    </div>
+  </nav>
+  
+
+  <!-- Sidebar -->
+  <div id="sidebar">
+    <!-- Profile Section -->
+    <div class="profile-section">
+      <img src="" alt="Profile" class="rounded-circle">
+      <div class="profile-text"> </div>
+    </div>
+    <!-- Menu -->
+    <div class="list-group">
+      <!-- Dashboard with hover tooltip and highlight effect -->
+      <a href="{% url 'admin_dashboard' %}" class="list-group-item dashboard" data-title="Dashboard">
+        <i class="bi bi-speedometer2 sidebar-icon"></i>
+        <span class="sidebar-text">Dashboard</span>
+      </a>
+
+      <!-- Profile with submenu -->
+      <div class="sidebar-dropdown">
+        <a href="" class="list-group-item parent-item">
+          <i class="bi bi-person-circle sidebar-icon"></i>
+
+          <span class="sidebar-text">Profile</span>
+          <i class="bi bi-chevron-down sidebar-caret"></i>
+        </a>
+        <div class="submenu">
+          <div class="submenu-header">Profile</div>
+          <hr class="submenu-divider">
+          <a href=""><i class="bi bi-person-check me-3"></i>My Profile</a>
+          <a href=""><i class="bi bi-box-arrow-right me-3"></i>Log Out</a>
+        </div>
+      </div>
+
+      <!-- Users with submenu -->
+      <div class="sidebar-dropdown">
+        <a href="" class="list-group-item parent-item">
+          <i class="bi bi-people sidebar-icon"></i>
+          <span class="sidebar-text">Users</span>
+          <i class="bi bi-chevron-down sidebar-caret"></i>
+        </a>
+        <div class="submenu">
+          <div class="submenu-header">Users</div>
+          <hr class="submenu-divider">
+          <a href="">List</a>
+          <a href="">Create</a>
+        </div>
+      </div>
+      <!-- Garage with submenu -->
+      <div class="sidebar-dropdown">
+        <a href="" class="list-group-item parent-item">
+          <i class="bi bi-car-front sidebar-icon"></i>
+          <span class="sidebar-text">Garage</span>
+          <i class="bi bi-chevron-down sidebar-caret"></i>
+        </a>
+        <div class="submenu">
+          <div class="submenu-header">Garage</div>
+          <hr class="submenu-divider">
+          <a href="">List</a>
+          <a href="">Create</a>
+        </div>
+      </div>
+      <!-- Worker with submenu -->
+      <div class="sidebar-dropdown">
+        <a href="" class="list-group-item parent-item">
+          <i class="fas fa-hard-hat sidebar-icon"></i>
+          <span class="sidebar-text">Worker</span>
+          <i class="bi bi-chevron-down sidebar-caret"></i>
+        </a>
+        <div class="submenu">
+          <div class="submenu-header">Worker</div>
+          <hr class="submenu-divider">
+          <a href="">List</a>
+          <a href="">Create</a>
+        </div>
+      </div>
+      <!-- Service with submenu -->
+      <div class="sidebar-dropdown">
+        <a href="" class="list-group-item parent-item">
+          <i class="bi bi-gear-wide-connected sidebar-icon"></i>
+          <span class="sidebar-text">Service</span>
+          <i class="bi bi-chevron-down sidebar-caret"></i>
+        </a>
+        <div class="submenu">
+          <div class="submenu-header">Service</div>
+          <hr class="submenu-divider">
+          <a href="">List</a>
+          <a href="">Create</a>
+        </div>
+      </div>
+      <!-- Payment with submenu -->
+      <div class="sidebar-dropdown">
+        <a href="" class="list-group-item parent-item">
+          <i class="bi bi-cash-stack sidebar-icon"></i>
+          <span class="sidebar-text">Payment</span>
+          <i class="bi bi-chevron-down sidebar-caret"></i>
+        </a>
+        <div class="submenu">
+          <div class="submenu-header">Payment</div>
+          <hr class="submenu-divider">
+          <a href="">List</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="center-bodycontent" id="mainContent">
+    <main class="container">
+      {% block content %}
+      <!-- Page-specific content goes here -->
+      {% endblock %}
+    </main>
+  </div>
+
+  <script>
+    // Toggle sidebar expanded/collapsed state
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+
+    sidebarToggle.addEventListener('click', function() {
+      sidebar.classList.toggle('expanded');
+      mainContent.classList.toggle('expanded');
+    });
+
+    // In expanded mode, toggle submenu on click of parent item and close others
+    document.querySelectorAll('#sidebar .sidebar-dropdown .parent-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        if (sidebar.classList.contains('expanded')) {
+          e.preventDefault();
+          const currentDropdown = this.closest('.sidebar-dropdown');
+          // Close any other open submenus
+          document.querySelectorAll('#sidebar .sidebar-dropdown.open').forEach(dropdown => {
+            if (dropdown !== currentDropdown) {
+              dropdown.classList.remove('open');
+            }
+          });
+          currentDropdown.classList.toggle('open');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
