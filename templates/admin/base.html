@@ -263,10 +263,6 @@
       </button>
       {% block navbar_extra %}{% endblock %}
       <div class="ms-auto">
-        <!-- Theme toggle button -->
-        <button id="themeToggle" class="btn btn-outline-light me-2">
-          <i id="themeIcon" class="bi bi-moon"></i>
-        </button>
         <!-- Logout button -->
         <a href="" class="btn btn-outline-light me-2">Logout</a>
       </div>
@@ -309,63 +305,84 @@
       <div class="sidebar-dropdown">
         <a href="" class="list-group-item parent-item">
           <i class="bi bi-people sidebar-icon"></i>
-          <span class="sidebar-text">Users</span>
+          <span class="sidebar-text">User Management</span>
           <i class="bi bi-chevron-down sidebar-caret"></i>
         </a>
         <div class="submenu">
           <div class="submenu-header">Users</div>
           <hr class="submenu-divider">
-          <a href="">List</a>
-          <a href="">Create</a>
+          <a href="">All Users</a>
+          <a href="">Add New</a>
         </div>
       </div>
-      <!-- Garage with submenu -->
+
+      <!-- Doctors with submenu -->
       <div class="sidebar-dropdown">
         <a href="" class="list-group-item parent-item">
-          <i class="bi bi-car-front sidebar-icon"></i>
-          <span class="sidebar-text">Garage</span>
+          <i class="fas fa-user-md sidebar-icon"></i>
+          <span class="sidebar-text">Doctor Management</span>
           <i class="bi bi-chevron-down sidebar-caret"></i>
         </a>
         <div class="submenu">
-          <div class="submenu-header">Garage</div>
+          <div class="submenu-header">Doctors</div>
           <hr class="submenu-divider">
-          <a href="">List</a>
-          <a href="">Create</a>
+          <a href=""><i class="fas fa-list me-2"></i>All Doctors</a>
+          <a href=""><i class="fas fa-plus-circle me-2"></i>Add New</a>
         </div>
       </div>
-      <!-- Worker with submenu -->
+
+      <!-- Medicine with submenu -->
       <div class="sidebar-dropdown">
         <a href="" class="list-group-item parent-item">
-          <i class="fas fa-hard-hat sidebar-icon"></i>
-          <span class="sidebar-text">Worker</span>
+          <i class="fas fa-pills sidebar-icon"></i>
+          <span class="sidebar-text">Medicine Management</span>
           <i class="bi bi-chevron-down sidebar-caret"></i>
         </a>
         <div class="submenu">
-          <div class="submenu-header">Worker</div>
+          <div class="submenu-header">Medicines</div>
           <hr class="submenu-divider">
-          <a href="">List</a>
-          <a href="">Create</a>
+          <a href=""><i class="fas fa-capsules me-2"></i>Medicine List</a>
+          <a href=""><i class="fas fa-cube me-2"></i>Inventory</a>
+          <a href=""><i class="fas fa-tags me-2"></i>Categories</a>
         </div>
       </div>
-      <!-- Service with submenu -->
+
+      <!-- Orders with submenu -->
       <div class="sidebar-dropdown">
         <a href="" class="list-group-item parent-item">
-          <i class="bi bi-gear-wide-connected sidebar-icon"></i>
-          <span class="sidebar-text">Service</span>
+          <i class="fas fa-shopping-cart sidebar-icon"></i>
+          <span class="sidebar-text">Orders Management</span>
           <i class="bi bi-chevron-down sidebar-caret"></i>
         </a>
         <div class="submenu">
-          <div class="submenu-header">Service</div>
+          <div class="submenu-header">Orders</div>
           <hr class="submenu-divider">
-          <a href="">List</a>
-          <a href="">Create</a>
+          <a href=""><i class="fas fa-list me-2"></i>All Orders</a>
+          <a href=""><i class="fas fa-exchange-alt me-2"></i>Order Status</a>
         </div>
       </div>
-      <!-- Payment with submenu -->
+
+      <!-- Reports & Analytics -->
+      <div class="sidebar-dropdown">
+        <a href="" class="list-group-item parent-item">
+          <i class="fas fa-chart-line sidebar-icon"></i>
+          <span class="sidebar-text">Reports & Analytics</span>
+          <i class="bi bi-chevron-down sidebar-caret"></i>
+        </a>
+        <div class="submenu">
+          <div class="submenu-header">Reports</div>
+          <hr class="submenu-divider">
+          <a href=""><i class="fas fa-file-invoice-dollar me-2"></i>Sales Reports</a>
+          <a href=""><i class="fas fa-prescription-bottle-alt me-2"></i>Inventory Reports</a>
+          <a href=""><i class="fas fa-user-clock me-2"></i>Appointment Reports</a>
+        </div>
+      </div>
+
+      <!-- Settings with submenu -->
       <div class="sidebar-dropdown">
         <a href="" class="list-group-item parent-item">
           <i class="bi bi-cash-stack sidebar-icon"></i>
-          <span class="sidebar-text">Payment</span>
+          <span class="sidebar-text">Settings</span>
           <i class="bi bi-chevron-down sidebar-caret"></i>
         </a>
         <div class="submenu">
