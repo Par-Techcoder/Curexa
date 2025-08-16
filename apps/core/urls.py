@@ -5,6 +5,7 @@ urlpatterns = [
     
     # Admin URLs
     path('admin/', views.AdminDashboardView.as_view(), name='admin_dashboard'),
+    path('admin/medi', views.MedicationListView.as_view(), name='medication_list'),
     
 ]
 
