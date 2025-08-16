@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Details & Edit - Curexa Admin</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts (optional if you want custom font) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Custom Inline Styles -->
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass-card { 
+      background: rgba(255, 255, 255, 0.8); 
+      backdrop-filter: blur(10px); 
+      border-radius: 1rem; 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+    }
+    .btn-primary {
+      background-color: #2E86AB;
+      color: white;
+      transition: 0.2s;
+    }
+    .btn-primary:hover {
+      background-color: #256D8A;
+    }
+    .form-input {
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      padding: 0.5rem 0.75rem;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50">
+    <!-- Background Pattern -->
+    <div class="fixed inset-0 opacity-5">
+        <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,<svg width=" 60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%232E86AB" fill-opacity="0.1"><path d="M30 30c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20zm0 0c0 11.046 8.954 20 20 20s20-8.954 20-20-8.954-20-20-20-20 8.954-20 20z"></path></g></g>'); background-size: 60px 60px;"></div>
+    </div>
+
+    <!-- Fixed Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white shadow-elevation-2 border-b border-border-light">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo & Brand -->
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="text-lg font-heading font-semibold text-text-primary">Curexa</h1>
+                            <p class="text-xs text-text-secondary">Admin Portal</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="product_catalog_dashboard.html" class="text-text-secondary hover:text-primary transition-colors duration-200">Dashboard</a>
+                    <a href="product_catalog_dashboard.html" class="text-primary font-medium">Products</a>
+                    <a href="javascript:void(0)" class="text-text-secondary hover:text-primary transition-colors duration-200">Orders</a>
+                    <a href="javascript:void(0)" class="text-text-secondary hover:text-primary transition-colors duration-200">Analytics</a>
+                </nav>
+
+                <!-- User Actions -->
+                <div class="flex items-center space-x-4">
+                    <button class="p-2 text-text-secondary hover:text-primary transition-colors duration-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5-5-5h5v-12"/>
+                        </svg>
+                    </button>
+                    <button class="p-2 text-text-secondary hover:text-primary transition-colors duration-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5-5-5h5v-12"/>
+                        </svg>
+                    </button>
+                    <div class="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
+                        <span class="text-sm font-medium text-primary">A</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-16 min-h-screen">
+        <!-- Breadcrumb Navigation -->
+        <div class="bg-white border-b border-border-light">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                <nav class="flex items-center space-x-2 text-sm">
+                    <a href="product_catalog_dashboard.html" class="text-text-secondary hover:text-primary transition-colors duration-200">Dashboard</a>
+                    <svg class="w-4 h-4 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                    <a href="product_catalog_dashboard.html" class="text-text-secondary hover:text-primary transition-colors duration-200">Products</a>
+                    <svg class="w-4 h-4 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                    <span class="text-text-primary font-medium">Surgical Mask N95 - Premium</span>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Product Details Container -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Page Header -->
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h1 class="text-2xl font-heading font-semibold text-text-primary mb-2">Product Details</h1>
+                    <p class="text-text-secondary">Manage comprehensive product information and medical specifications</p>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button id="editModeToggle" class="btn-primary px-4 py-2 rounded-lg flex items-center space-x-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                        </svg>
+                        <span>Edit Product</span>
+                    </button>
+                    <button class="p-2 text-text-secondary hover:text-primary transition-colors duration-200 border border-border-light rounded-lg">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Two Column Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Left Column - Product Information (8 cols) -->
+                <div class="lg:col-span-8 space-y-6">
+                    <!-- Basic Information Section -->
+                    <section class="glass-card p-6 micro-interaction">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-lg font-heading font-semibold text-primary flex items-center space-x-2">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                <span>Basic Information</span>
+                            </h2>
+                            <button class="section-edit-btn text-text-secondary hover:text-primary transition-colors duration-200">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Product Name -->
+                            <div class="field-group">
+                                <label class="block text-sm font-medium text-text-primary mb-2">Product Name</label>
+                                <div class="view-mode">
+                                    <p class="text-text-primary font-medium">Surgical Mask N95 - Premium</p>
+                                </div>
+                                <div class="edit-mode hidden">
+                                    <input type="text" class="form-input w-full" value="Surgical Mask N95 - Premium" />
+                                </div>
+                            </div>
+
+                            <!-- SKU -->
+                            <div class="field-group">
+                                <label class="block text-sm font-medium text-text-primary mb-2">SKU</label>
+                                <div class="view-mode">
+                                    <p class="text-text-primary font-data">MSK-N95-PRM-001</p>
+                                </div>
+                                <div class="edit-mode hidden">
+                                    <input type="text" class="form-input w-full" value="MSK-N95-PRM-001" />
+                                </div>
+                            </div>
+
+                            <!-- Category -->
+                            <div class="field-group">
+                                <label class="block text-sm font-medium text-text-primary mb-2">Category</label>
+                                <div class="view-mode">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-primary-100 text-primary">
+                                        Personal Protective Equipment
+                                    </span>
+                                </div>
+                                <div class="edit-mode hidden">
+                                    <select class="form-input w-full">
+                                        <option>Personal Protective Equipment</option>
+                                        <option>Medical Devices</option>
+                                        <option>Pharmaceuticals</option>
+                                        <option>Surgical Instruments</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Brand -->
+                            <div class="field-group">
+                                <label class="block text-sm font-medium text-text-primary mb-2">Brand</label>
+                                <div class="view-mode">
+                                    <p class="text-text-primary">MediShield Pro</p>
+                                </div>
+                                <div class="edit-mode hidden">
+                                    <input type="text" class="form-input w-full" value="MediShield Pro" />
+                                </div>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="field-group md:col-span-2">
+                                <label class="block text-sm font-medium text-text-primary mb-2">Description</label>
+                                <div class="view-mode">
+                                    <p class="text-text-secondary">Premium N95 surgical mask with advanced filtration technology. Provides 95% filtration efficiency against airborne particles. Comfortable fit with adjustable ear loops and nose bridge.</p>
+                                </div>
+                                <div class="edit-mode hidden">
+                                    <textarea class="form-input w-full h-24" placeholder="Enter product description">Premium N95 surgical mask with advanced filtration technology. Provides 95% filtration efficiency against airborne particles. Comfortable fit with adjustable ear loops and nose bridge.</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Pricing & Inventory Section -->
+                    <section class="glass-card p-6 micro-interaction">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-lg font-heading font-semibold text-primary flex items-center space-x-2">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/>
+                                </svg>
+                                <span>Pricing & Inventory</span>
+                            </h2>
+                            <button class="section-edit-btn text-text-secondary hover:text-primary transition-colors duration-200">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <!-- Unit Price -->
+                            <div class="field-group">
+                                <label class="block text-sm font-medium text-text-primary mb-2">Unit Price</label>
+                                <div class="view-mode">
+                                    <p class="text-2xl font-semibold text-success">$24.99</p>
+                                </div>
+                                <div class="edit-mode hidden">
+                                    <div class="relative">
+                                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary">$</span>
+                                        <input type="number" class="form-input w-full pl-8" value="24.99" step="0.01" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Stock Quantity -->
+                            <div class="field-group">
+                                <label class="block text-sm font-medium text-text-primary mb-2">Stock Quantity</label>
+                                <div class="view-mode">
+                                    <div class="flex items-center space-x-2">
+                                        <p class="text-xl font-semibold text-text-primary">1,247</p>
+                                        <span class="text-sm text-success bg-success-100 px-2 py-1 rounded-full">In Stock</span>
+                                    </div>
+                                </div>
+                                <div class="edit-mode hidden">
+                                    <input type="number" class="form-input w-full" value="1247" />
+                                </div>
+                            </div>
+
+                            <!-- Minimum Stock -->
+                            <div class="field-group">
+                                <label class="block text-sm font-medium text-text-primary mb-2">Minimum Stock Alert</label>
+                                <div class="view-mode">
+                                    <p class="text-text-primary">50 units</p>
+                                </div>
+                                <div class="edit-mode hidden">
+                                    <input type="number" class="form-input w-full" value="50" />
+                                </div>
+                            </div>
+
+                            <!-- Cost Price -->
+                            <div class="field-group">
+                                <label class="block text-sm font-medium text-text-primary mb-2">Cost Price</label>
+                                <div class="view-mode">
+                                    <p class="text-text-primary">$18.75</p>
+                                </div>
+                                <div class="edit-mode hidden">
+                                    <div class="relative">
+                                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary">$</span>
+                                        <input type="number" class="form-input w-full pl-8" value="18.75" step="0.01" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bulk Pricing -->
+                            <div class="field-group">
+                                <label class="block text-sm font-medium text-text-primary mb-2">Bulk Price (100+)</label>
+                                <div class="view-mode">
+                                    <p class="text-text-primary">$22.49</p>
+                                </div>
+                                <div class="edit-mode hidden">
+                                    <div class="relative">
+                                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary">$</span>
+                                        <input type="number" class="form-input w-full pl-8" value="22.49" step="0.01" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tax Rate -->
+                            <div class="field-group">
+                                <label class="block text-sm font-medium text-text-primary mb-2">Tax Rate</label>
+                                <div class="view-mode">
+                                    <p class="text-text-primary">8.25%</p>
+                                </div>
+                                <div class="edit-mode hidden">
+                                    <div class="relative">
+                                        <input type="number" class="form-input w-full pr-8" value="8.25" step="0.01" />
+                                        <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-secondary">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Medical Specifications Section -->
+                    <section class="glass-card p-6 micro-interaction">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-lg font-heading font-semibold text-primary flex items-center space-x-2">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M19 8l-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C8.97 19.54 10.43 20 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46C15.03 4.46 13.57 4 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z"/>
+                                </svg>
+                                <span>Medical Specifications</span>
+                            </h2>
+                            <button class="section-edit-btn text-text-secondary hover:text-primary transition-colors duration-200">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Batch Number -->
+                            <div class="field-group">
+                                <label class="block text-sm font-medium text-text-primary mb-2">Batch Number</label>
+                                <div class="view-mode">
+                                    <p class="text-text-primary font-data">BTH-2025-001247</p>
+                                </div>
+                                <div class="edit-mode hidden">
+                                    <input type="text" class="form-input w-full" value="BTH-2025-001247" />
+                                </div>
+                            </div>
+
+                            <!-- Expiration Date -->
+                            <div class="field-group">
+                                <label class="block text-sm font-medium text-text-primary mb-2">Expiration Date</label>
+                                <div class="view-mode">
+                                    <div class="flex items-center space-x-2">
+                                        <p class="text-text-primary">12/15/2027</p>
+                                        <span class="text-sm text-success bg-success-100 px-2 py-1 rounded-full">Valid</span>
+                                    </div>
+                                </div>
+                                <div class="edit-mode hidden">
+                                    <input type="date" class="form-input w-full" value="2027-12-15" />
+                                </div>
+                            </div>
+
+                            <!-- Manufacturing Date -->
+                            <div class="field-group">
+                                <label class="block text-sm font-medium text-text-primary mb-2">Manufacturing Date</label>
+                                <div class="view-mode">
+                                    <p class="text-text-primary">01/15/2025</p>
+                                </div>
+                                <div class="edit-mode hidden">
+                                    <input type="date" class="form-input w-full" value="2025-01-15" />
+                                </div>
+                            </div>
+
+                            <!-- Sterilization Method -->
+                            <div class="field-group">
+                                <label class="block text-sm font-medium text-text-primary mb-2">Sterilization Method</label>
+                                <div class="view-mode">
+                                    <p class="text-text-primary">Ethylene Oxide (EtO)</p>
+                                </div>
+                                <div class="edit-mode hidden">
+                                    <select class="form-input w-full">
+                                        <option>Ethylene Oxide (EtO)</option>
+                                        <option>Gamma Radiation</option>
+                                        <option>Steam Sterilization</option>
+                                        <option>Not Applicable</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Filtration Efficiency -->
+                            <div class="field-group">
+                                <label class="block text-sm font-medium text-text-primary mb-2">Filtration Efficiency</label>
+                                <div class="view-mode">
+                                    <p class="text-text-primary">≥95% @ 0.3μm particles</p>
+                                </div>
+                                <div class="edit-mode hidden">
+                                    <input type="text" class="form-input w-full" value="≥95% @ 0.3μm particles" />
+                                </div>
+                            </div>
+
+                            <!-- Prescription Required -->
+                            <div class="field-group">
+                                <label class="block text-sm font-medium text-text-primary mb-2">Prescription Required</label>
+                                <div class="view-mode">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-error-100 text-error">
+                                        No
+                                    </span>
+                                </div>
+                                <div class="edit-mode hidden">
+                                    <select class="form-input w-full">
+                                        <option value="no">No</option>
+                                        <option value="yes">Yes</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Compliance Data Section -->
+                    <section class="glass-card p-6 micro-interaction">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-lg font-heading font-semibold text-primary flex items-center space-x-2">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>Compliance Data</span>
+                            </h2>
+                            <button class="section-edit-btn text-text-secondary hover:text-primary transition-colors duration-200">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- FDA Status -->
+                            <div class="field-group">
+                                <label class="block text-sm font-medium text-text-primary mb-2">FDA Status</label>
+                                <div class="view-mode">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-success-100 text-success">
+                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                            </svg>
+                                            Approved
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="edit-mode hidden">
+                                    <select class="form-input w-full">
+                                        <option value="approved">Approved</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="rejected">Rejected</option>
+                                        <option value="not_required">Not Required</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- FDA Number -->
+                            <div class="field-group">
+                                <label class="block text-sm font-medium text-text-primary mb-2">FDA Registration Number</label>
+                                <div class="view-mode">
+                                    <p class="text-text-primary font-data">FDA-2025-MSK-N95-001</p>
+                                </div>
+                                <div class="edit-mode hidden">
+                                    <input type="text" class="form-input w-full" value="FDA-2025-MSK-N95-001" />
+                                </div>
+                            </div>
+
+                            <!-- CE Marking -->
+                            <div class="field-group">
+                                <label class="block text-sm font-medium text-text-primary mb-2">CE Marking</label>
+                                <div class="view-mode">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-success-100 text-success">
+                                        Certified
+                                    </span>
+                                </div>
+                                <div class="edit-mode hidden">
+                                    <select class="form-input w-full">
+                                        <option value="certified">Certified</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="not_applicable">Not Applicable</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- ISO Certification -->
+                            <div class="field-group">
+                                <label class="block text-sm font-medium text-text-primary mb-2">ISO Certification</label>
+                                <div class="view-mode">
+                                    <p class="text-text-primary">ISO 13485:2016</p>
+                                </div>
+                                <div class="edit-mode hidden">
+                                    <input type="text" class="form-input w-full" value="ISO 13485:2016" />
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Right Column - Images & Actions (4 cols) -->
+                <div class="lg:col-span-4 space-y-6">
+                    <!-- Product Images Gallery -->
+                    <section class="glass-card p-6 micro-interaction">
+                        <h3 class="text-lg font-heading font-semibold text-text-primary mb-4">Product Images</h3>
+                        
+                        <!-- Main Image -->
+                        <div class="mb-4">
+                            <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                                <img src="https://images.pexels.com/photos/4386466/pexels-photo-4386466.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Surgical Mask N95 - Premium" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1584824486509-112e4181ff6b?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; this.onerror=null;" />
+                            </div>
+                        </div>
+
+                        <!-- Thumbnail Images -->
+                        <div class="grid grid-cols-4 gap-2 mb-4">
+                            <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 border-primary">
+                                <img src="https://images.pexels.com/photos/4386466/pexels-photo-4386466.jpeg?auto=compress&cs=tinysrgb&w=200" alt="Main view" class="w-full h-full object-cover cursor-pointer" />
+                            </div>
+                            <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                                <img src="https://images.pixabay.com/photo/2020/04/29/07/54/coronavirus-5107715_960_720.jpg" alt="Side view" class="w-full h-full object-cover cursor-pointer" />
+                            </div>
+                            <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1584744982491-665216d95f8b?w=200" alt="Package view" class="w-full h-full object-cover cursor-pointer" />
+                            </div>
+                            <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 border-dashed border-border-light flex items-center justify-center cursor-pointer hover:border-primary transition-colors duration-200">
+                                <svg class="w-6 h-6 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Upload Button -->
+                        <button class="w-full py-2 px-4 border border-border-light rounded-lg text-text-secondary hover:text-primary hover:border-primary transition-colors duration-200 flex items-center justify-center space-x-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                            </svg>
+                            <span>Upload Images</span>
+                        </button>
+                    </section>
+
+                    <!-- Stock Status -->
+                    <section class="glass-card p-6 micro-interaction">
+                        <h3 class="text-lg font-heading font-semibold text-text-primary mb-4">Stock Status</h3>
+                        
+                        <div class="space-y-4">
+                            <!-- Current Stock -->
+                            <div class="flex items-center justify-between">
+                                <span class="text-text-secondary">Current Stock</span>
+                                <span class="text-xl font-semibold text-text-primary">1,247</span>
+                            </div>
+                            
+                            <!-- Stock Level Indicator -->
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm text-text-secondary">Stock Level</span>
+                                    <span class="text-sm text-success">Healthy</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-success h-2 rounded-full" style="width: 85%"></div>
+                                </div>
+                            </div>
+
+                            <!-- Reserved Stock -->
+                            <div class="flex items-center justify-between">
+                                <span class="text-text-secondary">Reserved</span>
+                                <span class="text-text-primary">23</span>
+                            </div>
+
+                            <!-- Available Stock -->
+                            <div class="flex items-center justify-between">
+                                <span class="text-text-secondary">Available</span>
+                                <span class="text-text-primary font-medium">1,224</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Recent Activity -->
+                    <section class="glass-card p-6 micro-interaction">
+                        <h3 class="text-lg font-heading font-semibold text-text-primary mb-4">Recent Activity</h3>
+                        
+                        <div class="space-y-3">
+                            <div class="flex items-start space-x-3">
+                                <div class="w-2 h-2 bg-success rounded-full mt-2"></div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-text-primary">Stock updated</p>
+                                    <p class="text-xs text-text-secondary">2 hours ago</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-3">
+                                <div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-text-primary">Price adjusted</p>
+                                    <p class="text-xs text-text-secondary">1 day ago</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-3">
+                                <div class="w-2 h-2 bg-warning rounded-full mt-2"></div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-text-primary">Batch number updated</p>
+                                    <p class="text-xs text-text-secondary">3 days ago</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Quick Actions -->
+                    <section class="glass-card p-6 micro-interaction">
+                        <h3 class="text-lg font-heading font-semibold text-text-primary mb-4">Quick Actions</h3>
+                        
+                        <div class="space-y-3">
+                            <button id="saveChangesBtn" class="w-full btn-primary py-3 px-4 rounded-lg font-medium text-white bg-primary hover:bg-primary-600 transition-all duration-200 hidden">
+                                Save Changes
+                            </button>
+                            
+                            <button class="w-full py-2 px-4 border border-border-light rounded-lg text-text-primary hover:bg-primary-50 transition-colors duration-200 flex items-center justify-center space-x-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                </svg>
+                                <span>Duplicate Product</span>
+                            </button>
+                            
+                            <button class="w-full py-2 px-4 border border-border-light rounded-lg text-text-primary hover:bg-warning-50 transition-colors duration-200 flex items-center justify-center space-x-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8l4 4 4-4"/>
+                                </svg>
+                                <span>Archive Product</span>
+                            </button>
+                            
+                            <button id="deleteProductBtn" class="w-full py-2 px-4 border border-error-200 rounded-lg text-error hover:bg-error-50 transition-colors duration-200 flex items-center justify-center space-x-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                                <span>Delete Product</span>
+                            </button>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 max-w-md mx-4 shadow-elevation-3">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-heading font-semibold text-text-primary">Confirm Deletion</h3>
+                <button id="closeDeleteModal" class="text-text-secondary hover:text-text-primary">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="mb-6">
+                <p class="text-text-secondary">Are you sure you want to delete this product? This action cannot be undone.</p>
+                <div class="mt-4 p-3 bg-error-50 rounded-lg">
+                    <p class="text-sm font-medium text-error">Product: Surgical Mask N95 - Premium</p>
+                    <p class="text-xs text-error-600">SKU: MSK-N95-PRM-001</p>
+                </div>
+            </div>
+            <div class="flex space-x-3">
+                <button id="confirmDelete" class="flex-1 bg-error text-white py-2 px-4 rounded-lg hover:bg-error-600 transition-colors duration-200">
+                    Delete Product
+                </button>
+                <button id="cancelDelete" class="flex-1 border border-border-light py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Notification -->
+    <div id="successNotification" class="fixed top-4 right-4 bg-success text-white px-6 py-3 rounded-lg shadow-elevation-3 transform translate-x-full transition-transform duration-300 z-50">
+        <div class="flex items-center space-x-2">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            <span id="successMessage">Changes saved successfully!</span>
+        </div>
+    </div>
+
+    <script>
+        // Edit mode functionality
+        let isEditMode = false;
+        const editModeToggle = document.getElementById('editModeToggle');
+        const saveChangesBtn = document.getElementById('saveChangesBtn');
+        const sectionEditBtns = document.querySelectorAll('.section-edit-btn');
+
+        // Toggle edit mode
+        editModeToggle.addEventListener('click', function() {
+            isEditMode = !isEditMode;
+            toggleEditMode();
+        });
+
+        function toggleEditMode() {
+            const viewModes = document.querySelectorAll('.view-mode');
+            const editModes = document.querySelectorAll('.edit-mode');
+            
+            if (isEditMode) {
+                // Switch to edit mode
+                viewModes.forEach(el => el.classList.add('hidden'));
+                editModes.forEach(el => el.classList.remove('hidden'));
+                editModeToggle.innerHTML = `
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                    <span>Cancel Edit</span>
+                `;
+                editModeToggle.classList.remove('btn-primary');
+                editModeToggle.classList.add('bg-error', 'hover:bg-error-600');
+                saveChangesBtn.classList.remove('hidden');
+            } else {
+                // Switch to view mode
+                viewModes.forEach(el => el.classList.remove('hidden'));
+                editModes.forEach(el => el.classList.add('hidden'));
+                editModeToggle.innerHTML = `
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                    <span>Edit Product</span>
+                `;
+                editModeToggle.classList.add('btn-primary');
+                editModeToggle.classList.remove('bg-error', 'hover:bg-error-600');
+                saveChangesBtn.classList.add('hidden');
+            }
+        }
+
+        // Save changes functionality
+        saveChangesBtn.addEventListener('click', function() {
+            // Simulate saving
+            this.disabled = true;
+            this.innerHTML = 'Saving...';
+            
+            setTimeout(() => {
+                showSuccessNotification('Product updated successfully!');
+                isEditMode = false;
+                toggleEditMode();
+                this.disabled = false;
+                this.innerHTML = 'Save Changes';
+            }, 1500);
+        });
+
+        // Delete product functionality
+        const deleteProductBtn = document.getElementById('deleteProductBtn');
+        const deleteModal = document.getElementById('deleteModal');
+        const closeDeleteModal = document.getElementById('closeDeleteModal');
+        const confirmDelete = document.getElementById('confirmDelete');
+        const cancelDelete = document.getElementById('cancelDelete');
+
+        deleteProductBtn.addEventListener('click', () => {
+            deleteModal.classList.remove('hidden');
+            deleteModal.classList.add('flex');
+        });
+
+        closeDeleteModal.addEventListener('click', closeModal);
+        cancelDelete.addEventListener('click', closeModal);
+
+        function closeModal() {
+            deleteModal.classList.add('hidden');
+            deleteModal.classList.remove('flex');
+        }
+
+        confirmDelete.addEventListener('click', () => {
+            confirmDelete.disabled = true;
+            confirmDelete.innerHTML = 'Deleting...';
+            
+            setTimeout(() => {
+                closeModal();
+                showSuccessNotification('Product deleted successfully!');
+                setTimeout(() => {
+                    window.location.href = 'product_catalog_dashboard.html';
+                }, 2000);
+            }, 1500);
+        });
+
+        // Success notification
+        function showSuccessNotification(message) {
+            const notification = document.getElementById('successNotification');
+            const messageEl = document.getElementById('successMessage');
+            
+            messageEl.textContent = message;
+            notification.classList.remove('translate-x-full');
+            
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+            }, 3000);
+        }
+
+        // Image gallery functionality
+        const thumbnails = document.querySelectorAll('.aspect-square img[src*="pexels"], .aspect-square img[src*="pixabay"], .aspect-square img[src*="unsplash"]');
+        const mainImage = document.querySelector('.aspect-square img[alt="Surgical Mask N95 - Premium"]');
+
+        thumbnails.forEach(thumb => {
+            thumb.addEventListener('click', function() {
+                // Remove active border from all thumbnails
+                thumbnails.forEach(t => t.parentElement.classList.remove('border-2', 'border-primary'));
+                
+                // Add active border to clicked thumbnail
+                this.parentElement.classList.add('border-2', 'border-primary');
+                
+                // Update main image
+                mainImage.src = this.src.replace('w=200', 'w=800');
+            });
+        });
+
+        // Form validation
+        const inputs = document.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.hasAttribute('required') && !this.value.trim()) {
+                    this.classList.add('border-error-500');
+                    this.classList.remove('border-border-light');
+                } else {
+                    this.classList.remove('border-error-500');
+                    this.classList.add('border-border-light');
+                }
+            });
+
+            input.addEventListener('input', function() {
+                if (this.value.trim()) {
+                    this.classList.remove('border-error-500');
+                    this.classList.add('border-border-light');
+                }
+            });
+        });
+
+        // Auto-save functionality (optional)
+        let autoSaveTimeout;
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                if (isEditMode) {
+                    clearTimeout(autoSaveTimeout);
+                    autoSaveTimeout = setTimeout(() => {
+                        // Auto-save logic here
+                        console.log('Auto-saving changes...');
+                    }, 2000);
+                }
+            });
+        });
+
+        // Add spring animation to cards
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.glass-card').forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('spring-animation');
+                }, index * 100);
+            });
+        });
+
+        // Close modal when clicking outside
+        deleteModal.addEventListener('click', (e) => {
+            if (e.target === deleteModal) {
+                closeModal();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + E to toggle edit mode
+            if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+                e.preventDefault();
+                editModeToggle.click();
+            }
+            
+            // Ctrl/Cmd + S to save changes
+            if ((e.ctrlKey || e.metaKey) && e.key === 's' && isEditMode) {
+                e.preventDefault();
+                saveChangesBtn.click();
+            }
+            
+            // Escape to cancel edit mode
+            if (e.key === 'Escape' && isEditMode) {
+                editModeToggle.click();
+            }
+        });
+    </script>
+<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
+</body>
+</html>

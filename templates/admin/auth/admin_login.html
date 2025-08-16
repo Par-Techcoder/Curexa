@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login - Curexa Admin</title>
+
+  <!-- TailwindCSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .glass-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border-radius: 1rem; }
+    .btn-primary { background-color: #2E86AB; }
+    .btn-primary:hover { background-color: #256D8A; }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 flex items-center justify-center">
+  
+  <!-- Background Pattern -->
+  <div class="fixed inset-0 opacity-5">
+    <div class="absolute inset-0" 
+         style="background-image: url('data:image/svg+xml,<svg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'><g fill=\'none\' fill-rule=\'evenodd\'><g fill=\'%232E86AB\' fill-opacity=\'0.1\'><path d=\'M30 30c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20zm0 0c0 11.046 8.954 20 20 20s20-8.954 20-20-8.954-20-20-20-20 8.954-20 20z\'></path></g></g></svg>'); background-size: 60px 60px;">
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="relative min-h-screen flex items-center justify-center px-4 py-8">
+    <!-- Login Card -->
+    <div class="w-full max-w-md">
+      <!-- Logo Section -->
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-4 shadow-lg">
+          <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 
+                     1.1.9 2 2 2h14c1.1 0 
+                     2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 
+                     14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+          </svg>
+        </div>
+        <h1 class="text-2xl font-semibold text-gray-800 mb-2">Curexa Admin</h1>
+        <p class="text-gray-500 text-sm">Secure Healthcare Administration Portal</p>
+      </div>
+
+      <!-- Login Form Card -->
+      <div class="glass-card p-8 shadow-lg">
+        <div class="mb-6">
+          <h2 class="text-xl font-semibold text-gray-800 mb-2">Welcome Back</h2>
+          <p class="text-gray-500 text-sm">Sign in to access your medical product catalog</p>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" class="space-y-6">
+          <!-- Email -->
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+            <input type="email" id="email" name="email" 
+                   class="w-full pl-3 pr-3 py-3 border rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition" 
+                   placeholder="admin@curexa.com" required />
+          </div>
+
+          <!-- Password -->
+          <div>
+            <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+            <input type="password" id="password" name="password" 
+                   class="w-full pl-3 pr-3 py-3 border rounded-lg focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition" 
+                   placeholder="Enter your password" required />
+          </div>
+
+          <!-- Remember / Forgot -->
+          <div class="flex items-center justify-between text-sm">
+            <label class="flex items-center">
+              <input type="checkbox" class="mr-2"> Remember me
+            </label>
+            <a href="#" class="text-blue-600 hover:underline">Forgot password?</a>
+          </div>
+
+          <!-- Button -->
+          <button type="submit" id="signInBtn" 
+                  class="w-full py-3 px-4 rounded-lg font-medium text-white btn-primary transition transform hover:scale-105 active:scale-95">
+            <span id="btnText">Sign In</span>
+            <svg id="loadingIcon" class="hidden animate-spin ml-2 h-4 w-4 text-white inline-block" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+              <path class="opacity-75" fill="currentColor" 
+                    d="M4 12a8 8 0 018-8V0C5.373 
+                       0 0 5.373 0 12h4zm2 
+                       5.291A7.962 7.962 0 014 12H0c0 
+                       3.042 1.135 5.824 3 
+                       7.938l3-2.647z"/>
+            </svg>
+          </button>
+
+          <!-- Error -->
+          <div id="errorMessage" class="hidden p-3 bg-red-100 border border-red-300 text-red-600 rounded-lg text-sm">
+            Invalid email or password. Please try again.
+          </div>
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="mt-6 text-center text-xs text-gray-500">
+        © 2025 Curexa Admin. All Rights Reserved.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const signInBtn = document.getElementById('signInBtn');
+    const btnText = document.getElementById('btnText');
+    const loadingIcon = document.getElementById('loadingIcon');
+    const errorMessage = document.getElementById('errorMessage');
+
+    const demoCredentials = [
+      { email: 'admin@curexa.com', password: 'AdminPass123' },
+      { email: 'manager@healthsupply.com', password: 'Manager2025' }
+    ];
+
+    loginForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      signInBtn.disabled = true;
+      btnText.textContent = 'Signing In...';
+      loadingIcon.classList.remove('hidden');
+      errorMessage.classList.add('hidden');
+
+      setTimeout(() => {
+        const valid = demoCredentials.find(c => c.email === email && c.password === password);
+        if (valid) {
+          btnText.textContent = 'Success!';
+          setTimeout(() => { window.location.href = 'product_catalog_dashboard.html'; }, 1000);
+        } else {
+          signInBtn.disabled = false;
+          btnText.textContent = 'Sign In';
+          loadingIcon.classList.add('hidden');
+          errorMessage.classList.remove('hidden');
+        }
+      }, 1200);
+    });
+  </script>
+</body>
+</html>
