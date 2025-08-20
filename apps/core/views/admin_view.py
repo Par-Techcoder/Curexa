@@ -29,11 +29,11 @@ class MedicineListView(View):
         return render(request, 'admin/medicens/medication_list.html')    
     
 class MedicineEditView(View):
-    def get(self, request):
+    def get(self, request, pk):
         # Logic for editing a medication
         return render(request, 'admin/medicens/medication_details_edit.html')
     
-    def post(self, request):
+    def post(self, request, pk):
         # Logic for saving the edited medication
         # This would typically involve form processing and saving to the database
         return redirect('medication_list')    
