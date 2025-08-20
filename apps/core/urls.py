@@ -1,4 +1,4 @@
-from apps.core import views
+from apps.core.views import admin as views
 from django.urls import path
 
 urlpatterns = [
