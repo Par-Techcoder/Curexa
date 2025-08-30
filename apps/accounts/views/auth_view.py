@@ -5,13 +5,13 @@ from apps.core.utilities.otp_service import send_otp_code, verify_otp_code
 from django.contrib.auth import login
 from apps.accounts.services import user_service
 
-class LoginView(View):
-    def get(self, request):
-        return
+# class LoginView(View):
+#     def get(self, request):
+#         return
 
-    def post(self, request):
-        # Handle login logic here
-        return redirect('home')  # Redirect to home after login    
+#     def post(self, request):
+#         # Handle login logic here
+#         return redirect('home')  # Redirect to home after login    
 
 def send_otp_view(request):
     if request.method == "POST":
