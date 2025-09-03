@@ -52,9 +52,6 @@
   <!-- Page Header -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h2">Products Management</h1>
-    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal">
-      <i class="bi bi-plus-circle"></i> Add Product
-    </button>
   </div>
 
   <!-- Filters and Search -->
@@ -93,17 +90,6 @@
       <button id="exportCsv" class="btn btn-outline-secondary me-2 flex-fill">
         <i class="bi bi-download"></i> Export
       </button>
-      <div class="dropdown">
-        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-          <i class="bi bi-three-dots"></i>
-        </button>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#">Bulk Edit</a></li>
-          <li><a class="dropdown-item" href="#">Export JSON</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="#">Delete Selected</a></li>
-        </ul>
-      </div>
     </div>
   </div>
 
@@ -168,68 +154,6 @@
   </div>
 </div>
 
-<!-- Add/Edit Modal -->
-<div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalTitle">Add Product</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form id="productForm">
-        <div class="modal-body">
-          <input type="hidden" id="productId">
-          <div class="row">
-            <div class="col-md-6 mb-3">
-              <label for="name" class="form-label">Name</label>
-              <input type="text" class="form-control" id="name" placeholder="Paracetamol 650mg" required>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="sku" class="form-label">SKU</label>
-              <input type="text" class="form-control" id="sku" placeholder="MED-0001" required>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="category" class="form-label">Category</label>
-              <select class="form-select" id="category">
-                <option value="medicine">Medicine</option>
-                <option value="supplement">Supplement</option>
-                <option value="equipment">Equipment</option>
-                <option value="personal-care">Personal Care</option>
-              </select>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="price" class="form-label">Price (₹)</label>
-              <input type="number" step="0.01" min="0" class="form-control" id="price" placeholder="99.00" required>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="stock" class="form-label">Stock</label>
-              <input type="number" min="0" class="form-control" id="stock" placeholder="150" required>
-            </div>
-            <div class="col-md-6 mb-3">
-              <label for="image" class="form-label">Image URL</label>
-              <input type="url" class="form-control" id="image" placeholder="https://images.example.com/product.jpg">
-            </div>
-            <div class="col-12 mb-3">
-              <label for="description" class="form-label">Description</label>
-              <textarea class="form-control" id="description" rows="3" placeholder="Brief details for your product."></textarea>
-            </div>
-            <div class="col-12">
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="active" checked>
-                <label class="form-check-label" for="active">Active</label>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-primary">Save Product</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -242,12 +166,6 @@
       { id: crypto.randomUUID(), name: 'Digital Thermometer', sku: 'EQP-0043', category: 'equipment', price: 299.0, stock: 8, active: true, image: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=1200&auto=format&fit=crop', description: 'Fast and accurate readings.' },
       { id: crypto.randomUUID(), name: 'Vitamin C 1000mg', sku: 'SUP-0102', category: 'supplement', price: 249.0, stock: 64, active: true, image: 'https://images.unsplash.com/photo-1616410011236-7db1d1b4b2c2?q=80&w=1200&auto=format&fit=crop', description: 'Immune support tablets.' },
       { id: crypto.randomUUID(), name: 'Hand Sanitizer 500ml', sku: 'PC-0200', category: 'personal-care', price: 149.0, stock: 0, active: false, image: 'https://images.unsplash.com/photo-1584630176563-073cc05f9030?q=80&w=1200&auto=format&fit=crop', description: 'Kills 99.9% germs.' },
-      { id: crypto.randomUUID(), name: 'Blood Pressure Monitor', sku: 'EQP-1001', category: 'equipment', price: 1899.0, stock: 23, active: true, image: 'https://images.unsplash.com/photo-1576765608731-47e02b3b2c7a?q=80&w=1200&auto=format&fit=crop', description: 'Automatic BP monitor.' },
-      { id: crypto.randomUUID(), name: 'Zinc Tablets 50mg', sku: 'SUP-0330', category: 'supplement', price: 199.0, stock: 15, active: true, image: 'https://images.unsplash.com/photo-1607619056574-7b8d3ee536b2?q=80&w=1200&auto=format&fit=crop', description: 'Dietary supplement.' },
-      { id: crypto.randomUUID(), name: 'Cough Syrup 100ml', sku: 'MED-0209', category: 'medicine', price: 110.0, stock: 7, active: true, image: 'https://images.unsplash.com/photo-1597074866922-020f77a7a062?q=80&w=1200&auto=format&fit=crop', description: 'Soothing relief.' },
-      { id: crypto.randomUUID(), name: 'Infrared Thermometer', sku: 'EQP-0044', category: 'equipment', price: 1499.0, stock: 3, active: false, image: 'https://images.unsplash.com/photo-1581089781785-603411fa81e5?q=80&w=1200&auto=format&fit=crop', description: 'Contactless temperature.' },
-      { id: crypto.randomUUID(), name: 'Multivitamin Capsules', sku: 'SUP-0103', category: 'supplement', price: 399.0, stock: 75, active: true, image: 'https://images.unsplash.com/photo-1582719478250-71b68c7cb1bf?q=80&w=1200&auto=format&fit=crop', description: 'Daily multivitamin.' },
-      { id: crypto.randomUUID(), name: 'Antiseptic Liquid 1L', sku: 'PC-0201', category: 'personal-care', price: 220.0, stock: 11, active: true, image: 'https://images.unsplash.com/photo-1604152135912-04a022e23696?q=80&w=1200&auto=format&fit=crop', description: 'For first aid & hygiene.' }
     ]
   };
 
@@ -256,18 +174,6 @@
     search: document.getElementById('search'),
     filter: document.getElementById('filterCategory'),
     sort: document.getElementById('sortBy'),
-    modal: document.getElementById('productModal'),
-    form: document.getElementById('productForm'),
-    productId: document.getElementById('productId'),
-    name: document.getElementById('name'),
-    sku: document.getElementById('sku'),
-    category: document.getElementById('category'),
-    price: document.getElementById('price'),
-    stock: document.getElementById('stock'),
-    image: document.getElementById('image'),
-    description: document.getElementById('description'),
-    active: document.getElementById('active'),
-    modalTitle: document.getElementById('modalTitle'),
     prev: document.getElementById('prevPage'),
     next: document.getElementById('nextPage'),
     pageInfo: document.getElementById('pageInfo'),
@@ -278,7 +184,6 @@
     exportCsv: document.getElementById('exportCsv')
   };
 
-  // Helpers
   const currency = (n) => `₹${Number(n).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   const byQuery = (q) => (p) => [p.name, p.sku, p.category].join(' ').toLowerCase().includes(q);
 
@@ -339,7 +244,7 @@
       col.innerHTML = `
         <div class="card product-card h-100">
           <div class="card-img-container position-relative">
-            <img src="${p.image || 'https://images.unsplash.com/photo-1582719478250-71b68c7cb1bf?q=80&w=1200&auto=format&fit=crop'}" class="card-img-top" alt="${p.name}">
+            <img src="${p.image}" class="card-img-top" alt="${p.name}">
             <span class="badge sku-badge">${p.sku}</span>
             ${getStatusBadge(p)}
           </div>
@@ -348,112 +253,16 @@
             <p class="card-text text-muted text-capitalize">${p.category.replace('-', ' ')}</p>
             <p class="card-text fw-bold">${currency(p.price)}</p>
           </div>
-          <div class="card-footer bg-transparent">
-            <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <button class="btn btn-sm btn-outline-primary me-1 edit-btn" data-id="${p.id}">
-                  <i class="bi bi-pencil"></i>
-                </button>
-                <button class="btn btn-sm btn-outline-secondary me-1 duplicate-btn" data-id="${p.id}">
-                  <i class="bi bi-copy"></i>
-                </button>
-              </div>
-              <div class="form-check form-switch">
-                <input class="form-check-input toggle-active" type="checkbox" data-id="${p.id}" ${p.active ? 'checked' : ''}>
-              </div>
-              <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${p.id}">
-                <i class="bi bi-trash"></i>
-              </button>
-            </div>
-          </div>
         </div>
       `;
-      
-      // Add event listeners
-      col.querySelector('.edit-btn').addEventListener('click', () => openModal(p));
-      col.querySelector('.duplicate-btn').addEventListener('click', () => duplicateProduct(p.id));
-      col.querySelector('.delete-btn').addEventListener('click', () => deleteProduct(p.id));
-      col.querySelector('.toggle-active').addEventListener('change', (e) => toggleActive(p.id, e.target.checked));
-      
       els.grid.appendChild(col);
     }
-    
-    // Enable/disable pagination buttons
-    els.prev.disabled = state.page === 1;
-    els.next.disabled = state.page === Math.ceil(list.length / state.perPage);
-  }
-
-  function openModal(product = null) {
-    const modal = new bootstrap.Modal(document.getElementById('productModal'));
-    els.form.reset();
-    els.productId.value = product?.id || '';
-    document.getElementById('modalTitle').textContent = product ? 'Edit Product' : 'Add Product';
-    
-    if (product) {
-      els.name.value = product.name;
-      els.sku.value = product.sku;
-      els.category.value = product.category;
-      els.price.value = product.price;
-      els.stock.value = product.stock;
-      els.image.value = product.image || '';
-      els.description.value = product.description || '';
-      els.active.checked = product.active;
-    } else {
-      els.active.checked = true;
-    }
-    
-    modal.show();
-  }
-
-  function closeModal() {
-    const modal = bootstrap.Modal.getInstance(document.getElementById('productModal'));
-    modal.hide();
-  }
-
-  function saveProduct(e) {
-    e.preventDefault();
-    const data = {
-      id: els.productId.value || crypto.randomUUID(),
-      name: els.name.value.trim(),
-      sku: els.sku.value.trim(),
-      category: els.category.value,
-      price: parseFloat(els.price.value),
-      stock: parseInt(els.stock.value, 10),
-      image: els.image.value.trim(),
-      description: els.description.value.trim(),
-      active: els.active.checked
-    };
-    const exists = state.products.find(p => p.id === data.id);
-    if (exists) Object.assign(exists, data); else state.products.unshift(data);
-    closeModal();
-    render();
-  }
-
-  function deleteProduct(id) {
-    if (!confirm('Are you sure you want to delete this product?')) return;
-    state.products = state.products.filter(p => p.id !== id);
-    render();
-  }
-
-  function duplicateProduct(id) {
-    const p = state.products.find(x => x.id === id);
-    if (!p) return;
-    const copy = { ...p, id: crypto.randomUUID(), sku: p.sku + '-COPY', name: p.name + ' (Copy)' };
-    state.products.unshift(copy);
-    render();
-  }
-
-  function toggleActive(id, value) {
-    const p = state.products.find(x => x.id === id);
-    if (!p) return;
-    p.active = value;
-    render();
   }
 
   function exportCSV() {
     const headers = ['ID','Name','SKU','Category','Price','Stock','Active'];
     const rows = state.products.map(p => [p.id, p.name, p.sku, p.category, p.price, p.stock, p.active]);
-    const csv = [headers, ...rows].map(r => r.map(v => typeof v === 'string' && v.includes(',') ? `"${v}"` : v).join(',')).join('\n');
+    const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -461,16 +270,13 @@
     URL.revokeObjectURL(url);
   }
 
-  // Event listeners
   els.search.addEventListener('input', () => { state.page = 1; render(); });
   els.filter.addEventListener('change', () => { state.page = 1; render(); });
   els.sort.addEventListener('change', () => { state.page = 1; render(); });
   els.prev.addEventListener('click', () => { state.page = Math.max(1, state.page - 1); render(); });
   els.next.addEventListener('click', () => { state.page = state.page + 1; render(); });
-  els.form.addEventListener('submit', saveProduct);
   els.exportCsv.addEventListener('click', exportCSV);
 
-  // Initialize
   render();
 </script>
 
