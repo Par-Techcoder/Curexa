@@ -1,7 +1,8 @@
 from functools import wraps
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
-from constants.default_values import Role
+from django.utils.decorators import method_decorator
+from apps.core.constants.default_values import Role
 
 
 def auth_required(login_url="/login/"):
@@ -17,7 +18,7 @@ def auth_required(login_url="/login/"):
                 return redirect(login_url)
             return view_func(request, *args, **kwargs)
         return _wrapped_view
-    return decorator
+    return _adapt_decorator(decorator)
 
 
 def anonymous_required(redirect_url="/"):
@@ -34,7 +35,7 @@ def anonymous_required(redirect_url="/"):
                 return redirect(redirect_url)
             return view_func(request, *args, **kwargs)
         return _wrapped_view
-    return decorator
+    return _adapt_decorator(decorator)
 
 
 def role_required(*allowed_roles):
@@ -54,7 +55,19 @@ def role_required(*allowed_roles):
 
             return HttpResponseForbidden("You do not have permission to access this page.")
         return _wrapped_view
-    return decorator
+    return _adapt_decorator(decorator)
+
+
+def _adapt_decorator(decorator_func):
+    """
+    Make a decorator work for both FBV and CBV.
+    """
+    def wrapper(obj):
+        if isinstance(obj, type):  # Class-based view
+            obj.dispatch = method_decorator(decorator_func)(obj.dispatch)
+            return obj
+        return decorator_func(obj)  # Function-based view
+    return wrapper
 
 
 # Specific role-based decorators
