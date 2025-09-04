@@ -1,9 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Login - Curexa Admin</title>
+  <title>Curexa Admin Portal - Login</title>
 
   <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -15,19 +16,20 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(to bottom right, #eff6ff, #ffffff, #ecfeff);
+      background: linear-gradient(to bottom right, #0f172a, #1e293b, #111827);
+      color: #f9fafb;
     }
 
     .glass-card {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(14px);
+      background: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(12px);
       border-radius: 1rem;
       padding: 2rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
     }
 
     .btn-primary {
-      background-color: #2E86AB;
+      background-color: #2563eb;
       color: #fff;
       font-weight: 500;
       border-radius: 0.5rem;
@@ -40,39 +42,35 @@
       cursor: pointer;
       width: 100%;
     }
-    .btn-primary:hover { background-color: #256D8A; }
+    .btn-primary:hover { background-color: #1e40af; }
     .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
 
     input[type="email"], input[type="password"] {
       width: 100%;
       padding: 0.75rem;
-      border: 1px solid #d1d5db;
+      border: 1px solid #374151;
       border-radius: 0.5rem;
+      background: #111827;
+      color: #f9fafb;
       transition: 0.2s;
     }
     input:focus {
-      border-color: #60a5fa;
-      box-shadow: 0 0 0 3px #bfdbfe;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px #2563eb;
       outline: none;
     }
 
     label {
       font-size: 0.875rem;
       font-weight: 500;
-      color: #374151;
+      color: #d1d5db;
     }
-
-    .text-center { text-align: center; }
-    .text-gray-800 { color: #1f2937; }
-    .text-gray-500 { color: #6b7280; }
-    .text-sm { font-size: 0.875rem; }
-    .text-xs { font-size: 0.75rem; }
 
     .error-message {
       padding: 0.75rem;
-      background: #fee2e2;
-      border: 1px solid #fca5a5;
-      color: #dc2626;
+      background: #7f1d1d;
+      border: 1px solid #f87171;
+      color: #fca5a5;
       border-radius: 0.5rem;
       font-size: 0.875rem;
       margin-top: 0.75rem;
@@ -84,64 +82,58 @@
       justify-content: center;
       width: 4rem;
       height: 4rem;
-      background: #2563eb;
+      background: #1e40af;
       border-radius: 1rem;
       margin-bottom: 1rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
 
-    footer { margin-top: 1.5rem; text-align: center; font-size: 0.75rem; color: #6b7280; }
+    footer {
+      margin-top: 1.5rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
   </style>
 </head>
 <body>
-  <!-- Background Pattern -->
-  <div style="position:fixed; inset:0; opacity:0.05; z-index:-10;
-              background:url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22%232E86AB%22 fill-opacity=%220.1%22%3E%3Cpath d=%22M30 30c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20zm0 0c0 11.046 8.954 20 20 20s20-8.954 20-20-8.954-20-20-20-20 8.954-20 20z%22/%3E%3C/g%3E%3C/svg%3E') repeat;">
+  <!-- Background Security Grid -->
+  <div style="position:fixed; inset:0; opacity:0.07; z-index:-10;
+              background:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22 viewBox=%220 0 40 40%22%3E%3Cg fill=%22%23ffffff%22 fill-opacity=%220.1%22%3E%3Crect width=%2240%22 height=%220.5%22/%3E%3Crect width=%220.5%22 height=%2240%22/%3E%3C/g%3E%3C/svg%3E') repeat;">
   </div>
 
   <!-- Main Container -->
   <main style="width:100%; max-width:28rem; padding:2rem;">
     <!-- Logo Section -->
     <div class="text-center">
-      <div class="logo-box">
-        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 
-                   1.1.9 2 2 2h14c1.1 0 
-                   2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 
-                   14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-        </svg>
+      <div class="logo-box" style="background:transparent; box-shadow:none; margin-bottom:1rem;">
+        <img src="{% static 'images/curexa_logo_transparent.png' %}" 
+            alt="Curexa Logo" 
+            style="width: 8rem; height: auto;" />
       </div>
-      <h1 class="text-2xl text-gray-800" style="font-weight:600; margin-bottom:0.5rem;">Curexa Admin</h1>
-      <p class="text-gray-500 text-sm">Secure Healthcare Administration Portal</p>
+      <h1 class="text-2xl" style="font-weight:600; margin-bottom:0.5rem;">Curexa Admin Portal</h1>
+      <p class="text-sm" style="color:#9ca3af;">Restricted Access — Authorized Personnel Only</p>
     </div>
 
     <!-- Login Form Card -->
     <section class="glass-card">
       <header style="margin-bottom:1.5rem;">
-        <h2 class="text-gray-800" style="font-size:1.25rem; font-weight:600; margin-bottom:0.5rem;">Welcome Back</h2>
-        <p class="text-gray-500 text-sm">Sign in to access your medical product catalog</p>
+        <h2 style="font-size:1.25rem; font-weight:600; margin-bottom:0.5rem;">Admin Login</h2>
+        <p style="font-size:0.875rem; color:#9ca3af;">Enter your credentials to continue</p>
       </header>
 
       <!-- Login Form -->
       <form id="loginForm" novalidate>
         <!-- Email -->
         <div style="margin-bottom:1rem;">
-          <label for="email">Email Address</label>
+          <label for="email">Admin Email</label>
           <input type="email" id="email" name="email" placeholder="admin@curexa.com" required />
         </div>
 
         <!-- Password -->
         <div style="margin-bottom:1rem;">
           <label for="password">Password</label>
-          <input type="password" id="password" name="password" placeholder="Enter your password" required />
-        </div>
-
-        <!-- Remember / Forgot -->
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; font-size:0.875rem;">
-          <label style="display:flex; align-items:center; cursor:pointer;">
-            <input type="checkbox" id="remember" name="remember" style="margin-right:0.5rem;"> Remember me
-          </label>
-          <a href="#" style="color:#2563eb; text-decoration:none;">Forgot password?</a>
+          <input type="password" id="password" name="password" placeholder="••••••••" required />
         </div>
 
         <!-- Button -->
@@ -159,14 +151,14 @@
 
         <!-- Error -->
         <div id="errorMessage" class="error-message" style="display:none;">
-          Invalid email or password. Please try again.
+          Invalid email or password. Unauthorized access attempt logged.
         </div>
       </form>
     </section>
 
     <!-- Footer -->
     <footer>
-      © 2025 Curexa Admin. All Rights Reserved.
+      © 2025 Curexa Admin. Unauthorized access is prohibited. All login attempts are monitored.
     </footer>
   </main>
 
@@ -187,7 +179,6 @@
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value.trim();
 
-      // Reset states
       signInBtn.disabled = true;
       btnText.textContent = 'Signing In...';
       loadingIcon.style.display = 'inline-block';

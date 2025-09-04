@@ -1,11 +1,12 @@
 from django.views import View
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
+from apps.core.utilities.decorators import anonymous_required, admin_required
 
-
-class AdminLoginView(View):
+@anonymous_required(redirect_url="/admin/" )
+class AdminLoginView(View):    
     def get(self, request):
-        # Logic for rendering the admin login page
+        
         return render(request, 'admin/auth/admin_login.html')
 
     def post(self, request):
@@ -13,6 +14,7 @@ class AdminLoginView(View):
         # This would typically involve authentication checks
         return redirect('admin_dashboard')
     
+@admin_required(login_url="/admin/login/")    
 class AdminLogoutView(View):
     def get(self, request):
         logout(request)        
