@@ -1,8 +1,8 @@
 from enum import Enum
 
 
-class ErrorMessage(Enum):
-    E00001 = ""
+class ErrorMessages(Enum):
+    E00001 = "Invalid email or password"
     E00002 = ""
     E00003 = ""
     E00004 = ""

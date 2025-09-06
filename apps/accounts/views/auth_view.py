@@ -2,7 +2,7 @@ from django.views import View
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from apps.core.utilities.otp_service import send_otp_code, verify_otp_code
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from apps.accounts.services import user_service
 
 # class LoginView(View):
@@ -12,6 +12,11 @@ from apps.accounts.services import user_service
 #     def post(self, request):
 #         # Handle login logic here
 #         return redirect('home')  # Redirect to home after login    
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('home')
 
 def send_otp_view(request):
     if request.method == "POST":
@@ -33,7 +38,7 @@ def verify_otp_view(request):
         if verify_otp_code(contact, otp_code, purpose="login"):
             
              # Create or fetch user
-            user, created = user_service.user_create_or_check(contact)
+            user= user_service.user_create_or_check(contact)
 
             # Log the user in (sets session cookie)
             login(request, user)
