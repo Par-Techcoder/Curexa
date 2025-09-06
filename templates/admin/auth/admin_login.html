@@ -123,7 +123,11 @@
       </header>
 
       <!-- Login Form -->
-      <form id="loginForm" novalidate>
+      <form id="loginForm" method="post" novalidate>
+        {% csrf_token %}
+        {% if error_message %}
+          <div class="error-message">{{ error_message }}</div>
+        {% endif %}
         <!-- Email -->
         <div style="margin-bottom:1rem;">
           <label for="email">Admin Email</label>
@@ -163,40 +167,54 @@
   </main>
 
   <script>
-    const loginForm = document.getElementById('loginForm');
-    const signInBtn = document.getElementById('signInBtn');
-    const btnText = document.getElementById('btnText');
-    const loadingIcon = document.getElementById('loadingIcon');
-    const errorMessage = document.getElementById('errorMessage');
+loginForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
 
-    const demoCredentials = [
-      { email: 'admin@curexa.com', password: 'AdminPass123' },
-      { email: 'manager@healthsupply.com', password: 'Manager2025' }
-    ];
+    signInBtn.disabled = true;
+    btnText.textContent = 'Signing In...';
+    loadingIcon.style.display = 'inline-block';
+    errorMessage.style.display = 'none';
 
-    loginForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      const email = document.getElementById('email').value.trim();
-      const password = document.getElementById('password').value.trim();
-
-      signInBtn.disabled = true;
-      btnText.textContent = 'Signing In...';
-      loadingIcon.style.display = 'inline-block';
-      errorMessage.style.display = 'none';
-
-      setTimeout(() => {
-        const valid = demoCredentials.find(c => c.email === email && c.password === password);
-        if (valid) {
-          btnText.textContent = 'Success!';
-          setTimeout(() => { window.location.href = 'product_catalog_dashboard.html'; }, 1000);
-        } else {
-          signInBtn.disabled = false;
-          btnText.textContent = 'Sign In';
-          loadingIcon.style.display = 'none';
-          errorMessage.style.display = 'block';
+    // Get CSRF token from the cookie
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
         }
-      }, 1200);
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+    // Send POST to Django
+    const response = await fetch("{% url 'admin_login' %}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': csrftoken
+        },
+        body: `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
     });
+
+    if (response.redirected) {
+        window.location.href = response.url;  // login success
+    } else {
+        signInBtn.disabled = false;
+        btnText.textContent = 'Sign In';
+        loadingIcon.style.display = 'none';
+        errorMessage.style.display = 'block';
+    }
+});
+
+
   </script>
 </body>
 </html>
