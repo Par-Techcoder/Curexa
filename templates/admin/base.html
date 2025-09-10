@@ -234,7 +234,7 @@
 
     /* Main Content */
     .center-bodycontent {
-      margin-top: 70px;
+      {% comment %} margin-top: 70px; {% endcomment %}
       margin-left: 70px;
       transition: margin-left 0.3s ease;
       padding: 20px;
@@ -493,11 +493,11 @@
   <!-- Sidebar -->
   <div id="sidebar">
     <!-- Profile -->
-    <div class="profile-section">
-      <img src="https://ui-avatars.com/api/?name=Medical+Admin&background=random" alt="Profile">
+    <div class="profile-section">      
+      <img src="{% if user.profile_picture %}{{ user.profile_picture }}{% else %}{% static 'images/default_pic.jpg' %}{% endif %}" alt="Profile">
       <div class="profile-text">
-        <strong>Medical Admin</strong><br>
-        <small>admin@curexa.com</small>
+        <strong>{{ user.first_name }}</strong><br>
+        <small>{{ user.email }}</small>
       </div>
     </div>
 
@@ -530,21 +530,21 @@
       </div>
 
       <div class="sidebar-dropdown">
-        <a href="#" class="list-group-item parent-item">
+        <a href="{% url 'medicine_list' %}" class="list-group-item parent-item">
           <i class="fas fa-pills sidebar-icon"></i>
           <span class="sidebar-text">Medicines</span>
           <i class="bi bi-chevron-down sidebar-caret"></i>
           <span class="sidebar-tooltip">Medicines</span>
         </a>
         <div class="submenu">
-          <a href="#"><i class="fas fa-capsules me-2"></i> Medicine List</a>
+          <a href="{% url 'medicine_list' %}"><i class="fas fa-capsules me-2"></i> Medicine List</a>
           <a href="#"><i class="fas fa-cube me-2"></i> Inventory</a>
           <a href="#"><i class="fas fa-tags me-2"></i> Categories</a>
           <a href="#"><i class="fas fa-exclamation-triangle me-2"></i> Low Stock</a>
         </div>
         <div class="hover-submenu">
           <div class="hover-submenu-header">Medicines</div>
-          <a href="#"><i class="fas fa-capsules"></i> Medicine List</a>
+          <a href="{% url 'medicine_list' %}"><i class="fas fa-capsules"></i> Medicine List</a>
           <a href="#"><i class="fas fa-cube"></i> Inventory</a>
           <a href="#"><i class="fas fa-tags"></i> Categories</a>
           <a href="#"><i class="fas fa-exclamation-triangle"></i> Low Stock</a>

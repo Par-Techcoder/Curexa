@@ -9,35 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Sans+Pro:wght@400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
     
     <style>
-        /* Tailwind CSS Reset and Base Styles */
-        *, ::before, ::after {
-            box-sizing: border-box;
-            border-width: 0;
-            border-style: solid;
-            border-color: #e5e7eb;
-        }
-        
-        ::before, ::after {
-            --tw-content: '';
-        }
-        
-        html, :host {
-            line-height: 1.5;
-            -webkit-text-size-adjust: 100%;
-            -moz-tab-size: 4;
-            -o-tab-size: 4;
-            tab-size: 4;
-            font-family: Source Sans Pro, sans-serif;
-            font-feature-settings: normal;
-            font-variation-settings: normal;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        body {
-            margin: 0;
-            line-height: inherit;
-        }
-        
         /* CSS Variables for Design System */
         :root {
             /* Primary Colors */
@@ -80,97 +51,93 @@
             
             /* Border Colors */
             --color-border-light: #E2E8F0;
+            
+            /* Shadows */
+            --shadow-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-elevation-2: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --shadow-elevation-3: 0 8px 24px rgba(0, 0, 0, 0.2);
+            
+            /* Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 0.875rem;
+            --radius-2xl: 1rem;
         }
         
         /* Base Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
         body {
             font-family: 'Source Sans Pro', sans-serif;
-            background-color: var(--color-background);
+            background: linear-gradient(to bottom right, var(--color-primary-50), white, var(--color-accent-50));
             color: var(--color-text-primary);
             line-height: 1.6;
+            min-height: 100vh;
         }
         
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Inter', sans-serif;
             font-weight: 600;
             line-height: 1.3;
-            font-size: inherit;
             margin: 0;
         }
         
-        button, input, optgroup, select, textarea {
+        button, input, select, textarea {
             font-family: inherit;
-            font-feature-settings: inherit;
-            font-variation-settings: inherit;
-            font-size: 100%;
-            font-weight: inherit;
-            line-height: inherit;
-            letter-spacing: inherit;
-            color: inherit;
-            margin: 0;
-            padding: 0;
+            font-size: 1rem;
         }
         
-        button, input:where([type='button']), input:where([type='reset']), input:where([type='submit']) {
-            -webkit-appearance: button;
-            background-color: transparent;
-            background-image: none;
+        /* Utility Classes */
+        .flex {
+            display: flex;
         }
         
-        img, svg, video, canvas, audio, iframe, embed, object {
-            display: block;
-            vertical-align: middle;
+        .grid {
+            display: grid;
         }
         
-        img, video {
-            max-width: 100%;
-            height: auto;
-        }
-        
-        [hidden]:where(:not([hidden="until-found"])) {
+        .hidden {
             display: none;
+        }
+        
+        .items-center {
+            align-items: center;
+        }
+        
+        .justify-center {
+            justify-content: center;
+        }
+        
+        .justify-between {
+            justify-content: space-between;
+        }
+        
+        .justify-end {
+            justify-content: flex-end;
+        }
+        
+        .text-center {
+            text-align: center;
         }
         
         /* Component Styles */
         .glass-card {
             background: rgba(255, 255, 255, 0.25);
-            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.18);
             border-radius: 12px;
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
         }
         
-        .shadow-elevation-1 {
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        
-        .shadow-elevation-2 {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-        
-        .shadow-elevation-3 {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-        }
-        
-        .spring-animation {
-            animation: spring 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        
-        @keyframes spring {
-            0% {
-                transform: scale(0.8);
-                opacity: 0;
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-        
         .form-input {
             border: 1px solid var(--color-border-light);
-            border-radius: 6px;
+            border-radius: var(--radius-md);
             padding: 0.75rem 1rem;
             font-size: 0.875rem;
             transition: all 200ms ease-out;
@@ -188,178 +155,312 @@
             border-color: var(--color-error);
         }
         
-        /* Utility Classes */
-        .fixed { position: fixed; }
-        .absolute { position: absolute; }
-        .relative { position: relative; }
-        .inset-0 { inset: 0px; }
-        .left-3 { left: 0.75rem; }
-        .right-4 { right: 1rem; }
-        .top-1\/2 { top: 50%; }
-        .top-2 { top: 0.5rem; }
-        .top-4 { top: 1rem; }
-        .z-50 { z-index: 50; }
-        .z-60 { z-index: 60; }
-        
-        .mx-4 { margin-left: 1rem; margin-right: 1rem; }
-        .mx-auto { margin-left: auto; margin-right: auto; }
-        .mb-2 { margin-bottom: 0.5rem; }
-        .mb-4 { margin-bottom: 1rem; }
-        .mb-6 { margin-bottom: 1.5rem; }
-        .mr-2 { margin-right: 0.5rem; }
-        .mt-1 { margin-top: 0.25rem; }
-        .mt-2 { margin-top: 0.5rem; }
-        .mt-6 { margin-top: 1.5rem; }
-        
-        .block { display: block; }
-        .flex { display: flex; }
-        .grid { display: grid; }
-        .hidden { display: none; }
-        
-        .h-10 { height: 2.5rem; }
-        .h-12 { height: 3rem; }
-        .h-16 { height: 4rem; }
-        .h-4 { height: 1rem; }
-        .h-5 { height: 1.25rem; }
-        .h-6 { height: 1.5rem; }
-        .h-8 { height: 2rem; }
-        .min-h-screen { min-height: 100vh; }
-        .max-h-\[90vh\] { max-height: 90vh; }
-        .max-h-\[calc\(90vh-120px\)\] { max-height: calc(90vh - 120px); }
-        
-        .w-10 { width: 2.5rem; }
-        .w-12 { width: 3rem; }
-        .w-16 { width: 4rem; }
-        .w-3 { width: 0.75rem; }
-        .w-4 { width: 1rem; }
-        .w-5 { width: 1.25rem; }
-        .w-6 { width: 1.5rem; }
-        .w-8 { width: 2rem; }
-        .w-full { width: 100%; }
-        .max-w-6xl { max-width: 72rem; }
-        .max-w-md { max-width: 28rem; }
-        
-        .-translate-y-1\/2 {
-            --tw-translate-y: -50%;
-            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+        /* Background Pattern */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            pointer-events: none;
         }
-        .translate-x-full {
-            --tw-translate-x: 100%;
-            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+        
+        .bg-pattern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%232E86AB" fill-opacity="0.1"><path d="M30 30c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20zm0 0c0 11.046 8.954 20 20 20s20-8.954 20-20-8.954-20-20-20-20 8.954-20 20z"/></g></g>');
+            background-size: 60px 60px;
         }
-        .transform {
-            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+        
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            padding: 1rem;
+        }
+        
+        /* Modal Container */
+        .modal-container {
+            width: 100%;
+            max-width: 72rem;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: var(--shadow-elevation-3);
+            animation: spring 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        @keyframes spring {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        /* Modal Header */
+        .modal-header {
+            background-color: var(--color-surface);
+            border-bottom: 1px solid var(--color-border-light);
+            padding: 1.5rem 2rem;
+        }
+        
+        /* Modal Content */
+        .modal-content {
+            overflow-y: auto;
+            max-height: calc(90vh - 120px);
+            padding: 2rem;
+        }
+        
+        /* Form Sections */
+        .form-section {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-border-light);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-elevation-1);
+            margin-bottom: 2rem;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .icon-container {
+            width: 2rem;
+            height: 2rem;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        
+        @media (min-width: 768px) {
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .form-grid-wide {
+                grid-column: span 2;
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .form-grid-quad {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        /* Form Labels */
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--color-text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .required-star {
+            color: var(--color-error);
+        }
+        
+        /* Error Messages */
+        .error-message {
+            font-size: 0.75rem;
+            color: var(--color-error);
+            margin-top: 0.25rem;
+            display: none;
+        }
+        
+        /* Image Upload Area */
+        .image-upload-area {
+            border: 2px dashed var(--color-border-light);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 200ms ease;
+        }
+        
+        .image-upload-area:hover {
+            border-color: var(--color-primary);
+        }
+        
+        /* Modal Footer */
+        .modal-footer {
+            background-color: var(--color-surface);
+            border-top: 1px solid var(--color-border-light);
+            padding: 1.5rem 2rem;
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: var(--radius-lg);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 200ms ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-secondary {
+            background-color: var(--color-secondary);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--color-secondary-600);
+            transform: scale(1.02);
+        }
+        
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--color-primary-600);
+            transform: scale(1.02);
+        }
+        
+        .btn-cancel {
+            border: 1px solid var(--color-border-light);
+            color: var(--color-text-secondary);
+            background-color: transparent;
+        }
+        
+        .btn-cancel:hover {
+            background-color: #f9fafb;
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background-color: var(--color-success-100);
+            color: var(--color-success-500);
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-elevation-3);
+            transform: translateX(100%);
+            transition: transform 300ms ease;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        /* Confirmation Dialog */
+        .confirmation-dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 60;
+        }
+        
+        .dialog-content {
+            background-color: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            max-width: 28rem;
+            width: 100%;
+            margin: 0 1rem;
+            box-shadow: var(--shadow-elevation-3);
+        }
+        
+        /* Auto-save Indicator */
+        .auto-save-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            margin-top: 2rem;
+        }
+        
+        .spinner {
+            animation: spin 1s linear infinite;
+            display: none;
         }
         
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-        .animate-spin { animation: spin 1s linear infinite; }
         
-        .cursor-pointer { cursor: pointer; }
-        .resize-none { resize: none; }
+        /* Image Preview */
+        .image-preview-area {
+            margin-top: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            display: none;
+        }
         
-        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        @media (min-width: 768px) {
+            .image-preview-area {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
         
-        .items-center { align-items: center; }
-        .justify-center { justify-content: center; }
-        .justify-between { justify-content: space-between; }
-        .justify-end { justify-content: flex-end; }
-        
+        /* Spacing Utilities */
+        .gap-3 { gap: 0.75rem; }
         .gap-4 { gap: 1rem; }
         .gap-6 { gap: 1.5rem; }
+        .gap-8 { gap: 2rem; }
         
-        .space-x-2 > :not([hidden]) ~ :not([hidden]) {
-            --tw-space-x-reverse: 0;
-            margin-right: calc(0.5rem * var(--tw-space-x-reverse));
-            margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
-        }
-        .space-x-3 > :not([hidden]) ~ :not([hidden]) {
-            --tw-space-x-reverse: 0;
-            margin-right: calc(0.75rem * var(--tw-space-x-reverse));
-            margin-left: calc(0.75rem * calc(1 - var(--tw-space-x-reverse)));
-        }
-        .space-x-4 > :not([hidden]) ~ :not([hidden]) {
-            --tw-space-x-reverse: 0;
-            margin-right: calc(1rem * var(--tw-space-x-reverse));
-            margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
-        }
-        .space-y-4 > :not([hidden]) ~ :not([hidden]) {
-            --tw-space-y-reverse: 0;
-            margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
-            margin-bottom: calc(1rem * var(--tw-space-y-reverse));
-        }
-        .space-y-6 > :not([hidden]) ~ :not([hidden]) {
-            --tw-space-y-reverse: 0;
-            margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
-            margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
-        }
-        .space-y-8 > :not([hidden]) ~ :not([hidden]) {
-            --tw-space-y-reverse: 0;
-            margin-top: calc(2rem * calc(1 - var(--tw-space-y-reverse)));
-            margin-bottom: calc(2rem * var(--tw-space-y-reverse));
-        }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
         
-        .overflow-hidden { overflow: hidden; }
-        .overflow-y-auto { overflow-y: auto; }
-        
-        .rounded-full { border-radius: 9999px; }
-        .rounded-lg { border-radius: 0.5rem; }
-        .rounded-xl { border-radius: 0.75rem; }
-        
-        .border { border-width: 1px; }
-        .border-2 { border-width: 2px; }
-        .border-b { border-bottom-width: 1px; }
-        .border-t { border-top-width: 1px; }
-        .border-dashed { border-style: dashed; }
-        
-        .border-border-light { border-color: var(--color-border-light); }
-        .border-error { border-color: var(--color-error); }
-        .border-primary { border-color: var(--color-primary); }
-        .border-warning { border-color: var(--color-warning); }
-        
-        .bg-accent-100 { background-color: var(--color-accent-100); }
-        .bg-black { background-color: #000000; }
-        .bg-error { background-color: var(--color-error); }
-        .bg-error-600 { background-color: var(--color-error-600); }
-        .bg-gray-50 { background-color: #f9fafb; }
-        .bg-primary { background-color: var(--color-primary); }
-        .bg-primary-100 { background-color: var(--color-primary-100); }
-        .bg-primary-50 { background-color: var(--color-primary-50); }
-        .bg-primary-600 { background-color: var(--color-primary-600); }
-        .bg-secondary { background-color: var(--color-secondary); }
-        .bg-secondary-100 { background-color: #EBD1E1; }
-        .bg-secondary-600 { background-color: var(--color-secondary-600); }
-        .bg-success-100 { background-color: var(--color-success-100); }
-        .bg-success-500 { background-color: var(--color-success-500); }
-        .bg-warning-100 { background-color: var(--color-warning-100); }
-        .bg-warning-600 { background-color: var(--color-warning-600); }
-        .bg-white { background-color: #ffffff; }
-        .bg-opacity-50 { --tw-bg-opacity: 0.5; }
-        
-        .bg-gradient-to-br { background-image: linear-gradient(to bottom right, var(--tw-gradient-stops)); }
-        .from-primary-50 {
-            --tw-gradient-from: var(--color-primary-50) var(--tw-gradient-from-position);
-            --tw-gradient-to: rgb(235 244 248 / 0) var(--tw-gradient-to-position);
-            --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-        }
-        .via-white {
-            --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position);
-            --tw-gradient-stops: var(--tw-gradient-from), #fff var(--tw-gradient-via-position), var(--tw-gradient-to);
-        }
-        .to-accent-50 { --tw-gradient-to: var(--color-accent-50) var(--tw-gradient-to-position); }
-        
-        .object-cover { -o-object-fit: cover; object-fit: cover; }
+        .mt-1 { margin-top: 0.25rem; }
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-6 { margin-top: 1.5rem; }
         
         .p-2 { padding: 0.5rem; }
         .p-4 { padding: 1rem; }
         .p-6 { padding: 1.5rem; }
         .p-8 { padding: 2rem; }
         
-        .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
-        .px-4 { padding-left: 1rem; padding-right: 1rem; }
         .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
         .px-8 { padding-left: 2rem; padding-right: 2rem; }
         
@@ -367,97 +468,84 @@
         .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
         .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
         
-        .pl-8 { padding-left: 2rem; }
+        .space-y-4 > * + * { margin-top: 1rem; }
+        .space-y-6 > * + * { margin-top: 1.5rem; }
+        .space-y-8 > * + * { margin-top: 2rem; }
         
-        .text-center { text-align: center; }
-        
-        .font-heading { font-family: 'Inter', sans-serif; }
-        .font-data { font-family: 'JetBrains Mono', monospace; }
-        
-        .text-2xl { font-size: 1.5rem; line-height: 2rem; }
-        .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
-        .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
-        .text-xs { font-size: 0.75rem; line-height: 1rem; }
+        /* Text Styles */
+        .text-sm { font-size: 0.875rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; }
+        .text-2xl { font-size: 1.5rem; }
         
         .font-medium { font-weight: 500; }
         .font-semibold { font-weight: 600; }
         
-        .text-accent-600 { color: var(--color-accent-600); }
-        .text-error { color: var(--color-error); }
-        .text-error-600 { color: var(--color-error-600); }
-        .text-primary { color: var(--color-primary); }
-        .text-primary-600 { color: var(--color-primary-600); }
-        .text-secondary { color: var(--color-secondary); }
-        .text-success-500 { color: var(--color-success-500); }
         .text-text-primary { color: var(--color-text-primary); }
         .text-text-secondary { color: var(--color-text-secondary); }
-        .text-warning-600 { color: var(--color-warning-600); }
-        .text-white { color: #ffffff; }
+        .text-primary { color: var(--color-primary); }
+        .text-secondary { color: var(--color-secondary); }
+        .text-accent-600 { color: var(--color-accent-600); }
+        .text-success-500 { color: var(--color-success-500); }
+        .text-error { color: var(--color-error); }
+        .text-white { color: white; }
         
-        .opacity-5 { opacity: 0.05; }
-        .opacity-25 { opacity: 0.25; }
-        .opacity-75 { opacity: 0.75; }
+        /* Background Colors */
+        .bg-primary { background-color: var(--color-primary); }
+        .bg-primary-50 { background-color: var(--color-primary-50); }
+        .bg-primary-100 { background-color: var(--color-primary-100); }
+        .bg-accent-100 { background-color: var(--color-accent-100); }
+        .bg-secondary-100 { background-color: #EBD1E1; }
+        .bg-success-100 { background-color: var(--color-success-100); }
+        .bg-warning-100 { background-color: var(--color-warning-100); }
+        .bg-white { background-color: var(--color-surface); }
         
-        .transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
-        .transition-colors { transition-property: color, background-color, border-color, text-decoration-color, fill, stroke; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
-        .transition-transform { transition-property: transform; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
-        .duration-200 { transition-duration: 200ms; }
-        .duration-300 { transition-duration: 300ms; }
-        
-        .hover\:scale-\[1\.02\]:hover {
-            --tw-scale-x: 1.02;
-            --tw-scale-y: 1.02;
-            transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+        /* Icons */
+        .icon-sm {
+            width: 1rem;
+            height: 1rem;
         }
         
-        .hover\:border-primary:hover { border-color: var(--color-primary); }
-        .hover\:bg-error-600:hover { background-color: var(--color-error-600); }
-        .hover\:bg-gray-50:hover { background-color: #f9fafb; }
-        .hover\:bg-primary-50:hover { background-color: var(--color-primary-50); }
-        .hover\:bg-primary-600:hover { background-color: var(--color-primary-600); }
-        .hover\:bg-secondary-600:hover { background-color: var(--color-secondary-600); }
-        .hover\:text-primary:hover { color: var(--color-primary); }
-        .hover\:text-text-primary:hover { color: var(--color-text-primary); }
-        
-        /* Responsive */
-        @media (min-width: 768px) {
-            .md\:col-span-2 { grid-column: span 2 / span 2; }
-            .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .icon-md {
+            width: 1.25rem;
+            height: 1.25rem;
         }
         
-        @media (min-width: 1024px) {
-            .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .icon-lg {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+        
+        .icon-xl {
+            width: 2rem;
+            height: 2rem;
         }
     </style>
-<script type="module" src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fmedicommer1732back.builtwithrocket.new&_be=https%3A%2F%2Fapplication.rocket.new&_v=0.1.6"></script>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-primary-50 via-white to-accent-50">
+<body>
     <!-- Background Pattern -->
-    <div class="fixed inset-0 opacity-5">
-        <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,<svg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;><g fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;><g fill=&quot;%232E86AB&quot; fill-opacity=&quot;0.1&quot;><path d=&quot;M30 30c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20zm0 0c0 11.046 8.954 20 20 20s20-8.954 20-20-8.954-20-20-20-20 8.954-20 20z&quot;></path></g></g>'); background-size: 60px 60px;"></div>
-    </div>
+    <div class="bg-pattern"></div>
 
     <!-- Modal Overlay -->
-    <div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div class="modal-overlay">
         <!-- Modal Container -->
-        <div id="modalContainer" class="glass-card w-full max-w-6xl max-h-[90vh] overflow-hidden shadow-elevation-3 spring-animation">
+        <div class="modal-container glass-card">
             <!-- Modal Header -->
-            <div class="bg-white border-b border-border-light px-8 py-6">
+            <div class="modal-header">
                 <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-4">
+                    <div class="flex items-center gap-4">
                         <div class="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="icon-lg text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                             </svg>
                         </div>
                         <div>
-                            <h1 class="text-2xl font-heading font-semibold text-text-primary">Add New Medical Product</h1>
+                            <h1 class="text-2xl font-semibold text-text-primary">Add New Medical Product</h1>
                             <p class="text-text-secondary text-sm">Enter comprehensive product information for your medical catalog</p>
                         </div>
                     </div>
-                    <button id="closeModal" class="text-text-secondary hover:text-text-primary transition-colors duration-200 p-2">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button id="closeModal" class="text-text-secondary p-2" style="transition: color 200ms ease;">
+                        <svg class="icon-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
                     </button>
@@ -465,44 +553,44 @@
             </div>
 
             <!-- Modal Content -->
-            <div class="overflow-y-auto max-h-[calc(90vh-120px)]">
-                <form id="addProductForm" class="p-8 space-y-8">
+            <div class="modal-content">
+                <form id="addProductForm" class="space-y-8">
                     <!-- Product Basics Section -->
-                    <section class="bg-white rounded-lg border border-border-light p-6 shadow-elevation-1">
-                        <div class="flex items-center space-x-3 mb-6">
-                            <div class="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                    <section class="form-section">
+                        <div class="section-header">
+                            <div class="icon-container bg-primary-100">
+                                <svg class="icon-md text-primary" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
                             </div>
-                            <h2 class="text-lg font-heading font-semibold text-text-primary">Product Basics</h2>
+                            <h2 class="text-lg font-semibold text-text-primary">Product Basics</h2>
                         </div>
                         
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="form-grid">
                             <!-- Product Name -->
                             <div>
-                                <label for="productName" class="block text-sm font-medium text-text-primary mb-2">
-                                    Product Name <span class="text-error">*</span>
+                                <label for="productName" class="form-label">
+                                    Product Name <span class="required-star">*</span>
                                 </label>
-                                <input type="text" id="productName" name="productName" class="form-input w-full" placeholder="e.g., Digital Blood Pressure Monitor" required />
-                                <div class="text-xs text-error mt-1 hidden" id="productNameError">Product name is required</div>
+                                <input type="text" id="productName" name="productName" class="form-input" placeholder="e.g., Digital Blood Pressure Monitor" required />
+                                <div class="error-message" id="productNameError">Product name is required</div>
                             </div>
 
                             <!-- SKU -->
                             <div>
-                                <label for="productSku" class="block text-sm font-medium text-text-primary mb-2">
-                                    SKU <span class="text-error">*</span>
+                                <label for="productSku" class="form-label">
+                                    SKU <span class="required-star">*</span>
                                 </label>
-                                <input type="text" id="productSku" name="productSku" class="form-input w-full" placeholder="e.g., MED-BP-001" required />
-                                <div class="text-xs text-error mt-1 hidden" id="productSkuError">SKU is required</div>
+                                <input type="text" id="productSku" name="productSku" class="form-input" placeholder="e.g., MED-BP-001" required />
+                                <div class="error-message" id="productSkuError">SKU is required</div>
                             </div>
 
                             <!-- Category -->
                             <div>
-                                <label for="productCategory" class="block text-sm font-medium text-text-primary mb-2">
-                                    Medical Category <span class="text-error">*</span>
+                                <label for="productCategory" class="form-label">
+                                    Medical Category <span class="required-star">*</span>
                                 </label>
-                                <select id="productCategory" name="productCategory" class="form-input w-full" required>
+                                <select id="productCategory" name="productCategory" class="form-input" required>
                                     <option value>Select Category</option>
                                     <option value="medications">Medications</option>
                                     <option value="medical-devices">Medical Devices</option>
@@ -513,113 +601,113 @@
                                     <option value="laboratory-equipment">Laboratory Equipment</option>
                                     <option value="personal-protective-equipment">Personal Protective Equipment</option>
                                 </select>
-                                <div class="text-xs text-error mt-1 hidden" id="productCategoryError">Category is required</div>
+                                <div class="error-message" id="productCategoryError">Category is required</div>
                             </div>
 
                             <!-- Manufacturer -->
                             <div>
-                                <label for="manufacturer" class="block text-sm font-medium text-text-primary mb-2">
-                                    Manufacturer <span class="text-error">*</span>
+                                <label for="manufacturer" class="form-label">
+                                    Manufacturer <span class="required-star">*</span>
                                 </label>
-                                <input type="text" id="manufacturer" name="manufacturer" class="form-input w-full" placeholder="e.g., Omron Healthcare" required />
-                                <div class="text-xs text-error mt-1 hidden" id="manufacturerError">Manufacturer is required</div>
+                                <input type="text" id="manufacturer" name="manufacturer" class="form-input" placeholder="e.g., Omron Healthcare" required />
+                                <div class="error-message" id="manufacturerError">Manufacturer is required</div>
                             </div>
                         </div>
                     </section>
 
                     <!-- Pricing & Inventory Section -->
-                    <section class="bg-white rounded-lg border border-border-light p-6 shadow-elevation-1">
-                        <div class="flex items-center space-x-3 mb-6">
-                            <div class="w-8 h-8 bg-accent-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-4 h-4 text-accent-600" fill="currentColor" viewBox="0 0 20 20">
+                    <section class="form-section">
+                        <div class="section-header">
+                            <div class="icon-container bg-accent-100">
+                                <svg class="icon-md text-accent-600" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"/>
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"/>
                                 </svg>
                             </div>
-                            <h2 class="text-lg font-heading font-semibold text-text-primary">Pricing & Inventory</h2>
+                            <h2 class="text-lg font-semibold text-text-primary">Pricing & Inventory</h2>
                         </div>
                         
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="form-grid form-grid-quad">
                             <!-- Cost Price -->
                             <div>
-                                <label for="costPrice" class="block text-sm font-medium text-text-primary mb-2">
-                                    Cost Price (USD) <span class="text-error">*</span>
+                                <label for="costPrice" class="form-label">
+                                    Cost Price (USD) <span class="required-star">*</span>
                                 </label>
-                                <div class="relative">
-                                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary">$</span>
-                                    <input type="number" id="costPrice" name="costPrice" class="form-input w-full pl-8" placeholder="0.00" step="0.01" min="0" required />
+                                <div style="position: relative;">
+                                    <span style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--color-text-secondary);">$</span>
+                                    <input type="number" id="costPrice" name="costPrice" class="form-input" style="padding-left: 2rem;" placeholder="0.00" step="0.01" min="0" required />
                                 </div>
-                                <div class="text-xs text-error mt-1 hidden" id="costPriceError">Cost price is required</div>
+                                <div class="error-message" id="costPriceError">Cost price is required</div>
                             </div>
 
                             <!-- Retail Price -->
                             <div>
-                                <label for="retailPrice" class="block text-sm font-medium text-text-primary mb-2">
-                                    Retail Price (USD) <span class="text-error">*</span>
+                                <label for="retailPrice" class="form-label">
+                                    Retail Price (USD) <span class="required-star">*</span>
                                 </label>
-                                <div class="relative">
-                                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-secondary">$</span>
-                                    <input type="number" id="retailPrice" name="retailPrice" class="form-input w-full pl-8" placeholder="0.00" step="0.01" min="0" required />
+                                <div style="position: relative;">
+                                    <span style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--color-text-secondary);">$</span>
+                                    <input type="number" id="retailPrice" name="retailPrice" class="form-input" style="padding-left: 2rem;" placeholder="0.00" step="0.01" min="0" required />
                                 </div>
-                                <div class="text-xs text-error mt-1 hidden" id="retailPriceError">Retail price is required</div>
+                                <div class="error-message" id="retailPriceError">Retail price is required</div>
                             </div>
 
                             <!-- Stock Quantity -->
                             <div>
-                                <label for="stockQuantity" class="block text-sm font-medium text-text-primary mb-2">
-                                    Stock Quantity <span class="text-error">*</span>
+                                <label for="stockQuantity" class="form-label">
+                                    Stock Quantity <span class="required-star">*</span>
                                 </label>
-                                <input type="number" id="stockQuantity" name="stockQuantity" class="form-input w-full" placeholder="0" min="0" required />
-                                <div class="text-xs text-error mt-1 hidden" id="stockQuantityError">Stock quantity is required</div>
+                                <input type="number" id="stockQuantity" name="stockQuantity" class="form-input" placeholder="0" min="0" required />
+                                <div class="error-message" id="stockQuantityError">Stock quantity is required</div>
                             </div>
 
                             <!-- Reorder Threshold -->
                             <div>
-                                <label for="reorderThreshold" class="block text-sm font-medium text-text-primary mb-2">
+                                <label for="reorderThreshold" class="form-label">
                                     Reorder Threshold
                                 </label>
-                                <input type="number" id="reorderThreshold" name="reorderThreshold" class="form-input w-full" placeholder="10" min="0" />
+                                <input type="number" id="reorderThreshold" name="reorderThreshold" class="form-input" placeholder="10" min="0" />
                             </div>
                         </div>
                     </section>
 
                     <!-- Product Details Section -->
-                    <section class="bg-white rounded-lg border border-border-light p-6 shadow-elevation-1">
-                        <div class="flex items-center space-x-3 mb-6">
-                            <div class="w-8 h-8 bg-secondary-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-4 h-4 text-secondary" fill="currentColor" viewBox="0 0 20 20">
+                    <section class="form-section">
+                        <div class="section-header">
+                            <div class="icon-container bg-secondary-100">
+                                <svg class="icon-md text-secondary" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 0v12h8V4H6z" clip-rule="evenodd"/>
                                 </svg>
                             </div>
-                            <h2 class="text-lg font-heading font-semibold text-text-primary">Product Details</h2>
+                            <h2 class="text-lg font-semibold text-text-primary">Product Details</h2>
                         </div>
                         
                         <div class="space-y-6">
                             <!-- Description -->
                             <div>
-                                <label for="description" class="block text-sm font-medium text-text-primary mb-2">
-                                    Product Description <span class="text-error">*</span>
+                                <label for="description" class="form-label">
+                                    Product Description <span class="required-star">*</span>
                                 </label>
-                                <textarea id="description" name="description" rows="4" class="form-input w-full resize-none" placeholder="Provide detailed product description including features, benefits, and usage instructions..." required></textarea>
-                                <div class="text-xs text-error mt-1 hidden" id="descriptionError">Description is required</div>
+                                <textarea id="description" name="description" rows="4" class="form-input" style="resize: none;" placeholder="Provide detailed product description including features, benefits, and usage instructions..." required></textarea>
+                                <div class="error-message" id="descriptionError">Description is required</div>
                             </div>
 
                             <!-- Specifications -->
                             <div>
-                                <label for="specifications" class="block text-sm font-medium text-text-primary mb-2">
+                                <label for="specifications" class="form-label">
                                     Technical Specifications
                                 </label>
-                                <textarea id="specifications" name="specifications" rows="3" class="form-input w-full resize-none" placeholder="Enter technical specifications, dimensions, weight, power requirements, etc..."></textarea>
+                                <textarea id="specifications" name="specifications" rows="3" class="form-input" style="resize: none;" placeholder="Enter technical specifications, dimensions, weight, power requirements, etc..."></textarea>
                             </div>
 
                             <!-- Medical-Specific Fields -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="form-grid">
                                 <!-- FDA Approval -->
                                 <div>
-                                    <label for="fdaApproval" class="block text-sm font-medium text-text-primary mb-2">
+                                    <label for="fdaApproval" class="form-label">
                                         FDA Approval Status
                                     </label>
-                                    <select id="fdaApproval" name="fdaApproval" class="form-input w-full">
+                                    <select id="fdaApproval" name="fdaApproval" class="form-input">
                                         <option value>Select Status</option>
                                         <option value="approved">FDA Approved</option>
                                         <option value="cleared">FDA Cleared</option>
@@ -631,10 +719,10 @@
 
                                 <!-- Prescription Required -->
                                 <div>
-                                    <label for="prescriptionRequired" class="block text-sm font-medium text-text-primary mb-2">
+                                    <label for="prescriptionRequired" class="form-label">
                                         Prescription Required
                                     </label>
-                                    <select id="prescriptionRequired" name="prescriptionRequired" class="form-input w-full">
+                                    <select id="prescriptionRequired" name="prescriptionRequired" class="form-input">
                                         <option value="no">No</option>
                                         <option value="yes">Yes</option>
                                         <option value="otc">Over-the-Counter</option>
@@ -643,47 +731,47 @@
 
                                 <!-- Storage Conditions -->
                                 <div>
-                                    <label for="storageConditions" class="block text-sm font-medium text-text-primary mb-2">
+                                    <label for="storageConditions" class="form-label">
                                         Storage Conditions
                                     </label>
-                                    <input type="text" id="storageConditions" name="storageConditions" class="form-input w-full" placeholder="e.g., Store at room temperature (15-30°C)" />
+                                    <input type="text" id="storageConditions" name="storageConditions" class="form-input" placeholder="e.g., Store at room temperature (15-30°C)" />
                                 </div>
 
                                 <!-- Expiration Date -->
                                 <div>
-                                    <label for="expirationDate" class="block text-sm font-medium text-text-primary mb-2">
+                                    <label for="expirationDate" class="form-label">
                                         Expiration Date
                                     </label>
-                                    <input type="date" id="expirationDate" name="expirationDate" class="form-input w-full" />
+                                    <input type="date" id="expirationDate" name="expirationDate" class="form-input" />
                                 </div>
 
                                 <!-- Dosage Information -->
-                                <div class="md:col-span-2">
-                                    <label for="dosageInfo" class="block text-sm font-medium text-text-primary mb-2">
+                                <div class="form-grid-wide">
+                                    <label for="dosageInfo" class="form-label">
                                         Dosage Information (if applicable)
                                     </label>
-                                    <input type="text" id="dosageInfo" name="dosageInfo" class="form-input w-full" placeholder="e.g., 500mg tablets, take 1-2 tablets every 4-6 hours" />
+                                    <input type="text" id="dosageInfo" name="dosageInfo" class="form-input" placeholder="e.g., 500mg tablets, take 1-2 tablets every 4-6 hours" />
                                 </div>
                             </div>
                         </div>
                     </section>
 
                     <!-- Media Upload Section -->
-                    <section class="bg-white rounded-lg border border-border-light p-6 shadow-elevation-1">
-                        <div class="flex items-center space-x-3 mb-6">
-                            <div class="w-8 h-8 bg-success-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-4 h-4 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <section class="form-section">
+                        <div class="section-header">
+                            <div class="icon-container bg-success-100">
+                                <svg class="icon-md text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                 </svg>
                             </div>
-                            <h2 class="text-lg font-heading font-semibold text-text-primary">Product Images</h2>
+                            <h2 class="text-lg font-semibold text-text-primary">Product Images</h2>
                         </div>
                         
                         <!-- Image Upload Area -->
-                        <div id="imageUploadArea" class="border-2 border-dashed border-border-light rounded-lg p-8 text-center hover:border-primary transition-colors duration-200 cursor-pointer">
+                        <div id="imageUploadArea" class="image-upload-area">
                             <div class="space-y-4">
                                 <div class="w-16 h-16 bg-primary-50 rounded-full flex items-center justify-center mx-auto">
-                                    <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="icon-xl text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
                                     </svg>
                                 </div>
@@ -696,16 +784,16 @@
                         </div>
 
                         <!-- Image Preview Area -->
-                        <div id="imagePreviewArea" class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 hidden">
+                        <div id="imagePreviewArea" class="image-preview-area">
                             <!-- Preview thumbnails will be inserted here -->
                         </div>
                     </section>
 
                     <!-- Auto-save Indicator -->
-                    <div id="autoSaveIndicator" class="flex items-center justify-center space-x-2 text-sm text-text-secondary">
-                        <svg class="w-4 h-4 animate-spin hidden" id="autoSaveSpinner" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                    <div class="auto-save-indicator">
+                        <svg class="spinner icon-sm" id="autoSaveSpinner" fill="none" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" style="opacity: 0.25;"/>
+                            <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" style="opacity: 0.75;"/>
                         </svg>
                         <span id="autoSaveText">Changes saved automatically</span>
                     </div>
@@ -713,25 +801,25 @@
             </div>
 
             <!-- Modal Footer -->
-            <div class="bg-white border-t border-border-light px-8 py-6">
+            <div class="modal-footer">
                 <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-2 text-sm text-text-secondary">
-                        <svg class="w-4 h-4 text-success-500" fill="currentColor" viewBox="0 0 20 20">
+                    <div class="flex items-center gap-2 text-sm text-text-secondary">
+                        <svg class="icon-sm text-success-500" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
                         </svg>
                         <span>All data is encrypted and HIPAA compliant</span>
                     </div>
                     
-                    <div class="flex items-center space-x-4">
-                        <button type="button" id="cancelBtn" class="px-6 py-2 border border-border-light text-text-secondary rounded-lg hover:bg-gray-50 transition-colors duration-200">
+                    <div class="flex items-center gap-4">
+                        <button type="button" id="cancelBtn" class="btn btn-cancel">
                             Cancel
                         </button>
-                        <button type="button" id="saveAndAddBtn" class="px-6 py-2 bg-secondary text-white rounded-lg hover:bg-secondary-600 transition-all duration-200 transform hover:scale-[1.02]">
+                        <button type="button" id="saveAndAddBtn" class="btn btn-secondary">
                             Save & Add Another
                         </button>
-                        <button type="submit" form="addProductForm" id="saveProductBtn" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-600 transition-all duration-200 transform hover:scale-[1.02] flex items-center space-x-2">
+                        <button type="submit" form="addProductForm" id="saveProductBtn" class="btn btn-primary">
                             <span>Save Product</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                             </svg>
                         </button>
@@ -742,32 +830,30 @@
     </div>
 
     <!-- Success Notification -->
-    <div id="successNotification" class="fixed top-4 right-4 bg-success-100 text-success-500 px-6 py-4 rounded-lg shadow-elevation-3 transform translate-x-full transition-transform duration-300 z-50">
-        <div class="flex items-center space-x-3">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-            </svg>
-            <span>Product added successfully!</span>
-        </div>
+    <div id="successNotification" class="notification">
+        <svg class="icon-md" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span>Product added successfully!</span>
     </div>
 
     <!-- Confirmation Dialog -->
-    <div id="confirmationDialog" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-60">
-        <div class="bg-white rounded-lg p-6 max-w-md mx-4 shadow-elevation-3">
-            <div class="flex items-center space-x-3 mb-4">
+    <div id="confirmationDialog" class="confirmation-dialog">
+        <div class="dialog-content">
+            <div class="flex items-center gap-3 mb-4">
                 <div class="w-10 h-10 bg-warning-100 rounded-full flex items-center justify-center">
-                    <svg class="w-5 h-5 text-warning-600" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="icon-md text-warning-600" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
                     </svg>
                 </div>
-                <h3 class="text-lg font-heading font-semibold text-text-primary">Confirm Action</h3>
+                <h3 class="text-lg font-semibold text-text-primary">Confirm Action</h3>
             </div>
             <p class="text-text-secondary mb-6" id="confirmationMessage">Are you sure you want to cancel? All unsaved changes will be lost.</p>
-            <div class="flex items-center justify-end space-x-3">
-                <button id="confirmCancel" class="px-4 py-2 text-text-secondary hover:text-text-primary transition-colors duration-200">
+            <div class="flex items-center justify-end gap-3">
+                <button id="confirmCancel" class="btn btn-cancel py-2">
                     No, Continue Editing
                 </button>
-                <button id="confirmAction" class="px-4 py-2 bg-error text-white rounded-lg hover:bg-error-600 transition-colors duration-200">
+                <button id="confirmAction" class="btn" style="background-color: var(--color-error); color: white;">
                     Yes, Cancel
                 </button>
             </div>
@@ -775,388 +861,123 @@
     </div>
 
     <script>
-        // Modal functionality
-        const modalOverlay = document.getElementById('modalOverlay');
-        const modalContainer = document.getElementById('modalContainer');
-        const closeModal = document.getElementById('closeModal');
-        const cancelBtn = document.getElementById('cancelBtn');
-        const confirmationDialog = document.getElementById('confirmationDialog');
-        const confirmCancel = document.getElementById('confirmCancel');
-        const confirmAction = document.getElementById('confirmAction');
-
-        // Form elements
-        const addProductForm = document.getElementById('addProductForm');
-        const saveProductBtn = document.getElementById('saveProductBtn');
-        const saveAndAddBtn = document.getElementById('saveAndAddBtn');
-        const successNotification = document.getElementById('successNotification');
-
-        // Auto-save elements
-        const autoSaveIndicator = document.getElementById('autoSaveIndicator');
-        const autoSaveSpinner = document.getElementById('autoSaveSpinner');
-        const autoSaveText = document.getElementById('autoSaveText');
-
-        // Image upload elements
-        const imageUploadArea = document.getElementById('imageUploadArea');
-        const imageInput = document.getElementById('imageInput');
-        const imagePreviewArea = document.getElementById('imagePreviewArea');
-
-        let uploadedImages = [];
-        let autoSaveTimeout;
-        let hasUnsavedChanges = false;
-
-        // Modal entrance animation
-        setTimeout(() => {
-            modalContainer.classList.add('spring-animation');
-        }, 100);
-
-        // Close modal handlers
-        function showConfirmationDialog() {
-            if (hasUnsavedChanges) {
-                confirmationDialog.classList.remove('hidden');
-                confirmationDialog.classList.add('flex');
-            } else {
-                closeModalDirectly();
-            }
-        }
-
-        function closeModalDirectly() {
-            // Instead of redirecting to another page, just hide the modal
-            alert('Product form closed. In a standalone version, this would close the modal or redirect appropriately.');
-        }
-
-        closeModal.addEventListener('click', showConfirmationDialog);
-        cancelBtn.addEventListener('click', showConfirmationDialog);
-
-        confirmCancel.addEventListener('click', () => {
-            confirmationDialog.classList.add('hidden');
-            confirmationDialog.classList.remove('flex');
-        });
-
-        confirmAction.addEventListener('click', closeModalDirectly);
-
-        // Close modal when clicking outside
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) {
-                showConfirmationDialog();
-            }
-        });
-
-        // Image upload functionality
-        imageUploadArea.addEventListener('click', () => {
-            imageInput.click();
-        });
-
-        imageUploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            imageUploadArea.classList.add('border-primary', 'bg-primary-50');
-        });
-
-        imageUploadArea.addEventListener('dragleave', () => {
-            imageUploadArea.classList.remove('border-primary', 'bg-primary-50');
-        });
-
-        imageUploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            imageUploadArea.classList.remove('border-primary', 'bg-primary-50');
-            handleImageFiles(e.dataTransfer.files);
-        });
-
-        imageInput.addEventListener('change', (e) => {
-            handleImageFiles(e.target.files);
-        });
-
-        function handleImageFiles(files) {
-            Array.from(files).forEach(file => {
-                if (file.type.startsWith('image/') && file.size <= 10 * 1024 * 1024) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        uploadedImages.push({
-                            file: file,
-                            url: e.target.result,
-                            name: file.name
-                        });
-                        updateImagePreview();
-                        triggerAutoSave();
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-
-        function updateImagePreview() {
-            if (uploadedImages.length > 0) {
-                imagePreviewArea.classList.remove('hidden');
-                imagePreviewArea.innerHTML = uploadedImages.map((image, index) => `
-                    <div class="relative group">
-                        <img src="${image.url}" alt="${image.name}" class="w-full h-24 object-cover rounded-lg border border-border-light">
-                        <button 
-                            type="button" 
-                            onclick="removeImage(${index})"
-                            class="absolute -top-2 -right-2 w-6 h-6 bg-error text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                        >
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                        </button>
-                    </div>
-                `).join('');
-            } else {
-                imagePreviewArea.classList.add('hidden');
-            }
-        }
-
-        function removeImage(index) {
-            uploadedImages.splice(index, 1);
-            updateImagePreview();
-            triggerAutoSave();
-        }
-
-        // Auto-save functionality
-        function triggerAutoSave() {
-            hasUnsavedChanges = true;
-            autoSaveSpinner.classList.remove('hidden');
-            autoSaveText.textContent = 'Saving...';
-
-            clearTimeout(autoSaveTimeout);
-            autoSaveTimeout = setTimeout(() => {
-                saveToLocalStorage();
-                autoSaveSpinner.classList.add('hidden');
-                autoSaveText.textContent = 'Changes saved automatically';
-            }, 1000);
-        }
-
-        function saveToLocalStorage() {
-            const formData = new FormData(addProductForm);
-            const data = Object.fromEntries(formData.entries());
-            data.images = uploadedImages.map(img => ({
-                name: img.name,
-                url: img.url
-            }));
-            data.timestamp = new Date().toISOString();
+        // Basic functionality for the form
+        document.addEventListener('DOMContentLoaded', function() {
+            // Close modal button
+            const closeModal = document.getElementById('closeModal');
+            const modalOverlay = document.querySelector('.modal-overlay');
             
-            localStorage.setItem('standalone_product_draft', JSON.stringify(data));
-        }
-
-        function loadFromLocalStorage() {
-            const savedData = localStorage.getItem('standalone_product_draft');
-            if (savedData) {
-                try {
-                    const data = JSON.parse(savedData);
+            closeModal.addEventListener('click', function() {
+                document.getElementById('confirmationDialog').style.display = 'flex';
+            });
+            
+            // Cancel button
+            const cancelBtn = document.getElementById('cancelBtn');
+            cancelBtn.addEventListener('click', function() {
+                document.getElementById('confirmationDialog').style.display = 'flex';
+            });
+            
+            // Confirmation dialog buttons
+            const confirmCancel = document.getElementById('confirmCancel');
+            const confirmAction = document.getElementById('confirmAction');
+            
+            confirmCancel.addEventListener('click', function() {
+                document.getElementById('confirmationDialog').style.display = 'none';
+            });
+            
+            confirmAction.addEventListener('click', function() {
+                // In a real implementation, this would close the modal
+                alert('Modal would close here in a real implementation');
+            });
+            
+            // Form submission
+            const form = document.getElementById('addProductForm');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Show success notification
+                const notification = document.getElementById('successNotification');
+                notification.classList.add('show');
+                
+                // Hide notification after 3 seconds
+                setTimeout(function() {
+                    notification.classList.remove('show');
+                }, 3000);
+            });
+            
+            // Image upload functionality
+            const imageUploadArea = document.getElementById('imageUploadArea');
+            const imageInput = document.getElementById('imageInput');
+            const imagePreviewArea = document.getElementById('imagePreviewArea');
+            
+            imageUploadArea.addEventListener('click', function() {
+                imageInput.click();
+            });
+            
+            imageInput.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    imagePreviewArea.style.display = 'grid';
+                    imagePreviewArea.innerHTML = '';
                     
-                    // Populate form fields
-                    Object.keys(data).forEach(key => {
-                        if (key !== 'images' && key !== 'timestamp') {
-                            const field = document.getElementById(key) || document.querySelector(`[name="${key}"]`);
-                            if (field) {
-                                field.value = data[key];
-                            }
+                    Array.from(e.target.files).forEach(file => {
+                        if (file.type.match('image.*')) {
+                            const reader = new FileReader();
+                            
+                            reader.onload = function(e) {
+                                const div = document.createElement('div');
+                                div.className = 'relative';
+                                
+                                const img = document.createElement('img');
+                                img.src = e.target.result;
+                                img.className = 'w-full h-32 object-cover rounded-lg';
+                                
+                                const removeBtn = document.createElement('button');
+                                removeBtn.className = 'absolute top-2 right-2 bg-error text-white rounded-full p-1';
+                                removeBtn.innerHTML = `
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                `;
+                                
+                                removeBtn.addEventListener('click', function() {
+                                    div.remove();
+                                    if (imagePreviewArea.children.length === 0) {
+                                        imagePreviewArea.style.display = 'none';
+                                    }
+                                });
+                                
+                                div.appendChild(img);
+                                div.appendChild(removeBtn);
+                                imagePreviewArea.appendChild(div);
+                            };
+                            
+                            reader.readAsDataURL(file);
                         }
                     });
-
-                    // Restore images
-                    if (data.images && data.images.length > 0) {
-                        uploadedImages = data.images;
-                        updateImagePreview();
-                    }
-
-                    hasUnsavedChanges = true;
-                } catch (error) {
-                    console.error('Error loading saved data:', error);
-                }
-            }
-        }
-
-        // Form validation
-        function validateForm() {
-            const requiredFields = [
-                'productName', 'productSku', 'productCategory', 'manufacturer',
-                'costPrice', 'retailPrice', 'stockQuantity', 'description'
-            ];
-
-            let isValid = true;
-            requiredFields.forEach(fieldName => {
-                const field = document.getElementById(fieldName);
-                const errorElement = document.getElementById(fieldName + 'Error');
-                
-                if (!field.value.trim()) {
-                    field.classList.add('border-error');
-                    if (errorElement) errorElement.classList.remove('hidden');
-                    isValid = false;
-                } else {
-                    field.classList.remove('border-error');
-                    if (errorElement) errorElement.classList.add('hidden');
                 }
             });
-
-            // Validate pricing
-            const costPrice = parseFloat(document.getElementById('costPrice').value);
-            const retailPrice = parseFloat(document.getElementById('retailPrice').value);
             
-            if (retailPrice <= costPrice) {
-                document.getElementById('retailPrice').classList.add('border-warning');
-                // Show warning but don't prevent submission
-            } else {
-                document.getElementById('retailPrice').classList.remove('border-warning');
-            }
-
-            return isValid;
-        }
-
-        // Form submission
-        addProductForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            if (!validateForm()) {
-                return;
-            }
-
-            // Show loading state
-            saveProductBtn.disabled = true;
-            saveProductBtn.innerHTML = `
-                <svg class="animate-spin w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Saving...
-            `;
-
-            // Simulate API call
-            setTimeout(() => {
-                // Clear localStorage
-                localStorage.removeItem('standalone_product_draft');
-                
-                // Show success notification
-                successNotification.classList.remove('translate-x-full');
-                
-                setTimeout(() => {
-                    successNotification.classList.add('translate-x-full');
-                    // In standalone version, just reset form or close
-                    setTimeout(() => {
-                        alert('Product saved successfully! In a complete application, this would redirect to the product list.');
-                    }, 500);
-                }, 2000);
-            }, 1500);
-        });
-
-        // Save and Add Another
-        saveAndAddBtn.addEventListener('click', () => {
-            if (!validateForm()) {
-                return;
-            }
-
-            // Show loading state
-            saveAndAddBtn.disabled = true;
-            saveAndAddBtn.textContent = 'Saving...';
-
-            setTimeout(() => {
-                // Clear form
-                addProductForm.reset();
-                uploadedImages = [];
-                updateImagePreview();
-                hasUnsavedChanges = false;
-                
-                // Clear localStorage
-                localStorage.removeItem('standalone_product_draft');
-                
-                // Show success notification
-                successNotification.classList.remove('translate-x-full');
-                
-                setTimeout(() => {
-                    successNotification.classList.add('translate-x-full');
-                }, 2000);
-
-                // Reset button
-                saveAndAddBtn.disabled = false;
-                saveAndAddBtn.textContent = 'Save & Add Another';
-                
-                // Focus on first field
-                document.getElementById('productName').focus();
-            }, 1500);
-        });
-
-        // Add event listeners for auto-save
-        const formInputs = addProductForm.querySelectorAll('input, select, textarea');
-        formInputs.forEach(input => {
-            input.addEventListener('input', triggerAutoSave);
-            input.addEventListener('change', triggerAutoSave);
-        });
-
-        // Real-time validation
-        formInputs.forEach(input => {
-            input.addEventListener('blur', () => {
-                const errorElement = document.getElementById(input.id + 'Error');
-                if (input.hasAttribute('required') && !input.value.trim()) {
-                    input.classList.add('border-error');
-                    if (errorElement) errorElement.classList.remove('hidden');
-                } else {
-                    input.classList.remove('border-error');
-                    if (errorElement) errorElement.classList.add('hidden');
-                }
-            });
-
-            input.addEventListener('input', () => {
-                if (input.value.trim()) {
-                    input.classList.remove('border-error');
-                    const errorElement = document.getElementById(input.id + 'Error');
-                    if (errorElement) errorElement.classList.add('hidden');
-                }
-            });
-        });
-
-        // Load saved data on page load
-        window.addEventListener('load', () => {
-            loadFromLocalStorage();
-            document.getElementById('productName').focus();
-        });
-
-        // Prevent accidental page close
-        window.addEventListener('beforeunload', (e) => {
-            if (hasUnsavedChanges) {
+            // Drag and drop for images
+            imageUploadArea.addEventListener('dragover', function(e) {
                 e.preventDefault();
-                e.returnValue = '';
-            }
-        });
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            // Ctrl/Cmd + S to save
-            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-                e.preventDefault();
-                addProductForm.dispatchEvent(new Event('submit'));
-            }
+                imageUploadArea.style.borderColor = 'var(--color-primary)';
+            });
             
-            // Escape to close
-            if (e.key === 'Escape') {
-                showConfirmationDialog();
-            }
-        });
-
-        // Price formatting
-        const priceInputs = document.querySelectorAll('#costPrice, #retailPrice');
-        priceInputs.forEach(input => {
-            input.addEventListener('blur', (e) => {
-                const value = parseFloat(e.target.value);
-                if (!isNaN(value)) {
-                    e.target.value = value.toFixed(2);
+            imageUploadArea.addEventListener('dragleave', function() {
+                imageUploadArea.style.borderColor = 'var(--color-border-light)';
+            });
+            
+            imageUploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                imageUploadArea.style.borderColor = 'var(--color-border-light)';
+                
+                if (e.dataTransfer.files.length > 0) {
+                    imageInput.files = e.dataTransfer.files;
+                    const event = new Event('change');
+                    imageInput.dispatchEvent(event);
                 }
             });
-        });
-
-        // Generate SKU suggestion
-        document.getElementById('productName').addEventListener('input', (e) => {
-            const name = e.target.value.trim();
-            const category = document.getElementById('productCategory').value;
-            
-            if (name && category && !document.getElementById('productSku').value) {
-                const namePrefix = name.substring(0, 3).toUpperCase();
-                const categoryPrefix = category.substring(0, 3).toUpperCase();
-                const randomNum = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-                
-                document.getElementById('productSku').value = `${categoryPrefix}-${namePrefix}-${randomNum}`;
-                triggerAutoSave();
-            }
         });
     </script>
-<script id="dhws-dataInjector" src="../public/dhws-data-injector.js"></script>
 </body>
 </html>

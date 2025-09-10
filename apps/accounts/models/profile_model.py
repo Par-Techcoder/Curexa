@@ -6,7 +6,8 @@ from apps.core.constants.default_values import Gender
 class Profile(User, AddressModel):
     dob = models.DateField(blank=True, null=True)
     gender = models.IntegerField(   
-        choices=[(gender.value, gender.name) for gender in Gender]
+        choices=[(gender.value, gender.name) for gender in Gender],
+        null=True, blank=True
     )
     profile_picture = models.ImageField(upload_to='static/images/profile_pictures/', blank=True, null=True)
     phone_number = models.CharField(max_length=15, blank=True, null=True)
