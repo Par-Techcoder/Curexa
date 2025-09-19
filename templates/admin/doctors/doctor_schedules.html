@@ -159,60 +159,482 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for time in timeslots %}
                                     <tr>
-                                        <td class="fw-bold">{{ time }}</td>
-                                        <td class="schedule-cell" data-time="{{ time }}" data-doctor="DR001">
+                                        <td class="fw-bold">8:00 AM</td>
+                                        <td class="schedule-cell" data-time="8:00 AM" data-doctor="DR001">
                                             <div class="appointment booked">
                                                 <small>John Doe</small>
                                             </div>
                                         </td>
-                                        <td class="schedule-cell" data-time="{{ time }}" data-doctor="DR002">
-                                            {% if forloop.counter0|divisibleby:2 %}
+                                        <td class="schedule-cell" data-time="8:00 AM" data-doctor="DR002">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="8:00 AM" data-doctor="DR003">
+                                            <div class="appointment booked">
+                                                <small>Emma Wilson</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="8:00 AM" data-doctor="DR004">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="8:00 AM" data-doctor="DR005">
+                                            <div class="appointment booked">
+                                                <small>Sophia Brown</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">8:30 AM</td>
+                                        <td class="schedule-cell" data-time="8:30 AM" data-doctor="DR001">
+                                            <div class="appointment booked">
+                                                <small>John Doe</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="8:30 AM" data-doctor="DR002">
                                             <div class="appointment booked">
                                                 <small>Robert Smith</small>
                                             </div>
-                                            {% else %}
-                                            <div class="appointment available">
-                                                <small>Available</small>
-                                            </div>
-                                            {% endif %}
                                         </td>
-                                        <td class="schedule-cell" data-time="{{ time }}" data-doctor="DR003">
-                                            {% if forloop.counter0|divisibleby:3 %}
+                                        <td class="schedule-cell" data-time="8:30 AM" data-doctor="DR003">
                                             <div class="appointment booked">
-                                                <small>Sarah Wilson</small>
+                                                <small>Emma Wilson</small>
                                             </div>
-                                            {% else %}
-                                            <div class="appointment available">
-                                                <small>Available</small>
-                                            </div>
-                                            {% endif %}
                                         </td>
-                                        <td class="schedule-cell" data-time="{{ time }}" data-doctor="DR004">
-                                            {% if forloop.counter0|divisibleby:4 %}
-                                            <div class="appointment booked">
-                                                <small>Michael Brown</small>
-                                            </div>
-                                            {% else %}
+                                        <td class="schedule-cell" data-time="8:30 AM" data-doctor="DR004">
                                             <div class="appointment available">
                                                 <small>Available</small>
                                             </div>
-                                            {% endif %}
                                         </td>
-                                        <td class="schedule-cell" data-time="{{ time }}" data-doctor="DR005">
-                                            {% if forloop.counter0|divisibleby:5 %}
+                                        <td class="schedule-cell" data-time="8:30 AM" data-doctor="DR005">
                                             <div class="appointment booked">
-                                                <small>Emily Davis</small>
+                                                <small>Sophia Brown</small>
                                             </div>
-                                            {% else %}
-                                            <div class="appointment available">
-                                                <small>Available</small>
-                                            </div>
-                                            {% endif %}
                                         </td>
                                     </tr>
-                                    {% endfor %}
+                                    <tr>
+                                        <td class="fw-bold">9:00 AM</td>
+                                        <td class="schedule-cell" data-time="9:00 AM" data-doctor="DR001">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="9:00 AM" data-doctor="DR002">
+                                            <div class="appointment booked">
+                                                <small>Robert Smith</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="9:00 AM" data-doctor="DR003">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="9:00 AM" data-doctor="DR004">
+                                            <div class="appointment booked">
+                                                <small>Michael Johnson</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="9:00 AM" data-doctor="DR005">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">9:30 AM</td>
+                                        <td class="schedule-cell" data-time="9:30 AM" data-doctor="DR001">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="9:30 AM" data-doctor="DR002">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="9:30 AM" data-doctor="DR003">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="9:30 AM" data-doctor="DR004">
+                                            <div class="appointment booked">
+                                                <small>Michael Johnson</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="9:30 AM" data-doctor="DR005">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">10:00 AM</td>
+                                        <td class="schedule-cell" data-time="10:00 AM" data-doctor="DR001">
+                                            <div class="appointment booked">
+                                                <small>David Miller</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="10:00 AM" data-doctor="DR002">
+                                            <div class="appointment booked">
+                                                <small>Jennifer Lee</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="10:00 AM" data-doctor="DR003">
+                                            <div class="appointment booked">
+                                                <small>Olivia Davis</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="10:00 AM" data-doctor="DR004">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="10:00 AM" data-doctor="DR005">
+                                            <div class="appointment booked">
+                                                <small>William Taylor</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">10:30 AM</td>
+                                        <td class="schedule-cell" data-time="10:30 AM" data-doctor="DR001">
+                                            <div class="appointment booked">
+                                                <small>David Miller</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="10:30 AM" data-doctor="DR002">
+                                            <div class="appointment booked">
+                                                <small>Jennifer Lee</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="10:30 AM" data-doctor="DR003">
+                                            <div class="appointment booked">
+                                                <small>Olivia Davis</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="10:30 AM" data-doctor="DR004">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="10:30 AM" data-doctor="DR005">
+                                            <div class="appointment booked">
+                                                <small>William Taylor</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">11:00 AM</td>
+                                        <td class="schedule-cell" data-time="11:00 AM" data-doctor="DR001">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="11:00 AM" data-doctor="DR002">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="11:00 AM" data-doctor="DR003">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="11:00 AM" data-doctor="DR004">
+                                            <div class="appointment booked">
+                                                <small>Sarah Anderson</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="11:00 AM" data-doctor="DR005">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">11:30 AM</td>
+                                        <td class="schedule-cell" data-time="11:30 AM" data-doctor="DR001">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="11:30 AM" data-doctor="DR002">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="11:30 AM" data-doctor="DR003">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="11:30 AM" data-doctor="DR004">
+                                            <div class="appointment booked">
+                                                <small>Sarah Anderson</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="11:30 AM" data-doctor="DR005">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">12:00 PM</td>
+                                        <td class="schedule-cell" data-time="12:00 PM" data-doctor="DR001">
+                                            <div class="appointment break">
+                                                <small>Lunch Break</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="12:00 PM" data-doctor="DR002">
+                                            <div class="appointment break">
+                                                <small>Lunch Break</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="12:00 PM" data-doctor="DR003">
+                                            <div class="appointment break">
+                                                <small>Lunch Break</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="12:00 PM" data-doctor="DR004">
+                                            <div class="appointment break">
+                                                <small>Lunch Break</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="12:00 PM" data-doctor="DR005">
+                                            <div class="appointment break">
+                                                <small>Lunch Break</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">12:30 PM</td>
+                                        <td class="schedule-cell" data-time="12:30 PM" data-doctor="DR001">
+                                            <div class="appointment break">
+                                                <small>Lunch Break</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="12:30 PM" data-doctor="DR002">
+                                            <div class="appointment break">
+                                                <small>Lunch Break</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="12:30 PM" data-doctor="DR003">
+                                            <div class="appointment break">
+                                                <small>Lunch Break</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="12:30 PM" data-doctor="DR004">
+                                            <div class="appointment break">
+                                                <small>Lunch Break</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="12:30 PM" data-doctor="DR005">
+                                            <div class="appointment break">
+                                                <small>Lunch Break</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">1:00 PM</td>
+                                        <td class="schedule-cell" data-time="1:00 PM" data-doctor="DR001">
+                                            <div class="appointment booked">
+                                                <small>Emma Thompson</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="1:00 PM" data-doctor="DR002">
+                                            <div class="appointment booked">
+                                                <small>Daniel Wilson</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="1:00 PM" data-doctor="DR003">
+                                            <div class="appointment booked">
+                                                <small>Mia Rodriguez</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="1:00 PM" data-doctor="DR004">
+                                            <div class="appointment booked">
+                                                <small>Ethan Martinez</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="1:00 PM" data-doctor="DR005">
+                                            <div class="appointment booked">
+                                                <small>Charlotte White</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">1:30 PM</td>
+                                        <td class="schedule-cell" data-time="1:30 PM" data-doctor="DR001">
+                                            <div class="appointment booked">
+                                                <small>Emma Thompson</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="1:30 PM" data-doctor="DR002">
+                                            <div class="appointment booked">
+                                                <small>Daniel Wilson</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="1:30 PM" data-doctor="DR003">
+                                            <div class="appointment booked">
+                                                <small>Mia Rodriguez</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="1:30 PM" data-doctor="DR004">
+                                            <div class="appointment booked">
+                                                <small>Ethan Martinez</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="1:30 PM" data-doctor="DR005">
+                                            <div class="appointment booked">
+                                                <small>Charlotte White</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">2:00 PM</td>
+                                        <td class="schedule-cell" data-time="2:00 PM" data-doctor="DR001">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="2:00 PM" data-doctor="DR002">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="2:00 PM" data-doctor="DR003">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="2:00 PM" data-doctor="DR004">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="2:00 PM" data-doctor="DR005">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">2:30 PM</td>
+                                        <td class="schedule-cell" data-time="2:30 PM" data-doctor="DR001">
+                                            <div class="appointment booked">
+                                                <small>Noah Brown</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="2:30 PM" data-doctor="DR002">
+                                            <div class="appointment booked">
+                                                <small>Sophia Garcia</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="2:30 PM" data-doctor="DR003">
+                                            <div class="appointment booked">
+                                                <small>Liam Johnson</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="2:30 PM" data-doctor="DR004">
+                                            <div class="appointment booked">
+                                                <small>Ava Davis</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="2:30 PM" data-doctor="DR005">
+                                            <div class="appointment booked">
+                                                <small>Lucas Miller</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">3:00 PM</td>
+                                        <td class="schedule-cell" data-time="3:00 PM" data-doctor="DR001">
+                                            <div class="appointment booked">
+                                                <small>Noah Brown</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="3:00 PM" data-doctor="DR002">
+                                            <div class="appointment booked">
+                                                <small>Sophia Garcia</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="3:00 PM" data-doctor="DR003">
+                                            <div class="appointment booked">
+                                                <small>Liam Johnson</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="3:00 PM" data-doctor="DR004">
+                                            <div class="appointment booked">
+                                                <small>Ava Davis</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="3:00 PM" data-doctor="DR005">
+                                            <div class="appointment booked">
+                                                <small>Lucas Miller</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">3:30 PM</td>
+                                        <td class="schedule-cell" data-time="3:30 PM" data-doctor="DR001">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="3:30 PM" data-doctor="DR002">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="3:30 PM" data-doctor="DR003">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="3:30 PM" data-doctor="DR004">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="3:30 PM" data-doctor="DR005">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">4:00 PM</td>
+                                        <td class="schedule-cell" data-time="4:00 PM" data-doctor="DR001">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="4:00 PM" data-doctor="DR002">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="4:00 PM" data-doctor="DR003">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="4:00 PM" data-doctor="DR004">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="4:00 PM" data-doctor="DR005">
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -225,32 +647,96 @@
                                 <thead>
                                     <tr>
                                         <th>Time</th>
-                                        <th>Monday<br>{% now "m/d" %}</th>
-                                        <th>Tuesday<br>{% now "m/d" %}</th>
-                                        <th>Wednesday<br>{% now "m/d" %}</th>
-                                        <th>Thursday<br>{% now "m/d" %}</th>
-                                        <th>Friday<br>{% now "m/d" %}</th>
-                                        <th>Saturday<br>{% now "m/d" %}</th>
+                                        <th>Monday<br>10/23</th>
+                                        <th>Tuesday<br>10/24</th>
+                                        <th>Wednesday<br>10/25</th>
+                                        <th>Thursday<br>10/26</th>
+                                        <th>Friday<br>10/27</th>
+                                        <th>Saturday<br>10/28</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for time in timeslots_short %}
                                     <tr>
-                                        <td class="fw-bold">{{ time }}</td>
-                                        {% for day in "12345" %}
-                                        <td>
-                                            {% if forloop.counter0|divisibleby:2 and forloop.parentloop.counter0|divisibleby:2 %}
-                                            <span class="badge bg-success">Available</span>
-                                            {% else %}
-                                            <span class="badge bg-secondary">Not Available</span>
-                                            {% endif %}
-                                        </td>
-                                        {% endfor %}
-                                        <td>
-                                            <span class="badge bg-secondary">Off</span>
-                                        </td>
+                                        <td class="fw-bold">8:00 AM</td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-secondary">Not Available</span></td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-secondary">Not Available</span></td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-secondary">Off</span></td>
                                     </tr>
-                                    {% endfor %}
+                                    <tr>
+                                        <td class="fw-bold">9:00 AM</td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-secondary">Not Available</span></td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-secondary">Not Available</span></td>
+                                        <td><span class="badge bg-secondary">Off</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">10:00 AM</td>
+                                        <td><span class="badge bg-secondary">Not Available</span></td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-secondary">Not Available</span></td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-secondary">Off</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">11:00 AM</td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-secondary">Not Available</span></td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-secondary">Not Available</span></td>
+                                        <td><span class="badge bg-secondary">Off</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">12:00 PM</td>
+                                        <td><span class="badge bg-warning">Break</span></td>
+                                        <td><span class="badge bg-warning">Break</span></td>
+                                        <td><span class="badge bg-warning">Break</span></td>
+                                        <td><span class="badge bg-warning">Break</span></td>
+                                        <td><span class="badge bg-warning">Break</span></td>
+                                        <td><span class="badge bg-secondary">Off</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">1:00 PM</td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-secondary">Not Available</span></td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-secondary">Off</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">2:00 PM</td>
+                                        <td><span class="badge bg-secondary">Not Available</span></td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-secondary">Not Available</span></td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-secondary">Off</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">3:00 PM</td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-secondary">Not Available</span></td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-secondary">Not Available</span></td>
+                                        <td><span class="badge bg-secondary">Off</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">4:00 PM</td>
+                                        <td><span class="badge bg-secondary">Not Available</span></td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-secondary">Not Available</span></td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-success">Available</span></td>
+                                        <td><span class="badge bg-secondary">Off</span></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -259,25 +745,86 @@
                     <!-- By Doctor View -->
                     <div class="tab-pane fade" id="doctors" role="tabpanel" aria-labelledby="doctors-tab">
                         <div class="row">
-                            {% for doctor in doctors %}
                             <div class="col-md-6 mb-4">
                                 <div class="card medical-border h-100">
                                     <div class="card-header">
                                         <h5 class="card-title mb-0">
-                                            <img src="{% static doctor.image %}" alt="{{ doctor.name }}" class="rounded-circle me-2" width="30" height="30">
-                                            {{ doctor.name }}
+                                            <img src="{% static 'images/doctor1.jpg' %}" alt="Dr. Sarah Johnson" class="rounded-circle me-2" width="30" height="30">
+                                            Dr. Sarah Johnson
                                         </h5>
-                                        <small class="text-muted">{{ doctor.specialization }}</small>
+                                        <small class="text-muted">Cardiology</small>
                                     </div>
                                     <div class="card-body">
                                         <h6>Today's Schedule</h6>
                                         <div class="schedule-timeline">
-                                            {% for slot in doctor.schedule %}
-                                            <div class="schedule-item {% if slot.status == 'busy' %}busy{% else %}free{% endif %}">
-                                                <span class="time">{{ slot.time }}</span>
-                                                <span class="patient">{{ slot.patient }}</span>
+                                            <div class="schedule-item busy">
+                                                <span class="time">8:00 AM</span>
+                                                <span class="patient">John Doe</span>
                                             </div>
-                                            {% endfor %}
+                                            <div class="schedule-item busy">
+                                                <span class="time">8:30 AM</span>
+                                                <span class="patient">John Doe</span>
+                                            </div>
+                                            <div class="schedule-item free">
+                                                <span class="time">9:00 AM</span>
+                                                <span class="patient">Available</span>
+                                            </div>
+                                            <div class="schedule-item free">
+                                                <span class="time">9:30 AM</span>
+                                                <span class="patient">Available</span>
+                                            </div>
+                                            <div class="schedule-item busy">
+                                                <span class="time">10:00 AM</span>
+                                                <span class="patient">David Miller</span>
+                                            </div>
+                                            <div class="schedule-item busy">
+                                                <span class="time">10:30 AM</span>
+                                                <span class="patient">David Miller</span>
+                                            </div>
+                                            <div class="schedule-item free">
+                                                <span class="time">11:00 AM</span>
+                                                <span class="patient">Available</span>
+                                            </div>
+                                            <div class="schedule-item free">
+                                                <span class="time">11:30 AM</span>
+                                                <span class="patient">Available</span>
+                                            </div>
+                                            <div class="schedule-item break">
+                                                <span class="time">12:00 PM</span>
+                                                <span class="patient">Lunch Break</span>
+                                            </div>
+                                            <div class="schedule-item break">
+                                                <span class="time">12:30 PM</span>
+                                                <span class="patient">Lunch Break</span>
+                                            </div>
+                                            <div class="schedule-item busy">
+                                                <span class="time">1:00 PM</span>
+                                                <span class="patient">Emma Thompson</span>
+                                            </div>
+                                            <div class="schedule-item busy">
+                                                <span class="time">1:30 PM</span>
+                                                <span class="patient">Emma Thompson</span>
+                                            </div>
+                                            <div class="schedule-item free">
+                                                <span class="time">2:00 PM</span>
+                                                <span class="patient">Available</span>
+                                            </div>
+                                            <div class="schedule-item busy">
+                                                <span class="time">2:30 PM</span>
+                                                <span class="patient">Noah Brown</span>
+                                            </div>
+                                            <div class="schedule-item busy">
+                                                <span class="time">3:00 PM</span>
+                                                <span class="patient">Noah Brown</span>
+                                            </div>
+                                            <div class="schedule-item free">
+                                                <span class="time">3:30 PM</span>
+                                                <span class="patient">Available</span>
+                                            </div>
+                                            <div class="schedule-item free">
+                                                <span class="time">4:00 PM</span>
+                                                <span class="patient">Available</span>
+                                            </div>
                                         </div>
                                         <div class="mt-3">
                                             <button class="btn btn-sm btn-outline-light w-100">
@@ -287,7 +834,95 @@
                                     </div>
                                 </div>
                             </div>
-                            {% endfor %}
+                            <div class="col-md-6 mb-4">
+                                <div class="card medical-border h-100">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">
+                                            <img src="{% static 'images/doctor2.jpg' %}" alt="Dr. Michael Chen" class="rounded-circle me-2" width="30" height="30">
+                                            Dr. Michael Chen
+                                        </h5>
+                                        <small class="text-muted">Neurology</small>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6>Today's Schedule</h6>
+                                        <div class="schedule-timeline">
+                                            <div class="schedule-item free">
+                                                <span class="time">8:00 AM</span>
+                                                <span class="patient">Available</span>
+                                            </div>
+                                            <div class="schedule-item busy">
+                                                <span class="time">8:30 AM</span>
+                                                <span class="patient">Robert Smith</span>
+                                            </div>
+                                            <div class="schedule-item busy">
+                                                <span class="time">9:00 AM</span>
+                                                <span class="patient">Robert Smith</span>
+                                            </div>
+                                            <div class="schedule-item free">
+                                                <span class="time">9:30 AM</span>
+                                                <span class="patient">Available</span>
+                                            </div>
+                                            <div class="schedule-item busy">
+                                                <span class="time">10:00 AM</span>
+                                                <span class="patient">Jennifer Lee</span>
+                                            </div>
+                                            <div class="schedule-item busy">
+                                                <span class="time">10:30 AM</span>
+                                                <span class="patient">Jennifer Lee</span>
+                                            </div>
+                                            <div class="schedule-item free">
+                                                <span class="time">11:00 AM</span>
+                                                <span class="patient">Available</span>
+                                            </div>
+                                            <div class="schedule-item free">
+                                                <span class="time">11:30 AM</span>
+                                                <span class="patient">Available</span>
+                                            </div>
+                                            <div class="schedule-item break">
+                                                <span class="time">12:00 PM</span>
+                                                <span class="patient">Lunch Break</span>
+                                            </div>
+                                            <div class="schedule-item break">
+                                                <span class="time">12:30 PM</span>
+                                                <span class="patient">Lunch Break</span>
+                                            </div>
+                                            <div class="schedule-item busy">
+                                                <span class="time">1:00 PM</span>
+                                                <span class="patient">Daniel Wilson</span>
+                                            </div>
+                                            <div class="schedule-item busy">
+                                                <span class="time">1:30 PM</span>
+                                                <span class="patient">Daniel Wilson</span>
+                                            </div>
+                                            <div class="schedule-item free">
+                                                <span class="time">2:00 PM</span>
+                                                <span class="patient">Available</span>
+                                            </div>
+                                            <div class="schedule-item busy">
+                                                <span class="time">2:30 PM</span>
+                                                <span class="patient">Sophia Garcia</span>
+                                            </div>
+                                            <div class="schedule-item busy">
+                                                <span class="time">3:00 PM</span>
+                                                <span class="patient">Sophia Garcia</span>
+                                            </div>
+                                            <div class="schedule-item free">
+                                                <span class="time">3:30 PM</span>
+                                                <span class="patient">Available</span>
+                                            </div>
+                                            <div class="schedule-item free">
+                                                <span class="time">4:00 PM</span>
+                                                <span class="patient">Available</span>
+                                            </div>
+                                        </div>
+                                        <div class="mt-3">
+                                            <button class="btn btn-sm btn-outline-light w-100">
+                                                <i class="fas fa-calendar-plus me-1"></i> Schedule Appointment
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -355,7 +990,7 @@
                         <label class="form-check-label" for="recurringSchedule">
                             Recurring Schedule (Weekly)
                         </label>
-                    </div>
+                        </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -398,9 +1033,17 @@
         color: #2ecc71;
     }
     
+    .appointment.break {
+        background-color: rgba(243, 156, 18, 0.2);
+        border-left: 3px solid #f39c12;
+        color: #f39c12;
+    }
+    
     .schedule-timeline {
         border-left: 2px solid var(--med-primary);
         padding-left: 10px;
+        max-height: 400px;
+        overflow-y: auto;
     }
     
     .schedule-item {
@@ -416,6 +1059,10 @@
     
     .schedule-item.free {
         color: #2ecc71;
+    }
+    
+    .schedule-item.break {
+        color: #f39c12;
     }
     
     .schedule-item .time {
@@ -437,45 +1084,6 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Sample data for the template
-        const timeslots = [
-            '8:00 AM', '8:30 AM', '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM',
-            '11:00 AM', '11:30 AM', '12:00 PM', '12:30 PM', '1:00 PM', '1:30 PM',
-            '2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM', '4:00 PM', '4:30 PM'
-        ];
-        
-        const timeslots_short = [
-            '8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
-            '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM'
-        ];
-        
-        const doctors = [
-            {
-                name: 'Dr. Sarah Johnson',
-                specialization: 'Cardiology',
-                image: 'images/doctor1.jpg',
-                schedule: [
-                    { time: '8:00 AM', patient: 'John Doe', status: 'busy' },
-                    { time: '9:30 AM', patient: '', status: 'free' },
-                    { time: '11:00 AM', patient: 'Robert Smith', status: 'busy' },
-                    { time: '1:00 PM', patient: '', status: 'free' },
-                    { time: '2:30 PM', patient: 'Emily Wilson', status: 'busy' }
-                ]
-            },
-            {
-                name: 'Dr. Michael Chen',
-                specialization: 'Neurology',
-                image: 'images/doctor2.jpg',
-                schedule: [
-                    { time: '8:30 AM', patient: 'Sarah Brown', status: 'busy' },
-                    { time: '10:00 AM', patient: '', status: 'free' },
-                    { time: '11:30 AM', patient: 'Michael Davis', status: 'busy' },
-                    { time: '1:30 PM', patient: '', status: 'free' },
-                    { time: '3:00 PM', patient: 'Jennifer Lee', status: 'busy' }
-                ]
-            }
-        ];
-        
         // Date navigation
         const datePicker = document.getElementById('datePicker');
         const prevDayBtn = document.getElementById('prevDay');
