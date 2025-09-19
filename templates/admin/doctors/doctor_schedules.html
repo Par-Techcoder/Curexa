@@ -1,0 +1,564 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}Doctor Schedules - Curexa Admin{% endblock %}
+
+{% block navbar_extra %}
+<!-- Breadcrumb navigation -->
+<nav aria-label="breadcrumb" class="ms-3">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="#" class="text-white">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'doctor_list' %}" class="text-white">Doctors</a></li>
+        <li class="breadcrumb-item active text-light" aria-current="page">Schedules</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-section">
+            <h2><i class="fas fa-calendar-alt me-2"></i>Doctor Schedules</h2>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Stats Row -->
+<div class="row mt-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card medical-border h-100">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-8">
+                        <h5 class="card-title stats-number">42</h5>
+                        <p class="card-text stats-label">Today's Appointments</p>
+                    </div>
+                    <div class="col-4 text-end">
+                        <i class="fas fa-calendar-day card-icon text-primary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card medical-border h-100">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-8">
+                        <h5 class="card-title stats-number">8</h5>
+                        <p class="card-text stats-label">Doctors On Duty</p>
+                    </div>
+                    <div class="col-4 text-end">
+                        <i class="fas fa-user-md card-icon text-success"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card medical-border h-100">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-8">
+                        <h5 class="card-title stats-number">5</h5>
+                        <p class="card-text stats-label">Available Time Slots</p>
+                    </div>
+                    <div class="col-4 text-end">
+                        <i class="fas fa-clock card-icon text-info"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card medical-border h-100">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-8">
+                        <h5 class="card-title stats-number">3</h5>
+                        <p class="card-text stats-label">Emergency Cases</p>
+                    </div>
+                    <div class="col-4 text-end">
+                        <i class="fas fa-ambulance card-icon text-danger"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="d-flex">
+            <select class="form-select me-2" id="doctorFilter">
+                <option value="all" selected>All Doctors</option>
+                <option value="DR001">Dr. Sarah Johnson</option>
+                <option value="DR002">Dr. Michael Chen</option>
+                <option value="DR003">Dr. Anita Patel</option>
+                <option value="DR004">Dr. James Williams</option>
+                <option value="DR005">Dr. Emily Rodriguez</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="d-flex">
+            <input type="date" class="form-control me-2" id="datePicker" value="{% now 'Y-m-d' %}">
+            <div class="btn-group">
+                <button class="btn btn-outline-light" id="prevDay">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="btn btn-outline-light" id="todayBtn">Today</button>
+                <button class="btn btn-outline-light" id="nextDay">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 text-end">
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addScheduleModal">
+            <i class="fas fa-plus me-1"></i> New Schedule
+        </button>
+        <button class="btn btn-outline-light ms-2" id="printSchedule">
+            <i class="fas fa-print"></i>
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card medical-border">
+            <div class="card-body">
+                <h4 class="mb-3" id="scheduleDate">Schedule for {% now "F j, Y" %}</h4>
+                
+                <!-- Schedule View Tabs -->
+                <ul class="nav nav-tabs" id="scheduleTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="daily-tab" data-bs-toggle="tab" data-bs-target="#daily" type="button" role="tab" aria-controls="daily" aria-selected="true">Daily View</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="weekly-tab" data-bs-toggle="tab" data-bs-target="#weekly" type="button" role="tab" aria-controls="weekly" aria-selected="false">Weekly View</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="doctors-tab" data-bs-toggle="tab" data-bs-target="#doctors" type="button" role="tab" aria-controls="doctors" aria-selected="false">By Doctor</button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content mt-3" id="scheduleTabContent">
+                    <!-- Daily View -->
+                    <div class="tab-pane fade show active" id="daily" role="tabpanel" aria-labelledby="daily-tab">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-dark" id="dailySchedule">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Dr. Sarah Johnson<br><small class="text-muted">Cardiology</small></th>
+                                        <th>Dr. Michael Chen<br><small class="text-muted">Neurology</small></th>
+                                        <th>Dr. Anita Patel<br><small class="text-muted">Pediatrics</small></th>
+                                        <th>Dr. James Williams<br><small class="text-muted">Orthopedics</small></th>
+                                        <th>Dr. Emily Rodriguez<br><small class="text-muted">Dermatology</small></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for time in timeslots %}
+                                    <tr>
+                                        <td class="fw-bold">{{ time }}</td>
+                                        <td class="schedule-cell" data-time="{{ time }}" data-doctor="DR001">
+                                            <div class="appointment booked">
+                                                <small>John Doe</small>
+                                            </div>
+                                        </td>
+                                        <td class="schedule-cell" data-time="{{ time }}" data-doctor="DR002">
+                                            {% if forloop.counter0|divisibleby:2 %}
+                                            <div class="appointment booked">
+                                                <small>Robert Smith</small>
+                                            </div>
+                                            {% else %}
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                            {% endif %}
+                                        </td>
+                                        <td class="schedule-cell" data-time="{{ time }}" data-doctor="DR003">
+                                            {% if forloop.counter0|divisibleby:3 %}
+                                            <div class="appointment booked">
+                                                <small>Sarah Wilson</small>
+                                            </div>
+                                            {% else %}
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                            {% endif %}
+                                        </td>
+                                        <td class="schedule-cell" data-time="{{ time }}" data-doctor="DR004">
+                                            {% if forloop.counter0|divisibleby:4 %}
+                                            <div class="appointment booked">
+                                                <small>Michael Brown</small>
+                                            </div>
+                                            {% else %}
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                            {% endif %}
+                                        </td>
+                                        <td class="schedule-cell" data-time="{{ time }}" data-doctor="DR005">
+                                            {% if forloop.counter0|divisibleby:5 %}
+                                            <div class="appointment booked">
+                                                <small>Emily Davis</small>
+                                            </div>
+                                            {% else %}
+                                            <div class="appointment available">
+                                                <small>Available</small>
+                                            </div>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Weekly View -->
+                    <div class="tab-pane fade" id="weekly" role="tabpanel" aria-labelledby="weekly-tab">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-dark text-center">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Monday<br>{% now "m/d" %}</th>
+                                        <th>Tuesday<br>{% now "m/d" %}</th>
+                                        <th>Wednesday<br>{% now "m/d" %}</th>
+                                        <th>Thursday<br>{% now "m/d" %}</th>
+                                        <th>Friday<br>{% now "m/d" %}</th>
+                                        <th>Saturday<br>{% now "m/d" %}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for time in timeslots_short %}
+                                    <tr>
+                                        <td class="fw-bold">{{ time }}</td>
+                                        {% for day in "12345" %}
+                                        <td>
+                                            {% if forloop.counter0|divisibleby:2 and forloop.parentloop.counter0|divisibleby:2 %}
+                                            <span class="badge bg-success">Available</span>
+                                            {% else %}
+                                            <span class="badge bg-secondary">Not Available</span>
+                                            {% endif %}
+                                        </td>
+                                        {% endfor %}
+                                        <td>
+                                            <span class="badge bg-secondary">Off</span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- By Doctor View -->
+                    <div class="tab-pane fade" id="doctors" role="tabpanel" aria-labelledby="doctors-tab">
+                        <div class="row">
+                            {% for doctor in doctors %}
+                            <div class="col-md-6 mb-4">
+                                <div class="card medical-border h-100">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">
+                                            <img src="{% static doctor.image %}" alt="{{ doctor.name }}" class="rounded-circle me-2" width="30" height="30">
+                                            {{ doctor.name }}
+                                        </h5>
+                                        <small class="text-muted">{{ doctor.specialization }}</small>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6>Today's Schedule</h6>
+                                        <div class="schedule-timeline">
+                                            {% for slot in doctor.schedule %}
+                                            <div class="schedule-item {% if slot.status == 'busy' %}busy{% else %}free{% endif %}">
+                                                <span class="time">{{ slot.time }}</span>
+                                                <span class="patient">{{ slot.patient }}</span>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="mt-3">
+                                            <button class="btn btn-sm btn-outline-light w-100">
+                                                <i class="fas fa-calendar-plus me-1"></i> Schedule Appointment
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Schedule Modal -->
+<div class="modal fade" id="addScheduleModal" tabindex="-1" aria-labelledby="addScheduleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header medical-border">
+                <h5 class="modal-title" id="addScheduleModalLabel"><i class="fas fa-plus me-2"></i>Add New Schedule</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="scheduleDoctor" class="form-label">Doctor <span class="text-danger">*</span></label>
+                            <select class="form-select" id="scheduleDoctor" required>
+                                <option value="" selected disabled>Select Doctor</option>
+                                <option value="DR001">Dr. Sarah Johnson (Cardiology)</option>
+                                <option value="DR002">Dr. Michael Chen (Neurology)</option>
+                                <option value="DR003">Dr. Anita Patel (Pediatrics)</option>
+                                <option value="DR004">Dr. James Williams (Orthopedics)</option>
+                                <option value="DR005">Dr. Emily Rodriguez (Dermatology)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="scheduleDate" class="form-label">Date <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="scheduleDate" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="startTime" class="form-label">Start Time <span class="text-danger">*</span></label>
+                            <input type="time" class="form-control" id="startTime" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="endTime" class="form-label">End Time <span class="text-danger">*</span></label>
+                            <input type="time" class="form-control" id="endTime" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="scheduleType" class="form-label">Schedule Type</label>
+                        <select class="form-select" id="scheduleType">
+                            <option value="available">Available for Appointments</option>
+                            <option value="busy">Busy (Meeting, Surgery, etc.)</option>
+                            <option value="break">Break</option>
+                            <option value="off">Day Off</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="scheduleNotes" class="form-label">Notes</label>
+                        <textarea class="form-control" id="scheduleNotes" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="recurringSchedule">
+                        <label class="form-check-label" for="recurringSchedule">
+                            Recurring Schedule (Weekly)
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Save Schedule</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .table th {
+        border-top: none;
+        border-bottom: 1px solid var(--med-primary);
+        font-weight: 600;
+    }
+    
+    .schedule-cell {
+        cursor: pointer;
+        position: relative;
+        height: 60px;
+        vertical-align: middle;
+    }
+    
+    .appointment {
+        padding: 5px;
+        border-radius: 4px;
+        text-align: center;
+        font-size: 0.85rem;
+    }
+    
+    .appointment.booked {
+        background-color: rgba(231, 76, 60, 0.3);
+        border-left: 3px solid #e74c3c;
+    }
+    
+    .appointment.available {
+        background-color: rgba(46, 204, 113, 0.2);
+        border-left: 3px solid #2ecc71;
+        color: #2ecc71;
+    }
+    
+    .schedule-timeline {
+        border-left: 2px solid var(--med-primary);
+        padding-left: 10px;
+    }
+    
+    .schedule-item {
+        padding: 5px 0;
+        margin-bottom: 5px;
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .schedule-item.busy {
+        color: #e74c3c;
+    }
+    
+    .schedule-item.free {
+        color: #2ecc71;
+    }
+    
+    .schedule-item .time {
+        font-weight: bold;
+        width: 70px;
+    }
+    
+    .nav-tabs .nav-link {
+        color: #ddd;
+        border: none;
+    }
+    
+    .nav-tabs .nav-link.active {
+        color: var(--med-primary);
+        background: transparent;
+        border-bottom: 3px solid var(--med-primary);
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Sample data for the template
+        const timeslots = [
+            '8:00 AM', '8:30 AM', '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM',
+            '11:00 AM', '11:30 AM', '12:00 PM', '12:30 PM', '1:00 PM', '1:30 PM',
+            '2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM', '4:00 PM', '4:30 PM'
+        ];
+        
+        const timeslots_short = [
+            '8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
+            '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM'
+        ];
+        
+        const doctors = [
+            {
+                name: 'Dr. Sarah Johnson',
+                specialization: 'Cardiology',
+                image: 'images/doctor1.jpg',
+                schedule: [
+                    { time: '8:00 AM', patient: 'John Doe', status: 'busy' },
+                    { time: '9:30 AM', patient: '', status: 'free' },
+                    { time: '11:00 AM', patient: 'Robert Smith', status: 'busy' },
+                    { time: '1:00 PM', patient: '', status: 'free' },
+                    { time: '2:30 PM', patient: 'Emily Wilson', status: 'busy' }
+                ]
+            },
+            {
+                name: 'Dr. Michael Chen',
+                specialization: 'Neurology',
+                image: 'images/doctor2.jpg',
+                schedule: [
+                    { time: '8:30 AM', patient: 'Sarah Brown', status: 'busy' },
+                    { time: '10:00 AM', patient: '', status: 'free' },
+                    { time: '11:30 AM', patient: 'Michael Davis', status: 'busy' },
+                    { time: '1:30 PM', patient: '', status: 'free' },
+                    { time: '3:00 PM', patient: 'Jennifer Lee', status: 'busy' }
+                ]
+            }
+        ];
+        
+        // Date navigation
+        const datePicker = document.getElementById('datePicker');
+        const prevDayBtn = document.getElementById('prevDay');
+        const nextDayBtn = document.getElementById('nextDay');
+        const todayBtn = document.getElementById('todayBtn');
+        const scheduleDate = document.getElementById('scheduleDate');
+        
+        function updateDateDisplay() {
+            const selectedDate = new Date(datePicker.value);
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            scheduleDate.textContent = 'Schedule for ' + selectedDate.toLocaleDateString('en-US', options);
+        }
+        
+        prevDayBtn.addEventListener('click', function() {
+            const currentDate = new Date(datePicker.value);
+            currentDate.setDate(currentDate.getDate() - 1);
+            datePicker.value = currentDate.toISOString().split('T')[0];
+            updateDateDisplay();
+        });
+        
+        nextDayBtn.addEventListener('click', function() {
+            const currentDate = new Date(datePicker.value);
+            currentDate.setDate(currentDate.getDate() + 1);
+            datePicker.value = currentDate.toISOString().split('T')[0];
+            updateDateDisplay();
+        });
+        
+        todayBtn.addEventListener('click', function() {
+            datePicker.value = new Date().toISOString().split('T')[0];
+            updateDateDisplay();
+        });
+        
+        datePicker.addEventListener('change', updateDateDisplay);
+        
+        // Initialize date display
+        updateDateDisplay();
+        
+        // Doctor filter
+        const doctorFilter = document.getElementById('doctorFilter');
+        doctorFilter.addEventListener('change', function() {
+            const doctorId = this.value;
+            const cells = document.querySelectorAll('.schedule-cell');
+            
+            cells.forEach(cell => {
+                if (doctorId === 'all' || cell.getAttribute('data-doctor') === doctorId) {
+                    cell.parentElement.style.display = '';
+                } else {
+                    cell.parentElement.style.display = 'none';
+                }
+            });
+        });
+        
+        // Schedule cell click handler
+        const scheduleCells = document.querySelectorAll('.schedule-cell');
+        scheduleCells.forEach(cell => {
+            cell.addEventListener('click', function() {
+                const doctorId = this.getAttribute('data-doctor');
+                const time = this.getAttribute('data-time');
+                const date = datePicker.value;
+                
+                // In a real application, this would open a modal to book an appointment
+                console.log(`Booking appointment with doctor ${doctorId} at ${time} on ${date}`);
+                
+                Swal.fire({
+                    title: 'Book Appointment',
+                    html: `Schedule appointment at ${time} on ${date}?`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, book it!',
+                    cancelButtonText: 'Cancel',
+                    confirmButtonColor: 'var(--med-primary)'
+                });
+            });
+        });
+        
+        // Print schedule
+        const printBtn = document.getElementById('printSchedule');
+        printBtn.addEventListener('click', function() {
+            window.print();
+        });
+        
+        // Set today's date as default for new schedules
+        document.getElementById('scheduleDate').valueAsDate = new Date();
+    });
+</script>
+{% endblock %}

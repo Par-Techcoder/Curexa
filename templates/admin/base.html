@@ -503,29 +503,29 @@
 
     <!-- Menu -->
     <div class="list-group">
-      <a href="#" class="list-group-item active">
+      <a href="{% url 'admin_dashboard' %}" class="list-group-item active">
         <i class="bi bi-speedometer2 sidebar-icon"></i>
         <span class="sidebar-text">Dashboard</span>
         <span class="sidebar-tooltip">Dashboard</span>
       </a>
 
       <div class="sidebar-dropdown">
-        <a href="#" class="list-group-item parent-item">
+        <a href="{% url 'doctor_list' %}" class="list-group-item parent-item">
           <i class="fas fa-user-md sidebar-icon"></i>
           <span class="sidebar-text">Doctors</span>
           <i class="bi bi-chevron-down sidebar-caret"></i>
           <span class="sidebar-tooltip">Doctors</span>
         </a>
         <div class="submenu">
-          <a href="#"><i class="fas fa-list me-2"></i> All Doctors</a>
-          <a href="#"><i class="fas fa-plus-circle me-2"></i> Add Doctor</a>
-          <a href="#"><i class="fas fa-calendar-check me-2"></i> Schedules</a>
+          <a href="{% url 'doctor_list' %}"><i class="fas fa-list me-2"></i> All Doctors</a>
+          <a href="{% url 'doctor_add' %}"><i class="fas fa-plus-circle me-2"></i> Add Doctor</a>
+          <a href="{% url 'doctor_schedles' 1 %}"><i class="fas fa-calendar-check me-2"></i> Schedules</a>
         </div>
         <div class="hover-submenu">
           <div class="hover-submenu-header">Doctors</div>
-          <a href="#"><i class="fas fa-list"></i> All Doctors</a>
-          <a href="#"><i class="fas fa-plus-circle"></i> Add Doctor</a>
-          <a href="#"><i class="fas fa-calendar-check"></i> Schedules</a>
+          <a href="{% url 'doctor_list' %}"><i class="fas fa-list"></i> All Doctors</a>
+          <a href="{% url 'doctor_add' %}"><i class="fas fa-plus-circle"></i> Add Doctor</a>
+          <a href="{% url 'doctor_schedles' 1 %}"><i class="fas fa-calendar-check"></i> Schedules</a>
         </div>
       </div>
 
