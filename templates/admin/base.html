@@ -570,22 +570,22 @@
       </div>
 
       <div class="sidebar-dropdown">
-        <a href="#" class="list-group-item parent-item">
+        <a href="{% url 'appointment_list' %}" class="list-group-item parent-item">
           <i class="fas fa-calendar-alt sidebar-icon"></i>
           <span class="sidebar-text">Appointments</span>
           <i class="bi bi-chevron-down sidebar-caret"></i>
           <span class="sidebar-tooltip">Appointments</span>
         </a>
         <div class="submenu">
-          <a href="#"><i class="fas fa-calendar-day me-2"></i> Today's Appointments</a>
-          <a href="#"><i class="fas fa-calendar-week me-2"></i> Weekly Schedule</a>
-          <a href="#"><i class="fas fa-plus-circle me-2"></i> Book Appointment</a>
+          <a href="{% url 'appointment_list' %}"><i class="fas fa-calendar-day me-2"></i> Today's Appointments</a>
+          <a href="{% url 'appointment_add' %}"><i class="fas fa-plus-circle me-2"></i> Book Appointment</a>
+          <a href="{% url 'appointment_history' %}"><i class="fas fa-calendar-week me-2"></i> Appointment History</a>
         </div>
         <div class="hover-submenu">
           <div class="hover-submenu-header">Appointments</div>
-          <a href="#"><i class="fas fa-calendar-day"></i> Today's Appointments</a>
-          <a href="#"><i class="fas fa-calendar-week"></i> Weekly Schedule</a>
-          <a href="#"><i class="fas fa-plus-circle"></i> Book Appointment</a>
+          <a href="{% url 'appointment_list' %}"><i class="fas fa-calendar-day"></i> Today's Appointments</a>
+          <a href="{% url 'appointment_add' %}"><i class="fas fa-plus-circle"></i> Book Appointment</a>
+          <a href="{% url 'appointment_history' %}"><i class="fas fa-calendar-week"></i> Appointment History </a>
         </div>
       </div>
 

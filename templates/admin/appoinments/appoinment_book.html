@@ -1,0 +1,570 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}Book Appointment - Curexa Admin{% endblock %}
+
+{% block navbar_extra %}
+<!-- Breadcrumb navigation -->
+<nav aria-label="breadcrumb" class="ms-3">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="#" class="text-white">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'appointment_list' %}" class="text-white">Appointments</a></li>
+        <li class="breadcrumb-item active text-light" aria-current="page">Book Appointment</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-section">
+            <h2><i class="fas fa-calendar-plus me-2"></i>Book New Appointment</h2>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-lg-8">
+        <div class="card medical-border">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-info-circle me-2"></i>Appointment Details</h5>
+            </div>
+            <div class="card-body">
+                <form id="bookAppointmentForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="patientSelect" class="form-label">Patient <span class="text-danger">*</span></label>
+                            <select class="form-select" id="patientSelect" required>
+                                <option value="" selected disabled>Select Patient</option>
+                                <option value="PT001">John Doe (PT001)</option>
+                                <option value="PT002">Jane Smith (PT002)</option>
+                                <option value="PT003">Robert Johnson (PT003)</option>
+                                <option value="PT004">Sarah Williams (PT004)</option>
+                                <option value="PT005">Michael Brown (PT005)</option>
+                                <option value="new">+ Add New Patient</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="doctorSelect" class="form-label">Doctor <span class="text-danger">*</span></label>
+                            <select class="form-select" id="doctorSelect" required>
+                                <option value="" selected disabled>Select Doctor</option>
+                                <option value="DR001">Dr. Sarah Johnson (Cardiology)</option>
+                                <option value="DR002">Dr. Michael Chen (Neurology)</option>
+                                <option value="DR003">Dr. Anita Patel (Pediatrics)</option>
+                                <option value="DR004">Dr. James Williams (Orthopedics)</option>
+                                <option value="DR005">Dr. Emily Rodriguez (Dermatology)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="appointmentDate" class="form-label">Date <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="appointmentDate" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="appointmentTime" class="form-label">Time <span class="text-danger">*</span></label>
+                            <select class="form-select" id="appointmentTime" required>
+                                <option value="" selected disabled>Select Time</option>
+                                <optgroup label="Morning">
+                                    <option value="08:00">8:00 AM</option>
+                                    <option value="08:30">8:30 AM</option>
+                                    <option value="09:00">9:00 AM</option>
+                                    <option value="09:30">9:30 AM</option>
+                                    <option value="10:00">10:00 AM</option>
+                                    <option value="10:30">10:30 AM</option>
+                                    <option value="11:00">11:00 AM</option>
+                                    <option value="11:30">11:30 AM</option>
+                                </optgroup>
+                                <optgroup label="Afternoon">
+                                    <option value="13:00">1:00 PM</option>
+                                    <option value="13:30">1:30 PM</option>
+                                    <option value="14:00">2:00 PM</option>
+                                    <option value="14:30">2:30 PM</option>
+                                    <option value="15:00">3:00 PM</option>
+                                    <option value="15:30">3:30 PM</option>
+                                    <option value="16:00">4:00 PM</option>
+                                    <option value="16:30">4:30 PM</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="appointmentType" class="form-label">Appointment Type <span class="text-danger">*</span></label>
+                            <select class="form-select" id="appointmentType" required>
+                                <option value="" selected disabled>Select Type</option>
+                                <option value="consultation">Consultation</option>
+                                <option value="followup">Follow-up</option>
+                                <option value="emergency">Emergency</option>
+                                <option value="routine">Routine Checkup</option>
+                                <option value="vaccination">Vaccination</option>
+                                <option value="test">Test/Procedure</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="duration" class="form-label">Duration</label>
+                            <select class="form-select" id="duration">
+                                <option value="15">15 minutes</option>
+                                <option value="30" selected>30 minutes</option>
+                                <option value="45">45 minutes</option>
+                                <option value="60">60 minutes</option>
+                                <option value="90">90 minutes</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="reason" class="form-label">Reason for Visit <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="reason" rows="3" placeholder="Please describe the reason for this appointment" required></textarea>
+                    </div>
+                    
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="reminder">
+                        <label class="form-check-label" for="reminder">
+                            Send reminder notification to patient
+                        </label>
+                    </div>
+                    
+                    <div class="d-flex justify-content-end mt-4">
+                        <a href="{% url 'appointment_list' %}" class="btn btn-secondary me-2">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Book Appointment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- Doctor Information Card -->
+        <div class="card medical-border mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-user-md me-2"></i>Doctor Information</h5>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <img src="{% static 'images/doctor1.jpg' %}" id="doctorImage" class="rounded-circle" width="120" height="120" alt="Doctor">
+                </div>
+                <h5 id="doctorName">Select a Doctor</h5>
+                <p id="doctorSpecialty" class="text-muted">Specialty will appear here</p>
+                
+                <div class="row mt-3">
+                    <div class="col-6">
+                        <div class="border rounded p-2 text-center mb-3">
+                            <h6 class="mb-0">Availability</h6>
+                            <p class="mb-0" id="doctorAvailability">Mon-Fri</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="border rounded p-2 text-center mb-3">
+                            <h6 class="mb-0">Fee</h6>
+                            <p class="mb-0" id="doctorFee">$0</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-outline-light btn-sm w-100" id="viewDoctorSchedule">
+                    <i class="fas fa-calendar me-1"></i> View Schedule
+                </button>
+            </div>
+        </div>
+        
+        <!-- Patient Information Card -->
+        <div class="card medical-border mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-user-injured me-2"></i>Patient Information</h5>
+            </div>
+            <div class="card-body">
+                <div id="patientInfo">
+                    <p class="text-center text-muted">Select a patient to view details</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Availability Calendar -->
+        <div class="card medical-border">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-calendar-alt me-2"></i>Available Time Slots</h5>
+            </div>
+            <div class="card-body">
+                <div id="availabilityCalendar">
+                    <p class="text-center text-muted">Select a doctor and date to view availability</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+    
+    .card {
+        border: none;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+    
+    .card-header {
+        background: rgba(42, 107, 156, 0.2);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .time-slot {
+        padding: 8px;
+        margin: 5px 0;
+        border-radius: 4px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .time-slot.available {
+        background-color: rgba(46, 204, 113, 0.2);
+        border: 1px solid #2ecc71;
+        color: #2ecc71;
+    }
+    
+    .time-slot.available:hover {
+        background-color: rgba(46, 204, 113, 0.3);
+    }
+    
+    .time-slot.booked {
+        background-color: rgba(231, 76, 60, 0.2);
+        border: 1px solid #e74c3c;
+        color: #e74c3c;
+        cursor: not-allowed;
+    }
+    
+    .time-slot.selected {
+        background-color: var(--med-primary);
+        border: 1px solid var(--med-primary-light);
+        color: white;
+    }
+    
+    .patient-detail {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+    }
+    
+    .patient-detail .label {
+        font-weight: 500;
+        color: #ddd;
+    }
+    
+    .patient-detail .value {
+        color: #fff;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Doctor data
+        const doctors = {
+            'DR001': {
+                name: 'Dr. Sarah Johnson',
+                specialty: 'Cardiology',
+                image: '{% static "images/doctor1.jpg" %}',
+                availability: 'Mon-Fri, 8:00 AM - 4:00 PM',
+                fee: '$150'
+            },
+            'DR002': {
+                name: 'Dr. Michael Chen',
+                specialty: 'Neurology',
+                image: '{% static "images/doctor2.jpg" %}',
+                availability: 'Mon-Thu, 9:00 AM - 5:00 PM',
+                fee: '$160'
+            },
+            'DR003': {
+                name: 'Dr. Anita Patel',
+                specialty: 'Pediatrics',
+                image: '{% static "images/doctor3.jpg" %}',
+                availability: 'Mon-Fri, 8:30 AM - 4:30 PM',
+                fee: '$140'
+            },
+            'DR004': {
+                name: 'Dr. James Williams',
+                specialty: 'Orthopedics',
+                image: '{% static "images/doctor4.jpg" %}',
+                availability: 'Tue-Sat, 8:00 AM - 4:00 PM',
+                fee: '$170'
+            },
+            'DR005': {
+                name: 'Dr. Emily Rodriguez',
+                specialty: 'Dermatology',
+                image: '{% static "images/doctor5.jpg" %}',
+                availability: 'Mon-Fri, 9:00 AM - 5:00 PM',
+                fee: '$155'
+            }
+        };
+        
+        // Patient data
+        const patients = {
+            'PT001': {
+                name: 'John Doe',
+                age: '42',
+                gender: 'Male',
+                phone: '(555) 123-4567',
+                email: 'john.doe@example.com',
+                lastVisit: '2023-10-12'
+            },
+            'PT002': {
+                name: 'Jane Smith',
+                age: '35',
+                gender: 'Female',
+                phone: '(555) 987-6543',
+                email: 'jane.smith@example.com',
+                lastVisit: '2023-10-10'
+            },
+            'PT003': {
+                name: 'Robert Johnson',
+                age: '68',
+                gender: 'Male',
+                phone: '(555) 456-7890',
+                email: 'robert.j@example.com',
+                lastVisit: '2023-10-05'
+            },
+            'PT004': {
+                name: 'Sarah Williams',
+                age: '29',
+                gender: 'Female',
+                phone: '(555) 234-5678',
+                email: 'sarahw@example.com',
+                lastVisit: '2023-09-28'
+            },
+            'PT005': {
+                name: 'Michael Brown',
+                age: '51',
+                gender: 'Male',
+                phone: '(555) 876-5432',
+                email: 'm.brown@example.com',
+                lastVisit: '2023-09-15'
+            }
+        };
+        
+        // Doctor selection handler
+        const doctorSelect = document.getElementById('doctorSelect');
+        const doctorImage = document.getElementById('doctorImage');
+        const doctorName = document.getElementById('doctorName');
+        const doctorSpecialty = document.getElementById('doctorSpecialty');
+        const doctorAvailability = document.getElementById('doctorAvailability');
+        const doctorFee = document.getElementById('doctorFee');
+        
+        doctorSelect.addEventListener('change', function() {
+            const doctorId = this.value;
+            if (doctorId && doctors[doctorId]) {
+                const doctor = doctors[doctorId];
+                doctorImage.src = doctor.image;
+                doctorName.textContent = doctor.name;
+                doctorSpecialty.textContent = doctor.specialty;
+                doctorAvailability.textContent = doctor.availability;
+                doctorFee.textContent = doctor.fee;
+                
+                // Update availability calendar
+                updateAvailabilityCalendar(doctorId);
+            } else {
+                doctorImage.src = '{% static "images/doctor1.jpg" %}';
+                doctorName.textContent = 'Select a Doctor';
+                doctorSpecialty.textContent = 'Specialty will appear here';
+                doctorAvailability.textContent = 'Mon-Fri';
+                doctorFee.textContent = '$0';
+                
+                // Clear availability calendar
+                document.getElementById('availabilityCalendar').innerHTML = '<p class="text-center text-muted">Select a doctor and date to view availability</p>';
+            }
+        });
+        
+        // Patient selection handler
+        const patientSelect = document.getElementById('patientSelect');
+        const patientInfo = document.getElementById('patientInfo');
+        
+        patientSelect.addEventListener('change', function() {
+            const patientId = this.value;
+            if (patientId === 'new') {
+                // Redirect to add new patient page
+                window.location.href = "{% url 'patient_add' %}";
+                return;
+            }
+            
+            if (patientId && patients[patientId]) {
+                const patient = patients[patientId];
+                const lastVisit = new Date(patient.lastVisit).toLocaleDateString();
+                
+                patientInfo.innerHTML = `
+                    <h6 class="text-center">${patient.name}</h6>
+                    <div class="patient-detail">
+                        <span class="label">Age:</span>
+                        <span class="value">${patient.age}</span>
+                    </div>
+                    <div class="patient-detail">
+                        <span class="label">Gender:</span>
+                        <span class="value">${patient.gender}</span>
+                    </div>
+                    <div class="patient-detail">
+                        <span class="label">Phone:</span>
+                        <span class="value">${patient.phone}</span>
+                    </div>
+                    <div class="patient-detail">
+                        <span class="label">Email:</span>
+                        <span class="value">${patient.email}</span>
+                    </div>
+                    <div class="patient-detail">
+                        <span class="label">Last Visit:</span>
+                        <span class="value">${lastVisit}</span>
+                    </div>
+                `;
+            } else {
+                patientInfo.innerHTML = '<p class="text-center text-muted">Select a patient to view details</p>';
+            }
+        });
+        
+        // Date selection handler
+        const appointmentDate = document.getElementById('appointmentDate');
+        appointmentDate.addEventListener('change', function() {
+            const doctorId = doctorSelect.value;
+            if (doctorId) {
+                updateAvailabilityCalendar(doctorId);
+            }
+        });
+        
+        // Update availability calendar
+        function updateAvailabilityCalendar(doctorId) {
+            const date = appointmentDate.value;
+            const availabilityCalendar = document.getElementById('availabilityCalendar');
+            
+            if (!date) {
+                availabilityCalendar.innerHTML = '<p class="text-center text-muted">Please select a date</p>';
+                return;
+            }
+            
+            // Generate random availability for demo purposes
+            const timeSlots = [
+                '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', 
+                '11:00', '11:30', '13:00', '13:30', '14:00', '14:30', 
+                '15:00', '15:30', '16:00', '16:30'
+            ];
+            
+            let calendarHTML = `<h6 class="text-center mb-3">Available slots for ${new Date(date).toLocaleDateString()}</h6>`;
+            calendarHTML += '<div class="row">';
+            
+            timeSlots.forEach(slot => {
+                // Randomly mark some slots as booked for demo
+                const isAvailable = Math.random() > 0.3;
+                const timeFormatted = formatTime(slot);
+                
+                calendarHTML += `
+                    <div class="col-6 mb-2">
+                        <div class="time-slot ${isAvailable ? 'available' : 'booked'}" data-time="${slot}">
+                            ${timeFormatted}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            calendarHTML += '</div>';
+            availabilityCalendar.innerHTML = calendarHTML;
+            
+            // Add click event to available time slots
+            document.querySelectorAll('.time-slot.available').forEach(slot => {
+                slot.addEventListener('click', function() {
+                    // Remove selected class from all slots
+                    document.querySelectorAll('.time-slot').forEach(s => {
+                        s.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked slot
+                    this.classList.add('selected');
+                    
+                    // Set the selected time in the time dropdown
+                    document.getElementById('appointmentTime').value = this.getAttribute('data-time');
+                });
+            });
+        }
+        
+        // Format time from HH:MM to 12-hour format
+        function formatTime(time) {
+            const [hours, minutes] = time.split(':');
+            const h = parseInt(hours);
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            const formattedHours = h % 12 || 12;
+            return `${formattedHours}:${minutes} ${ampm}`;
+        }
+        
+        // Form submission
+        const bookAppointmentForm = document.getElementById('bookAppointmentForm');
+        
+        bookAppointmentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Basic validation
+            let isValid = true;
+            const requiredFields = bookAppointmentForm.querySelectorAll('[required]');
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.classList.add('is-invalid');
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+            
+            if (isValid) {
+                // Show success message
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Appointment Booked!',
+                    html: `Appointment successfully scheduled for<br><strong>${document.getElementById('patientSelect').options[document.getElementById('patientSelect').selectedIndex].text}</strong><br>with<br><strong>${document.getElementById('doctorSelect').options[document.getElementById('doctorSelect').selectedIndex].text}</strong><br>on ${document.getElementById('appointmentDate').value} at ${formatTime(document.getElementById('appointmentTime').value)}`,
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: 'var(--med-primary)'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redirect to appointments list page
+                        window.location.href = "{% url 'appointment_list' %}";
+                    }
+                });
+            } else {
+                // Show error message
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Missing Information',
+                    text: 'Please fill in all required fields.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: 'var(--med-alert)'
+                });
+            }
+        });
+        
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('appointmentDate').setAttribute('min', today);
+        
+        // View doctor schedule button
+        document.getElementById('viewDoctorSchedule').addEventListener('click', function() {
+            const doctorId = doctorSelect.value;
+            if (doctorId) {
+                // In a real application, this would redirect to the doctor's schedule page
+                Swal.fire({
+                    icon: 'info',
+                    title: 'View Schedule',
+                    text: `This would open the schedule for ${doctors[doctorId].name}`,
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: 'var(--med-primary)'
+                });
+            } else {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Select a Doctor',
+                    text: 'Please select a doctor first to view their schedule.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: 'var(--med-warning)'
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

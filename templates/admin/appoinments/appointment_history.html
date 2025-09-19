@@ -1,0 +1,635 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title %}Appointment History - Curexa Admin{% endblock %}
+
+{% block navbar_extra %}
+<!-- Breadcrumb navigation -->
+<nav aria-label="breadcrumb" class="ms-3">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="#" class="text-white">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'patient_list' %}" class="text-white">Patients</a></li>
+        <li class="breadcrumb-item active text-light" aria-current="page">Appointment History</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-section">
+            <h2><i class="fas fa-history me-2"></i>Patient Appointment History</h2>
+        </div>
+    </div>
+</div>
+
+<!-- Patient Selector Card -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card medical-border">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-user-injured me-2"></i>Select Patient</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search patients by name, ID, or phone number..." id="patientSearch">
+                            <button class="btn btn-primary" type="button" id="searchButton">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-select" id="timeFilter">
+                            <option value="all" selected>All Appointments</option>
+                            <option value="month">This Month</option>
+                            <option value="3months">Last 3 Months</option>
+                            <option value="6months">Last 6 Months</option>
+                            <option value="year">This Year</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="patient-list mt-3">
+                    <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-action active" data-patient-id="PT001">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">John Doe</h6>
+                                    <small class="text-muted">PT001 • 42 years • Male • (555) 123-4567</small>
+                                </div>
+                                <span class="badge bg-primary rounded-pill">12 Appointments</span>
+                            </div>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action" data-patient-id="PT002">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Jane Smith</h6>
+                                    <small class="text-muted">PT002 • 35 years • Female • (555) 987-6543</small>
+                                </div>
+                                <span class="badge bg-primary rounded-pill">8 Appointments</span>
+                            </div>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action" data-patient-id="PT003">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Robert Johnson</h6>
+                                    <small class="text-muted">PT003 • 68 years • Male • (555) 456-7890</small>
+                                </div>
+                                <span class="badge bg-primary rounded-pill">5 Appointments</span>
+                            </div>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action" data-patient-id="PT004">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Sarah Williams</h6>
+                                    <small class="text-muted">PT004 • 29 years • Female • (555) 234-5678</small>
+                                </div>
+                                <span class="badge bg-primary rounded-pill">3 Appointments</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Patient Summary & Appointment History -->
+<div class="row mt-4">
+    <div class="col-lg-4">
+        <!-- Patient Summary Card -->
+        <div class="card medical-border">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-user-circle me-2"></i>Patient Summary</h5>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-3">
+                    <img src="{% static 'images/patient1.jpg' %}" class="rounded-circle" width="100" height="100" alt="Patient" id="patientImage">
+                    <h5 class="mt-2" id="patientName">Select a Patient</h5>
+                    <p class="text-muted" id="patientDetails">Patient details will appear here</p>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <div class="border rounded p-2 text-center">
+                            <h6 class="mb-0">Total Visits</h6>
+                            <p class="mb-0 fw-bold" id="totalVisits">0</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="border rounded p-2 text-center">
+                            <h6 class="mb-0">Last Visit</h6>
+                            <p class="mb-0" id="lastVisit">-</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h6>Medical Info</h6>
+                <div class="medical-info">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Blood Type:</span>
+                        <span id="bloodType">-</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Allergies:</span>
+                        <span id="allergies">None</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted">Conditions:</span>
+                        <span id="conditions">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Statistics Card -->
+        <div class="card medical-border mt-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-chart-pie me-2"></i>Visit Statistics</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="visitChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-8">
+        <!-- Appointment History Card -->
+        <div class="card medical-border">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0"><i class="fas fa-list-alt me-2"></i>Appointment History</h5>
+                <div>
+                    <button class="btn btn-sm btn-outline-light" id="exportButton">
+                        <i class="fas fa-download me-1"></i> Export
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-dark" id="appointmentTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Doctor</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Diagnosis</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="appointment-row">
+                                <td>Oct 12, 2023<br><small>10:00 AM</small></td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{% static 'images/doctor1.jpg' %}" class="rounded-circle me-2" width="30" height="30" alt="Doctor">
+                                        <div>Dr. Sarah Johnson</div>
+                                    </div>
+                                </td>
+                                <td>Consultation</td>
+                                <td><span class="badge bg-success">Completed</span></td>
+                                <td>Hypertension follow-up</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info view-details" data-id="APT1001">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="appointment-row">
+                                <td>Sep 28, 2023<br><small>2:30 PM</small></td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{% static 'images/doctor2.jpg' %}" class="rounded-circle me-2" width="30" height="30" alt="Doctor">
+                                        <div>Dr. Michael Chen</div>
+                                    </div>
+                                </td>
+                                <td>Follow-up</td>
+                                <td><span class="badge bg-success">Completed</span></td>
+                                <td>Migraine treatment</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info view-details" data-id="APT1002">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="appointment-row">
+                                <td>Aug 15, 2023<br><small>9:00 AM</small></td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{% static 'images/doctor1.jpg' %}" class="rounded-circle me-2" width="30" height="30" alt="Doctor">
+                                        <div>Dr. Sarah Johnson</div>
+                                    </div>
+                                </td>
+                                <td>Consultation</td>
+                                <td><span class="badge bg-success">Completed</span></td>
+                                <td>Blood pressure check</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info view-details" data-id="APT1003">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="appointment-row">
+                                <td>Jul 5, 2023<br><small>11:30 AM</small></td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{% static 'images/doctor3.jpg' %}" class="rounded-circle me-2" width="30" height="30" alt="Doctor">
+                                        <div>Dr. Anita Patel</div>
+                                    </div>
+                                </td>
+                                <td>Vaccination</td>
+                                <td><span class="badge bg-success">Completed</span></td>
+                                <td>Flu vaccine</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info view-details" data-id="APT1004">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr class="appointment-row">
+                                <td>Jun 18, 2023<br><small>4:00 PM</small></td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{% static 'images/doctor2.jpg' %}" class="rounded-circle me-2" width="30" height="30" alt="Doctor">
+                                        <div>Dr. Michael Chen</div>
+                                    </div>
+                                </td>
+                                <td>Consultation</td>
+                                <td><span class="badge bg-success">Completed</span></td>
+                                <td>Headache evaluation</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info view-details" data-id="APT1005">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <nav aria-label="Appointment pagination">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Appointment Details Modal -->
+<div class="modal fade" id="appointmentDetailsModal" tabindex="-1" aria-labelledby="appointmentDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header medical-border">
+                <h5 class="modal-title" id="appointmentDetailsModalLabel">Appointment Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Appointment Information</h6>
+                        <div class="detail-item">
+                            <span class="detail-label">Date & Time:</span>
+                            <span class="detail-value" id="modalDateTime">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Doctor:</span>
+                            <span class="detail-value" id="modalDoctor">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Type:</span>
+                            <span class="detail-value" id="modalType">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Status:</span>
+                            <span class="detail-value" id="modalStatus">-</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Medical Information</h6>
+                        <div class="detail-item">
+                            <span class="detail-label">Diagnosis:</span>
+                            <span class="detail-value" id="modalDiagnosis">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Symptoms:</span>
+                            <span class="detail-value" id="modalSymptoms">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Prescription:</span>
+                            <span class="detail-value" id="modalPrescription">-</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Notes:</span>
+                            <span class="detail-value" id="modalNotes">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Print</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .list-group-item {
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #fff;
+        margin-bottom: 5px;
+    }
+    
+    .list-group-item:hover, 
+    .list-group-item.active {
+        background-color: var(--med-primary);
+        border-color: var(--med-primary);
+    }
+    
+    .table th {
+        border-top: none;
+        border-bottom: 1px solid var(--med-primary);
+        font-weight: 600;
+    }
+    
+    .appointment-row:hover {
+        background-color: rgba(42, 107, 156, 0.2);
+        cursor: pointer;
+    }
+    
+    .badge {
+        font-size: 0.75rem;
+        padding: 0.35em 0.65em;
+    }
+    
+    .detail-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .detail-label {
+        font-weight: 500;
+        color: #ddd;
+    }
+    
+    .detail-value {
+        color: #fff;
+        text-align: right;
+    }
+    
+    .medical-info {
+        background-color: rgba(42, 107, 156, 0.1);
+        padding: 15px;
+        border-radius: 5px;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Patient data
+        const patients = {
+            'PT001': {
+                name: 'John Doe',
+                details: 'PT001 • 42 years • Male • (555) 123-4567',
+                image: '{% static "images/patient1.jpg" %}',
+                bloodType: 'O+',
+                allergies: 'Penicillin, Shellfish',
+                conditions: 'Hypertension, Type 2 Diabetes',
+                totalVisits: '12',
+                lastVisit: 'Oct 12, 2023'
+            },
+            'PT002': {
+                name: 'Jane Smith',
+                details: 'PT002 • 35 years • Female • (555) 987-6543',
+                image: '{% static "images/patient2.jpg" %}',
+                bloodType: 'A-',
+                allergies: 'None',
+                conditions: 'Migraine',
+                totalVisits: '8',
+                lastVisit: 'Sep 15, 2023'
+            },
+            'PT003': {
+                name: 'Robert Johnson',
+                details: 'PT003 • 68 years • Male • (555) 456-7890',
+                image: '{% static "images/patient3.jpg" %}',
+                bloodType: 'B+',
+                allergies: 'Iodine',
+                conditions: 'Arthritis, High Cholesterol',
+                totalVisits: '5',
+                lastVisit: 'Aug 22, 2023'
+            },
+            'PT004': {
+                name: 'Sarah Williams',
+                details: 'PT004 • 29 years • Female • (555) 234-5678',
+                image: '{% static "images/patient4.jpg" %}',
+                bloodType: 'AB+',
+                allergies: 'Latex',
+                conditions: 'None',
+                totalVisits: '3',
+                lastVisit: 'Jul 30, 2023'
+            }
+        };
+        
+        // Appointment data
+        const appointments = {
+            'APT1001': {
+                dateTime: 'Oct 12, 2023 at 10:00 AM',
+                doctor: 'Dr. Sarah Johnson (Cardiology)',
+                type: 'Consultation',
+                status: 'Completed',
+                diagnosis: 'Hypertension follow-up',
+                symptoms: 'Elevated blood pressure, headache',
+                prescription: 'Lisinopril 10mg daily, Amlodipine 5mg daily',
+                notes: 'Patient advised to reduce sodium intake and exercise regularly. Follow up in 3 months.'
+            },
+            'APT1002': {
+                dateTime: 'Sep 28, 2023 at 2:30 PM',
+                doctor: 'Dr. Michael Chen (Neurology)',
+                type: 'Follow-up',
+                status: 'Completed',
+                diagnosis: 'Migraine treatment',
+                symptoms: 'Severe headache, sensitivity to light',
+                prescription: 'Sumatriptan 50mg as needed, Propranolol 20mg daily',
+                notes: 'Patient reported reduction in migraine frequency. Continue current medication.'
+            },
+            'APT1003': {
+                dateTime: 'Aug 15, 2023 at 9:00 AM',
+                doctor: 'Dr. Sarah Johnson (Cardiology)',
+                type: 'Consultation',
+                status: 'Completed',
+                diagnosis: 'Blood pressure check',
+                symptoms: 'Routine checkup',
+                prescription: 'Continue current medication',
+                notes: 'Blood pressure well controlled. No changes to treatment plan.'
+            },
+            'APT1004': {
+                dateTime: 'Jul 5, 2023 at 11:30 AM',
+                doctor: 'Dr. Anita Patel (Pediatrics)',
+                type: 'Vaccination',
+                status: 'Completed',
+                diagnosis: 'Flu vaccine',
+                symptoms: 'Routine immunization',
+                prescription: 'None',
+                notes: 'Patient received flu vaccine. No adverse reactions observed.'
+            },
+            'APT1005': {
+                dateTime: 'Jun 18, 2023 at 4:00 PM',
+                doctor: 'Dr. Michael Chen (Neurology)',
+                type: 'Consultation',
+                status: 'Completed',
+                diagnosis: 'Headache evaluation',
+                symptoms: 'Persistent headaches, dizziness',
+                prescription: 'Ibuprofen 400mg as needed',
+                notes: 'Recommended stress management techniques. Follow up if symptoms persist.'
+            }
+        };
+        
+        // Patient selection
+        const patientItems = document.querySelectorAll('.list-group-item');
+        patientItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all items
+                patientItems.forEach(i => i.classList.remove('active'));
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+                
+                // Update patient summary
+                const patientId = this.getAttribute('data-patient-id');
+                if (patients[patientId]) {
+                    const patient = patients[patientId];
+                    document.getElementById('patientImage').src = patient.image;
+                    document.getElementById('patientName').textContent = patient.name;
+                    document.getElementById('patientDetails').textContent = patient.details;
+                    document.getElementById('bloodType').textContent = patient.bloodType;
+                    document.getElementById('allergies').textContent = patient.allergies;
+                    document.getElementById('conditions').textContent = patient.conditions;
+                    document.getElementById('totalVisits').textContent = patient.totalVisits;
+                    document.getElementById('lastVisit').textContent = patient.lastVisit;
+                }
+            });
+        });
+        
+        // Search functionality
+        const patientSearch = document.getElementById('patientSearch');
+        const searchButton = document.getElementById('searchButton');
+        
+        searchButton.addEventListener('click', performSearch);
+        patientSearch.addEventListener('keyup', performSearch);
+        
+        function performSearch() {
+            const searchText = this.value ? this.value : patientSearch.value;
+            const searchLower = searchText.toLowerCase();
+            
+            patientItems.forEach(item => {
+                const patientText = item.textContent.toLowerCase();
+                if (patientText.includes(searchLower)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+        
+        // Time filter
+        const timeFilter = document.getElementById('timeFilter');
+        timeFilter.addEventListener('change', function() {
+            // In a real application, this would filter appointments by time period
+            const filterValue = this.value;
+            Swal.fire({
+                icon: 'info',
+                title: 'Filter Applied',
+                text: `Showing appointments from ${this.options[this.selectedIndex].text}`,
+                confirmButtonText: 'OK',
+                confirmButtonColor: 'var(--med-primary)',
+                timer: 1500
+            });
+        });
+        
+        // View appointment details
+        const viewButtons = document.querySelectorAll('.view-details');
+        viewButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const appointmentId = this.getAttribute('data-id');
+                if (appointments[appointmentId]) {
+                    const appointment = appointments[appointmentId];
+                    
+                    // Set modal values
+                    document.getElementById('modalDateTime').textContent = appointment.dateTime;
+                    document.getElementById('modalDoctor').textContent = appointment.doctor;
+                    document.getElementById('modalType').textContent = appointment.type;
+                    document.getElementById('modalStatus').textContent = appointment.status;
+                    document.getElementById('modalDiagnosis').textContent = appointment.diagnosis;
+                    document.getElementById('modalSymptoms').textContent = appointment.symptoms;
+                    document.getElementById('modalPrescription').textContent = appointment.prescription;
+                    document.getElementById('modalNotes').textContent = appointment.notes;
+                    
+                    // Show modal
+                    const modal = new bootstrap.Modal(document.getElementById('appointmentDetailsModal'));
+                    modal.show();
+                }
+            });
+        });
+        
+        // Row click to view details
+        const appointmentRows = document.querySelectorAll('.appointment-row');
+        appointmentRows.forEach(row => {
+            row.addEventListener('click', function() {
+                const button = this.querySelector('.view-details');
+                button.click();
+            });
+        });
+        
+        // Export functionality
+        document.getElementById('exportButton').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Export Options',
+                html: `How would you like to export the appointment history?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'PDF',
+                cancelButtonText: 'CSV',
+                confirmButtonColor: 'var(--med-primary)',
+                cancelButtonColor: 'var(--med-accent)'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'PDF Export',
+                        text: 'Appointment history exported as PDF successfully.',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: 'var(--med-primary)'
+                    });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'CSV Export',
+                        text: 'Appointment history exported as CSV successfully.',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: 'var(--med-primary)'
+                    });
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

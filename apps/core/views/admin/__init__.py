@@ -5,3 +5,4 @@ from .medistore_view import *
 from .users_view import *
 from .home_view import *
 from .catagory_view import *
+from .appointments_view import *

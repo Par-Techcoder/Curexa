@@ -1,0 +1,568 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}Today's Appointments - Curexa Admin{% endblock %}
+
+{% block navbar_extra %}
+<!-- Breadcrumb navigation -->
+<nav aria-label="breadcrumb" class="ms-3">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="#" class="text-white">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'appointment_list' %}" class="text-white">Appointments</a></li>
+        <li class="breadcrumb-item active text-light" aria-current="page">Today's Appointments</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-section">
+            <h2><i class="fas fa-calendar-day me-2"></i>Today's Appointments</h2>
+            <p class="mb-0">{% now "l, F j, Y" %}</p>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Stats Row -->
+<div class="row mt-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card medical-border h-100">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-8">
+                        <h5 class="card-title stats-number">18</h5>
+                        <p class="card-text stats-label">Total Appointments</p>
+                    </div>
+                    <div class="col-4 text-end">
+                        <i class="fas fa-calendar-check card-icon text-primary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card medical-border h-100">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-8">
+                        <h5 class="card-title stats-number">6</h5>
+                        <p class="card-text stats-label">Completed</p>
+                    </div>
+                    <div class="col-4 text-end">
+                        <i class="fas fa-check-circle card-icon text-success"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card medical-border h-100">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-8">
+                        <h5 class="card-title stats-number">9</h5>
+                        <p class="card-text stats-label">Upcoming</p>
+                    </div>
+                    <div class="col-4 text-end">
+                        <i class="fas fa-clock card-icon text-info"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card medical-border h-100">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-8">
+                        <h5 class="card-title stats-number">3</h5>
+                        <p class="card-text stats-label">Cancelled</p>
+                    </div>
+                    <div class="col-4 text-end">
+                        <i class="fas fa-times-circle card-icon text-danger"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="d-flex">
+            <select class="form-select me-2" id="statusFilter">
+                <option value="all" selected>All Statuses</option>
+                <option value="scheduled">Scheduled</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+            <select class="form-select" id="doctorFilter">
+                <option value="all" selected>All Doctors</option>
+                <option value="DR001">Dr. Sarah Johnson</option>
+                <option value="DR002">Dr. Michael Chen</option>
+                <option value="DR003">Dr. Anita Patel</option>
+                <option value="DR004">Dr. James Williams</option>
+                <option value="DR005">Dr. Emily Rodriguez</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-6 text-end">
+        <a href="{% url 'appointment_add' %}" class="btn btn-success">
+            <i class="fas fa-plus me-1"></i> New Appointment
+        </a>
+        <button class="btn btn-outline-light ms-2" id="printSchedule">
+            <i class="fas fa-print"></i>
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card medical-border">
+            <div class="card-body">
+                <h4 class="mb-3">Appointment Schedule</h4>
+                
+                <!-- Timeline View -->
+                <div class="appointment-timeline">
+                    <!-- Morning Section -->
+                    <div class="timeline-section">
+                        <h5 class="timeline-header"><i class="fas fa-sun me-2"></i>Morning</h5>
+                        
+                        <div class="appointment-item completed">
+                            <div class="appointment-time">8:00 AM - 8:30 AM</div>
+                            <div class="appointment-details">
+                                <div class="d-flex justify-content-between">
+                                    <h6>John Doe</h6>
+                                    <span class="badge bg-success">Completed</span>
+                                </div>
+                                <p class="mb-1">Dr. Sarah Johnson · Cardiology</p>
+                                <p class="text-muted mb-0">Regular checkup</p>
+                            </div>
+                            <div class="appointment-actions">
+                                <button class="btn btn-sm btn-outline-info" title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="appointment-item completed">
+                            <div class="appointment-time">8:30 AM - 9:00 AM</div>
+                            <div class="appointment-details">
+                                <div class="d-flex justify-content-between">
+                                    <h6>Robert Smith</h6>
+                                    <span class="badge bg-success">Completed</span>
+                                </div>
+                                <p class="mb-1">Dr. Michael Chen · Neurology</p>
+                                <p class="text-muted mb-0">Follow-up consultation</p>
+                            </div>
+                            <div class="appointment-actions">
+                                <button class="btn btn-sm btn-outline-info" title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="appointment-item completed">
+                            <div class="appointment-time">9:00 AM - 9:30 AM</div>
+                            <div class="appointment-details">
+                                <div class="d-flex justify-content-between">
+                                    <h6>Emma Wilson</h6>
+                                    <span class="badge bg-success">Completed</span>
+                                </div>
+                                <p class="mb-1">Dr. Anita Patel · Pediatrics</p>
+                                <p class="text-muted mb-0">Vaccination</p>
+                            </div>
+                            <div class="appointment-actions">
+                                <button class="btn btn-sm btn-outline-info" title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="appointment-item completed">
+                            <div class="appointment-time">10:00 AM - 10:30 AM</div>
+                            <div class="appointment-details">
+                                <div class="d-flex justify-content-between">
+                                    <h6>David Miller</h6>
+                                    <span class="badge bg-success">Completed</span>
+                                </div>
+                                <p class="mb-1">Dr. Sarah Johnson · Cardiology</p>
+                                <p class="text-muted mb-0">ECG Test</p>
+                            </div>
+                            <div class="appointment-actions">
+                                <button class="btn btn-sm btn-outline-info" title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="appointment-item completed">
+                            <div class="appointment-time">10:30 AM - 11:00 AM</div>
+                            <div class="appointment-details">
+                                <div class="d-flex justify-content-between">
+                                    <h6>Jennifer Lee</h6>
+                                    <span class="badge bg-success">Completed</span>
+                                </div>
+                                <p class="mb-1">Dr. Michael Chen · Neurology</p>
+                                <p class="text-muted mb-0">Migraine treatment</p>
+                            </div>
+                            <div class="appointment-actions">
+                                <button class="btn btn-sm btn-outline-info" title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Afternoon Section -->
+                    <div class="timeline-section">
+                        <h5 class="timeline-header"><i class="fas fa-cloud-sun me-2"></i>Afternoon</h5>
+                        
+                        <div class="appointment-item scheduled">
+                            <div class="appointment-time">1:00 PM - 1:30 PM</div>
+                            <div class="appointment-details">
+                                <div class="d-flex justify-content-between">
+                                    <h6>Emma Thompson</h6>
+                                    <span class="badge bg-info">Scheduled</span>
+                                </div>
+                                <p class="mb-1">Dr. Sarah Johnson · Cardiology</p>
+                                <p class="text-muted mb-0">Blood pressure check</p>
+                            </div>
+                            <div class="appointment-actions">
+                                <button class="btn btn-sm btn-outline-info" title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="appointment-item scheduled">
+                            <div class="appointment-time">1:30 PM - 2:00 PM</div>
+                            <div class="appointment-details">
+                                <div class="d-flex justify-content-between">
+                                    <h6>Daniel Wilson</h6>
+                                    <span class="badge bg-info">Scheduled</span>
+                                </div>
+                                <p class="mb-1">Dr. Michael Chen · Neurology</p>
+                                <p class="text-muted mb-0">CT Scan review</p>
+                            </div>
+                            <div class="appointment-actions">
+                                <button class="btn btn-sm btn-outline-info" title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="appointment-item scheduled">
+                            <div class="appointment-time">2:00 PM - 2:30 PM</div>
+                            <div class="appointment-details">
+                                <div class="d-flex justify-content-between">
+                                    <h6>Mia Rodriguez</h6>
+                                    <span class="badge bg-info">Scheduled</span>
+                                </div>
+                                <p class="mb-1">Dr. Anita Patel · Pediatrics</p>
+                                <p class="text-muted mb-0">Child wellness exam</p>
+                            </div>
+                            <div class="appointment-actions">
+                                <button class="btn btn-sm btn-outline-info" title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="appointment-item scheduled">
+                            <div class="appointment-time">2:30 PM - 3:00 PM</div>
+                            <div class="appointment-details">
+                                <div class="d-flex justify-content-between">
+                                    <h6>Noah Brown</h6>
+                                    <span class="badge bg-info">Scheduled</span>
+                                </div>
+                                <p class="mb-1">Dr. Sarah Johnson · Cardiology</p>
+                                <p class="text-muted mb-0">Stress test</p>
+                            </div>
+                            <div class="appointment-actions">
+                                <button class="btn btn-sm btn-outline-info" title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="appointment-item scheduled">
+                            <div class="appointment-time">3:00 PM - 3:30 PM</div>
+                            <div class="appointment-details">
+                                <div class="d-flex justify-content-between">
+                                    <h6>Sophia Garcia</h6>
+                                    <span class="badge bg-info">Scheduled</span>
+                                </div>
+                                <p class="mb-1">Dr. Michael Chen · Neurology</p>
+                                <p class="text-muted mb-0">Medication adjustment</p>
+                            </div>
+                            <div class="appointment-actions">
+                                <button class="btn btn-sm btn-outline-info" title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="appointment-item scheduled">
+                            <div class="appointment-time">3:30 PM - 4:00 PM</div>
+                            <div class="appointment-details">
+                                <div class="d-flex justify-content-between">
+                                    <h6>Liam Johnson</h6>
+                                    <span class="badge bg-info">Scheduled</span>
+                                </div>
+                                <p class="mb-1">Dr. Anita Patel · Pediatrics</p>
+                                <p class="text-muted mb-0">Allergy consultation</p>
+                            </div>
+                            <div class="appointment-actions">
+                                <button class="btn btn-sm btn-outline-info" title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="appointment-item scheduled">
+                            <div class="appointment-time">4:00 PM - 4:30 PM</div>
+                            <div class="appointment-details">
+                                <div class="d-flex justify-content-between">
+                                    <h6>Ava Davis</h6>
+                                    <span class="badge bg-info">Scheduled</span>
+                                </div>
+                                <p class="mb-1">Dr. James Williams · Orthopedics</p>
+                                <p class="text-muted mb-0">Knee pain evaluation</p>
+                            </div>
+                            <div class="appointment-actions">
+                                <button class="btn btn-sm btn-outline-info" title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="appointment-item scheduled">
+                            <div class="appointment-time">4:30 PM - 5:00 PM</div>
+                            <div class="appointment-details">
+                                <div class="d-flex justify-content-between">
+                                    <h6>Lucas Miller</h6>
+                                    <span class="badge bg-info">Scheduled</span>
+                                </div>
+                                <p class="mb-1">Dr. Emily Rodriguez · Dermatology</p>
+                                <p class="text-muted mb-0">Skin allergy test</p>
+                            </div>
+                            <div class="appointment-actions">
+                                <button class="btn btn-sm btn-outline-info" title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Cancelled Appointments -->
+                    <div class="timeline-section">
+                        <h5 class="timeline-header"><i class="fas fa-times-circle me-2"></i>Cancelled</h5>
+                        
+                        <div class="appointment-item cancelled">
+                            <div class="appointment-time">9:30 AM - 10:00 AM</div>
+                            <div class="appointment-details">
+                                <div class="d-flex justify-content-between">
+                                    <h6>Sarah Anderson</h6>
+                                    <span class="badge bg-danger">Cancelled</span>
+                                </div>
+                                <p class="mb-1">Dr. James Williams · Orthopedics</p>
+                                <p class="text-muted mb-0">Patient rescheduled</p>
+                            </div>
+                            <div class="appointment-actions">
+                                <button class="btn btn-sm btn-outline-info" title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="appointment-item cancelled">
+                            <div class="appointment-time">11:00 AM - 11:30 AM</div>
+                            <div class="appointment-details">
+                                <div class="d-flex justify-content-between">
+                                    <h6>Michael Brown</h6>
+                                    <span class="badge bg-danger">Cancelled</span>
+                                </div>
+                                <p class="mb-1">Dr. Emily Rodriguez · Dermatology</p>
+                                <p class="text-muted mb-0">Emergency</p>
+                            </div>
+                            <div class="appointment-actions">
+                                <button class="btn btn-sm btn-outline-info" title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="appointment-item cancelled">
+                            <div class="appointment-time">5:00 PM - 5:30 PM</div>
+                            <div class="appointment-details">
+                                <div class="d-flex justify-content-between">
+                                    <h6>Charlotte White</h6>
+                                    <span class="badge bg-danger">Cancelled</span>
+                                </div>
+                                <p class="mb-1">Dr. Sarah Johnson · Cardiology</p>
+                                <p class="text-muted mb-0">No show</p>
+                            </div>
+                            <div class="appointment-actions">
+                                <button class="btn btn-sm btn-outline-info" title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .appointment-timeline {
+        position: relative;
+        padding-left: 30px;
+    }
+    
+    .timeline-section {
+        margin-bottom: 30px;
+    }
+    
+    .timeline-header {
+        color: var(--med-primary-light);
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 15px;
+    }
+    
+    .appointment-item {
+        display: flex;
+        background: rgba(42, 107, 156, 0.1);
+        border-left: 4px solid var(--med-primary);
+        border-radius: 4px;
+        padding: 15px;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+    }
+    
+    .appointment-item:hover {
+        background: rgba(42, 107, 156, 0.2);
+        transform: translateX(5px);
+    }
+    
+    .appointment-item.completed {
+        border-left-color: #2ecc71;
+    }
+    
+    .appointment-item.scheduled {
+        border-left-color: #3498db;
+    }
+    
+    .appointment-item.cancelled {
+        border-left-color: #e74c3c;
+        opacity: 0.7;
+    }
+    
+    .appointment-time {
+        width: 150px;
+        font-weight: bold;
+        color: var(--med-primary-light);
+    }
+    
+    .appointment-details {
+        flex: 1;
+    }
+    
+    .appointment-actions {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    .badge {
+        font-size: 0.75rem;
+        padding: 0.35em 0.65em;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Filter functionality
+        const statusFilter = document.getElementById('statusFilter');
+        const doctorFilter = document.getElementById('doctorFilter');
+        const appointmentItems = document.querySelectorAll('.appointment-item');
+        
+        function filterAppointments() {
+            const statusValue = statusFilter.value;
+            const doctorValue = doctorFilter.value;
+            
+            appointmentItems.forEach(item => {
+                const status = item.classList.contains('completed') ? 'completed' : 
+                              item.classList.contains('scheduled') ? 'scheduled' : 'cancelled';
+                
+                const doctorText = item.querySelector('.appointment-details p').textContent;
+                const hasDoctor = doctorValue === 'all' || doctorText.includes(doctorFilter.options[doctorFilter.selectedIndex].text);
+                
+                if ((statusValue === 'all' || status === statusValue) && hasDoctor) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+        
+        statusFilter.addEventListener('change', filterAppointments);
+        doctorFilter.addEventListener('change', filterAppointments);
+        
+        // Print schedule
+        const printBtn = document.getElementById('printSchedule');
+        printBtn.addEventListener('click', function() {
+            window.print();
+        });
+        
+        // Mark appointments as completed (for demo purposes)
+        const scheduledAppointments = document.querySelectorAll('.appointment-item.scheduled');
+        scheduledAppointments.forEach(appointment => {
+            appointment.addEventListener('dblclick', function() {
+                if (this.classList.contains('scheduled')) {
+                    this.classList.remove('scheduled');
+                    this.classList.add('completed');
+                    this.querySelector('.badge').className = 'badge bg-success';
+                    this.querySelector('.badge').textContent = 'Completed';
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Appointment Completed',
+                        text: 'The appointment has been marked as completed.',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: 'var(--med-primary)'
+                    });
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
