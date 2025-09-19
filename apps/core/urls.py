@@ -9,9 +9,13 @@ urlpatterns = [
     # Dashboard
     path("admin/", views.AdminDashboardView.as_view(), name="admin_dashboard"),
     
+    # Doctors
+    path("admin/doctors/", views.DoctorListView.as_view(), name="doctor_list"),
+    
     # Patients
     path("admin/patients/", views.PatientListView.as_view(), name="patient_list"),
     path("admin/patients/add/", views.PatientAddView.as_view(), name="patient_add"),
+    path("admin/patients/<int:pk>/medical-records/", views.PatientMedicalRecordsView.as_view(), name="patient_medical_records"),
 
     # Medicines
     path("admin/medicines/", views.MedicineListView.as_view(), name="medicine_list"),

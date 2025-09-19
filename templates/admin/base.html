@@ -540,14 +540,12 @@
           <a href="{% url 'medicine_list' %}"><i class="fas fa-capsules me-2"></i> Medicine List</a>
           <a href="{% url 'inventory_list' %}"><i class="fas fa-cube me-2"></i> Inventory</a>
           <a href="{% url 'category_list' %}"><i class="fas fa-tags me-2"></i> Categories</a>
-          <a href="#"><i class="fas fa-exclamation-triangle me-2"></i> Low Stock</a>
         </div>
         <div class="hover-submenu">
           <div class="hover-submenu-header">Medicines</div>
           <a href="{% url 'medicine_list' %}"><i class="fas fa-capsules"></i> Medicine List</a>
           <a href="{% url 'inventory_list' %}"><i class="fas fa-cube"></i> Inventory</a>
           <a href="{% url 'category_list' %}"><i class="fas fa-tags"></i> Categories</a>
-          <a href="#"><i class="fas fa-exclamation-triangle"></i> Low Stock</a>
         </div>
       </div>
 
@@ -561,13 +559,13 @@
         <div class="submenu">
           <a href="{% url 'patient_list' %}"><i class="fas fa-users me-2"></i> All Patients</a>
           <a href="{% url 'patient_add' %}"><i class="fas fa-user-plus me-2"></i> Add Patient</a>
-          <a href="#"><i class="fas fa-file-medical me-2"></i> Medical Records</a>
+          <a href="{% url 'patient_medical_records' 8 %}"><i class="fas fa-file-medical me-2"></i> Medical Records</a>
         </div>
         <div class="hover-submenu">
           <div class="hover-submenu-header">Patients</div>
           <a href="{% url 'patient_list' %}"><i class="fas fa-users"></i> All Patients</a>
           <a href="{% url 'patient_add' %}"><i class="fas fa-user-plus"></i> Add Patient</a>
-          <a href="#"><i class="fas fa-file-medical"></i> Medical Records</a>
+          <a href="{% url 'patient_medical_records' 8 %}"><i class="fas fa-file-medical"></i> Medical Records</a>
         </div>
       </div>
 

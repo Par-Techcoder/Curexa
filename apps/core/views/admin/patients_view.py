@@ -13,3 +13,7 @@ class PatientAddView(View):
     def post(self, request):
         # Handle form submission logic here
         return redirect("patient_list")    
+
+class PatientMedicalRecordsView(View):
+    def get(self, request, pk):
+        return render(request, "admin/patients/patient_medical_recorrds.html")    
