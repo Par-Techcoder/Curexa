@@ -8,6 +8,9 @@ urlpatterns = [
 
     # Dashboard
     path("admin/", views.AdminDashboardView.as_view(), name="admin_dashboard"),
+    
+    # Patients
+    path("admin/patients/", views.PatientListView.as_view(), name="patient_list"),
 
     # Medicines
     path("admin/medicines/", views.MedicineListView.as_view(), name="medicine_list"),
@@ -16,6 +19,9 @@ urlpatterns = [
     
     # Categories
     path("admin/categories/", views.CategoryListView.as_view(), name="category_list"),
+    
+    # Inventory
     path("admin/inventory/", views.InventoryListView.as_view(), name="inventory_list"),
+    
 ]
 
