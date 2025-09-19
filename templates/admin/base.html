@@ -560,13 +560,13 @@
         </a>
         <div class="submenu">
           <a href="{% url 'patient_list' %}"><i class="fas fa-users me-2"></i> All Patients</a>
-          <a href="#"><i class="fas fa-user-plus me-2"></i> Add Patient</a>
+          <a href="{% url 'patient_add' %}"><i class="fas fa-user-plus me-2"></i> Add Patient</a>
           <a href="#"><i class="fas fa-file-medical me-2"></i> Medical Records</a>
         </div>
         <div class="hover-submenu">
           <div class="hover-submenu-header">Patients</div>
           <a href="{% url 'patient_list' %}"><i class="fas fa-users"></i> All Patients</a>
-          <a href="#"><i class="fas fa-user-plus"></i> Add Patient</a>
+          <a href="{% url 'patient_add' %}"><i class="fas fa-user-plus"></i> Add Patient</a>
           <a href="#"><i class="fas fa-file-medical"></i> Medical Records</a>
         </div>
       </div>

@@ -11,6 +11,7 @@ urlpatterns = [
     
     # Patients
     path("admin/patients/", views.PatientListView.as_view(), name="patient_list"),
+    path("admin/patients/add/", views.PatientAddView.as_view(), name="patient_add"),
 
     # Medicines
     path("admin/medicines/", views.MedicineListView.as_view(), name="medicine_list"),
