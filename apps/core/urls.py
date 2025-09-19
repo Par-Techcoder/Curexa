@@ -13,5 +13,9 @@ urlpatterns = [
     path("admin/medicines/", views.MedicineListView.as_view(), name="medicine_list"),
     path("admin/medicines/add/", views.MedicineAddView.as_view(), name="medicine_add"),
     path("admin/medicines/<int:pk>/edit/", views.MedicineEditView.as_view(), name="medicine_edit"),
+    
+    # Categories
+    path("admin/categories/", views.CategoryListView.as_view(), name="category_list"),
+    path("admin/inventory/", views.InventoryListView.as_view(), name="inventory_list"),
 ]
 

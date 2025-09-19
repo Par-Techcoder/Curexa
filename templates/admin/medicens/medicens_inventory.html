@@ -1,0 +1,602 @@
+{% extends "admin/base.html" %}
+{% block title %}Curexa Admin — Inventory Management{% endblock %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid p-4">
+    <!-- Page Header -->
+    <div class="page-title-section">
+        <h1 class="h2 mb-0"><i class="fas fa-cubes me-2"></i>Inventory Management</h1>
+        <p class="mb-0">Monitor and manage your medicine inventory levels</p>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="dashboard-card text-center p-3">
+                <div class="card-icon text-primary">
+                    <i class="fas fa-pills"></i>
+                </div>
+                <div class="stats-number">1,247</div>
+                <div class="stats-label">Total Medicines</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="dashboard-card text-center p-3">
+                <div class="card-icon text-success">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stats-number">984</div>
+                <div class="stats-label">In Stock</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="dashboard-card text-center p-3">
+                <div class="card-icon text-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stats-number">42</div>
+                <div class="stats-label">Low Stock</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="dashboard-card text-center p-3">
+                <div class="card-icon text-danger">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+                <div class="stats-number">12</div>
+                <div class="stats-label">Out of Stock</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Card -->
+    <div class="card medical-border shadow-sm">
+        <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="fas fa-list me-2"></i>Inventory Overview</h5>
+            <div>
+                <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#importModal">
+                    <i class="fas fa-file-import me-1"></i> Import
+                </button>
+                <button class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#exportModal">
+                    <i class="fas fa-file-export me-1"></i> Export
+                </button>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#adjustStockModal">
+                    <i class="fas fa-plus-minus me-1"></i> Adjust Stock
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <!-- Filters and Search -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" placeholder="Search medicines..." id="inventorySearch">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select" id="stockStatusFilter">
+                        <option value="">All Statuses</option>
+                        <option value="in_stock">In Stock</option>
+                        <option value="low_stock">Low Stock</option>
+                        <option value="out_of_stock">Out of Stock</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="categoryFilter">
+                        <option value="">All Categories</option>
+                        <option value="antibiotics">Antibiotics</option>
+                        <option value="pain_relievers">Pain Relievers</option>
+                        <option value="vitamins">Vitamins & Supplements</option>
+                        <option value="cardiovascular">Cardiovascular</option>
+                        <option value="diabetes">Diabetes</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="sortBy">
+                        <option value="name">Sort by Name</option>
+                        <option value="quantity">Sort by Quantity</option>
+                        <option value="category">Sort by Category</option>
+                        <option value="expiry">Sort by Expiry Date</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Inventory Table -->
+            <div class="table-responsive">
+                <table class="table table-hover" id="inventoryTable">
+                    <thead>
+                        <tr>
+                            <th>Medicine Name</th>
+                            <th>Category</th>
+                            <th>SKU</th>
+                            <th>Current Stock</th>
+                            <th>Price</th>
+                            <th>Expiry Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Amoxicillin 500mg Capsules</td>
+                            <td>Antibiotics</td>
+                            <td>MED-AMX-500</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: 85%"></div>
+                                    </div>
+                                    <span>42/50</span>
+                                </div>
+                            </td>
+                            <td>₹350.00</td>
+                            <td>15 Dec 2024</td>
+                            <td><span class="badge bg-success">In Stock</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="tooltip" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning" data-bs-toggle="tooltip" title="Adjust Stock">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="table-warning">
+                            <td>Paracetamol 500mg Tablets</td>
+                            <td>Pain Relievers</td>
+                            <td>MED-PAR-500</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 15%"></div>
+                                    </div>
+                                    <span>7/50</span>
+                                </div>
+                            </td>
+                            <td>₹120.00</td>
+                            <td>20 Aug 2025</td>
+                            <td><span class="badge bg-warning">Low Stock</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="tooltip" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning" data-bs-toggle="tooltip" title="Adjust Stock">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Vitamin C 1000mg Tablets</td>
+                            <td>Vitamins & Supplements</td>
+                            <td>MED-VIT-C1000</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: 70%"></div>
+                                    </div>
+                                    <span>35/50</span>
+                                </div>
+                            </td>
+                            <td>₹250.00</td>
+                            <td>10 Mar 2025</td>
+                            <td><span class="badge bg-success">In Stock</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="tooltip" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning" data-bs-toggle="tooltip" title="Adjust Stock">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="table-danger">
+                            <td>Metformin 500mg Tablets</td>
+                            <td>Diabetes</td>
+                            <td>MED-MET-500</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 0%"></div>
+                                    </div>
+                                    <span>0/50</span>
+                                </div>
+                            </td>
+                            <td>₹180.00</td>
+                            <td>05 Nov 2024</td>
+                            <td><span class="badge bg-danger">Out of Stock</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="tooltip" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning" data-bs-toggle="tooltip" title="Adjust Stock">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Atorvastatin 20mg Tablets</td>
+                            <td>Cardiovascular</td>
+                            <td>MED-ATO-20</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: 60%"></div>
+                                    </div>
+                                    <span>30/50</span>
+                                </div>
+                            </td>
+                            <td>₹320.00</td>
+                            <td>18 Jan 2026</td>
+                            <td><span class="badge bg-success">In Stock</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="tooltip" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning" data-bs-toggle="tooltip" title="Adjust Stock">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="table-warning">
+                            <td>Ibuprofen 400mg Tablets</td>
+                            <td>Pain Relievers</td>
+                            <td>MED-IBU-400</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 10%"></div>
+                                    </div>
+                                    <span>5/50</span>
+                                </div>
+                            </td>
+                            <td>₹150.00</td>
+                            <td>22 Sep 2025</td>
+                            <td><span class="badge bg-warning">Low Stock</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="tooltip" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning" data-bs-toggle="tooltip" title="Adjust Stock">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="Inventory pagination">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Adjust Stock Modal -->
+<div class="modal fade" id="adjustStockModal" tabindex="-1" aria-labelledby="adjustStockModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="adjustStockModalLabel"><i class="fas fa-plus-minus me-2"></i>Adjust Stock Level</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="adjustStockForm">
+                    <div class="mb-3">
+                        <label for="medicineSelect" class="form-label">Select Medicine</label>
+                        <select class="form-select" id="medicineSelect" required>
+                            <option value="">Choose a medicine...</option>
+                            <option value="1">Amoxicillin 500mg Capsules</option>
+                            <option value="2">Paracetamol 500mg Tablets</option>
+                            <option value="3">Vitamin C 1000mg Tablets</option>
+                            <option value="4">Metformin 500mg Tablets</option>
+                            <option value="5">Atorvastatin 20mg Tablets</option>
+                            <option value="6">Ibuprofen 400mg Tablets</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="adjustmentType" class="form-label">Adjustment Type</label>
+                        <select class="form-select" id="adjustmentType" required>
+                            <option value="add">Add Stock</option>
+                            <option value="remove">Remove Stock</option>
+                            <option value="set">Set Stock Level</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Quantity</label>
+                        <input type="number" class="form-control" id="quantity" min="1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="reason" class="form-label">Reason for Adjustment</label>
+                        <select class="form-select" id="reason" required>
+                            <option value="">Select a reason...</option>
+                            <option value="restock">Restock</option>
+                            <option value="sale">Sale</option>
+                            <option value="damaged">Damaged Goods</option>
+                            <option value="expired">Expired</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-3" id="notesSection" style="display: none;">
+                        <label for="notes" class="form-label">Notes</label>
+                        <textarea class="form-control" id="notes" rows="2"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveAdjustmentBtn">Save Adjustment</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Import Modal -->
+<div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="importModalLabel"><i class="fas fa-file-import me-2"></i>Import Inventory Data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>Download the template file, fill it with your inventory data, and upload it here.
+                </div>
+                <div class="mb-3">
+                    <a href="#" class="btn btn-outline-primary">
+                        <i class="fas fa-download me-1"></i> Download Template
+                    </a>
+                </div>
+                <div class="mb-3">
+                    <label for="importFile" class="form-label">Select CSV File</label>
+                    <input class="form-control" type="file" id="importFile" accept=".csv">
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="overwriteExisting">
+                    <label class="form-check-label" for="overwriteExisting">
+                        Overwrite existing inventory data
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Import Data</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Export Modal -->
+<div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exportModalLabel"><i class="fas fa-file-export me-2"></i>Export Inventory Data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Export Format</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exportFormat" id="formatCSV" checked>
+                        <label class="form-check-label" for="formatCSV">
+                            CSV (Comma Separated Values)
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exportFormat" id="formatExcel">
+                        <label class="form-check-label" for="formatExcel">
+                            Excel Spreadsheet
+                        </label>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Data Range</label>
+                    <select class="form-select" id="exportRange">
+                        <option value="all">All Inventory</option>
+                        <option value="low_stock">Low Stock Items Only</option>
+                        <option value="out_of_stock">Out of Stock Items Only</option>
+                        <option value="expiring_soon">Expiring Soon</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Export Data</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        background: rgba(30, 47, 64, 0.7);
+        backdrop-filter: blur(10px);
+        color: #fff;
+    }
+    
+    .table {
+        --bs-table-bg: transparent;
+        --bs-table-color: #fff;
+        --bs-table-border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .table-hover tbody tr:hover {
+        --bs-table-accent-bg: rgba(42, 107, 156, 0.3);
+        color: #fff;
+    }
+    
+    .progress {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .page-link {
+        background-color: rgba(30, 47, 64, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #e9ecef;
+    }
+    
+    .page-item.active .page-link {
+        background-color: #2A6B9C;
+        border-color: #2A6B9C;
+    }
+    
+    .modal-content {
+        background: rgba(30, 47, 64, 0.95);
+        backdrop-filter: blur(10px);
+        color: #fff;
+    }
+    
+    .form-control, .form-select {
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        background-color: rgba(255, 255, 255, 0.15);
+        border-color: #2A6B9C;
+        box-shadow: 0 0 0 0.2rem rgba(42, 107, 156, 0.25);
+        color: #fff;
+    }
+    
+    .alert-info {
+        background-color: rgba(23, 162, 184, 0.2);
+        border-color: rgba(23, 162, 184, 0.3);
+        color: #9fefdf;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Activate the Medicines menu item in sidebar
+        const medicineMenu = document.querySelector('a[href="{% url 'medicine_list' %}"]');
+        if (medicineMenu) {
+            medicineMenu.closest('.sidebar-dropdown').classList.add('open');
+            medicineMenu.classList.add('active');
+        }
+        
+        // Initialize tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+        
+        // Show notes section when "Other" reason is selected
+        document.getElementById('reason').addEventListener('change', function() {
+            const notesSection = document.getElementById('notesSection');
+            notesSection.style.display = this.value === 'other' ? 'block' : 'none';
+        });
+        
+        // Save stock adjustment
+        document.getElementById('saveAdjustmentBtn').addEventListener('click', function() {
+            const medicine = document.getElementById('medicineSelect').value;
+            const adjustmentType = document.getElementById('adjustmentType').value;
+            const quantity = document.getElementById('quantity').value;
+            const reason = document.getElementById('reason').value;
+            
+            if (!medicine || !quantity || !reason) {
+                alert('Please fill all required fields');
+                return;
+            }
+            
+            // In a real application, you would send this data to the server
+            console.log('Saving stock adjustment:', {
+                medicine: medicine,
+                adjustmentType: adjustmentType,
+                quantity: quantity,
+                reason: reason
+            });
+            
+            // Show success message
+            alert('Stock adjustment saved successfully!');
+            
+            // Close the modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('adjustStockModal'));
+            modal.hide();
+            
+            // Reset the form
+            document.getElementById('adjustStockForm').reset();
+            document.getElementById('notesSection').style.display = 'none';
+        });
+        
+        // Search functionality
+        document.getElementById('inventorySearch').addEventListener('input', function() {
+            const searchText = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#inventoryTable tbody tr');
+            
+            rows.forEach(row => {
+                const name = row.cells[0].textContent.toLowerCase();
+                const category = row.cells[1].textContent.toLowerCase();
+                const sku = row.cells[2].textContent.toLowerCase();
+                
+                if (name.includes(searchText) || category.includes(searchText) || sku.includes(searchText)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+        
+        // Filter by stock status
+        document.getElementById('stockStatusFilter').addEventListener('change', function() {
+            const status = this.value;
+            const rows = document.querySelectorAll('#inventoryTable tbody tr');
+            
+            rows.forEach(row => {
+                if (!status) {
+                    row.style.display = '';
+                    return;
+                }
+                
+                const statusText = row.cells[6].textContent.toLowerCase();
+                
+                if (status === 'in_stock' && statusText === 'in stock') {
+                    row.style.display = '';
+                } else if (status === 'low_stock' && statusText === 'low stock') {
+                    row.style.display = '';
+                } else if (status === 'out_of_stock' && statusText === 'out of stock') {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+        
+        // Filter by category
+        document.getElementById('categoryFilter').addEventListener('change', function() {
+            const category = this.value;
+            const rows = document.querySelectorAll('#inventoryTable tbody tr');
+            
+            rows.forEach(row => {
+                if (!category) {
+                    row.style.display = '';
+                    return;
+                }
+                
+                const categoryText = row.cells[1].textContent.toLowerCase();
+                
+                if (categoryText.includes(category)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+{% endblock content %}

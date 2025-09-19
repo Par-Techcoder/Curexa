@@ -538,15 +538,15 @@
         </a>
         <div class="submenu">
           <a href="{% url 'medicine_list' %}"><i class="fas fa-capsules me-2"></i> Medicine List</a>
-          <a href="#"><i class="fas fa-cube me-2"></i> Inventory</a>
-          <a href="#"><i class="fas fa-tags me-2"></i> Categories</a>
+          <a href="{% url 'inventory_list' %}"><i class="fas fa-cube me-2"></i> Inventory</a>
+          <a href="{% url 'category_list' %}"><i class="fas fa-tags me-2"></i> Categories</a>
           <a href="#"><i class="fas fa-exclamation-triangle me-2"></i> Low Stock</a>
         </div>
         <div class="hover-submenu">
           <div class="hover-submenu-header">Medicines</div>
           <a href="{% url 'medicine_list' %}"><i class="fas fa-capsules"></i> Medicine List</a>
-          <a href="#"><i class="fas fa-cube"></i> Inventory</a>
-          <a href="#"><i class="fas fa-tags"></i> Categories</a>
+          <a href="{% url 'inventory_list' %}"><i class="fas fa-cube"></i> Inventory</a>
+          <a href="{% url 'category_list' %}"><i class="fas fa-tags"></i> Categories</a>
           <a href="#"><i class="fas fa-exclamation-triangle"></i> Low Stock</a>
         </div>
       </div>

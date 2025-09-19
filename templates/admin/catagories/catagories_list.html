@@ -1,0 +1,462 @@
+{% extends "admin/base.html" %}
+{% block title %}Curexa Admin — Medicine Categories{% endblock %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid p-4">
+    <!-- Page Header -->
+    <div class="page-title-section">
+        <h1 class="h2 mb-0"><i class="fas fa-tags me-2"></i>Medicine Categories</h1>
+        <p class="mb-0">Manage categories for organizing medicines in your inventory</p>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="dashboard-card text-center p-3">
+                <div class="card-icon text-primary">
+                    <i class="fas fa-tags"></i>
+                </div>
+                <div class="stats-number">12</div>
+                <div class="stats-label">Total Categories</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="dashboard-card text-center p-3">
+                <div class="card-icon text-success">
+                    <i class="fas fa-pills"></i>
+                </div>
+                <div class="stats-number">247</div>
+                <div class="stats-label">Medicines Categorized</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="dashboard-card text-center p-3">
+                <div class="card-icon text-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="stats-number">3</div>
+                <div class="stats-label">Empty Categories</div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="dashboard-card text-center p-3">
+                <div class="card-icon text-info">
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <div class="stats-number">5</div>
+                <div class="stats-label">Subcategories</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Card -->
+    <div class="card medical-border shadow-sm">
+        <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="fas fa-list me-2"></i>Category List</h5>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                <i class="fas fa-plus me-1"></i> Add Category
+            </button>
+        </div>
+        <div class="card-body">
+            <!-- Search and Filters -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" placeholder="Search categories..." id="categorySearch">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="statusFilter">
+                        <option value="">All Statuses</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="sortBy">
+                        <option value="name">Sort by Name</option>
+                        <option value="medicines">Sort by Medicine Count</option>
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Categories Table -->
+            <div class="table-responsive">
+                <table class="table table-hover" id="categoriesTable">
+                    <thead>
+                        <tr>
+                            <th>Category Name</th>
+                            <th>Description</th>
+                            <th>Medicines</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="category-color me-2" style="background-color: #4CAF50; width: 16px; height: 16px; border-radius: 4px;"></div>
+                                    <span>Antibiotics</span>
+                                </div>
+                            </td>
+                            <td>Medicines that inhibit or kill bacteria</td>
+                            <td>42</td>
+                            <td><span class="badge bg-success">Active</span></td>
+                            <td>12 Jan 2023</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="tooltip" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" data-bs-toggle="tooltip" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="category-color me-2" style="background-color: #2196F3; width: 16px; height: 16px; border-radius: 4px;"></div>
+                                    <span>Pain Relievers</span>
+                                </div>
+                            </td>
+                            <td>Medicines that relieve pain</td>
+                            <td>35</td>
+                            <td><span class="badge bg-success">Active</span></td>
+                            <td>18 Feb 2023</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="tooltip" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" data-bs-toggle="tooltip" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="category-color me-2" style="background-color: #FF9800; width: 16px; height: 16px; border-radius: 4px;"></div>
+                                    <span>Vitamins & Supplements</span>
+                                </div>
+                            </td>
+                            <td>Nutritional supplements and vitamins</td>
+                            <td>68</td>
+                            <td><span class="badge bg-success">Active</span></td>
+                            <td>05 Mar 2023</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="tooltip" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" data-bs-toggle="tooltip" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="category-color me-2" style="background-color: #9C27B0; width: 16px; height: 16px; border-radius: 4px;"></div>
+                                    <span>Cardiovascular</span>
+                                </div>
+                            </td>
+                            <td>Medicines for heart and blood pressure</td>
+                            <td>27</td>
+                            <td><span class="badge bg-success">Active</span></td>
+                            <td>22 Apr 2023</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="tooltip" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" data-bs-toggle="tooltip" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="category-color me-2" style="background-color: #F44336; width: 16px; height: 16px; border-radius: 4px;"></div>
+                                    <span>Diabetes</span>
+                                </div>
+                            </td>
+                            <td>Medicines for diabetes management</td>
+                            <td>19</td>
+                            <td><span class="badge bg-success">Active</span></td>
+                            <td>14 May 2023</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="tooltip" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" data-bs-toggle="tooltip" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="table-warning">
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="category-color me-2" style="background-color: #607D8B; width: 16px; height: 16px; border-radius: 4px;"></div>
+                                    <span>Dermatological</span>
+                                </div>
+                            </td>
+                            <td>Skin treatments and ointments</td>
+                            <td>0</td>
+                            <td><span class="badge bg-warning">Empty</span></td>
+                            <td>30 Jun 2023</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="tooltip" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" data-bs-toggle="tooltip" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="Category pagination">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- Add Category Modal -->
+<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCategoryModalLabel"><i class="fas fa-plus me-2"></i>Add New Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addCategoryForm">
+                    <div class="mb-3">
+                        <label for="categoryName" class="form-label">Category Name</label>
+                        <input type="text" class="form-control" id="categoryName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categoryDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="categoryDescription" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="categoryColor" class="form-label">Color Tag</label>
+                        <div class="d-flex flex-wrap gap-2">
+                            <div class="color-option" style="background-color: #4CAF50;" data-color="#4CAF50"></div>
+                            <div class="color-option" style="background-color: #2196F3;" data-color="#2196F3"></div>
+                            <div class="color-option" style="background-color: #FF9800;" data-color="#FF9800"></div>
+                            <div class="color-option" style="background-color: #9C27B0;" data-color="#9C27B0"></div>
+                            <div class="color-option" style="background-color: #F44336;" data-color="#F44336"></div>
+                            <div class="color-option" style="background-color: #607D8B;" data-color="#607D8B"></div>
+                        </div>
+                        <input type="hidden" id="selectedColor" value="#4CAF50">
+                    </div>
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" id="categoryStatus" checked>
+                        <label class="form-check-label" for="categoryStatus">Active Category</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveCategoryBtn">Save Category</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .category-color {
+        width: 16px;
+        height: 16px;
+        border-radius: 4px;
+        display: inline-block;
+    }
+    
+    .color-option {
+        width: 24px;
+        height: 24px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+    
+    .color-option:hover {
+        transform: scale(1.1);
+    }
+    
+    .color-option.selected {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+    }
+    
+    .card {
+        background: rgba(30, 47, 64, 0.7);
+        backdrop-filter: blur(10px);
+        color: #fff;
+    }
+    
+    .table {
+        --bs-table-bg: transparent;
+        --bs-table-color: #fff;
+        --bs-table-border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .table-hover tbody tr:hover {
+        --bs-table-accent-bg: rgba(42, 107, 156, 0.3);
+        color: #fff;
+    }
+    
+    .page-link {
+        background-color: rgba(30, 47, 64, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #e9ecef;
+    }
+    
+    .page-item.active .page-link {
+        background-color: #2A6B9C;
+        border-color: #2A6B9C;
+    }
+    
+    .modal-content {
+        background: rgba(30, 47, 64, 0.95);
+        backdrop-filter: blur(10px);
+        color: #fff;
+    }
+    
+    .form-control, .form-select {
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        background-color: rgba(255, 255, 255, 0.15);
+        border-color: #2A6B9C;
+        box-shadow: 0 0 0 0.2rem rgba(42, 107, 156, 0.25);
+        color: #fff;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Activate the Medicines menu item in sidebar
+        const medicineMenu = document.querySelector('a[href="{% url 'medicine_list' %}"]');
+        if (medicineMenu) {
+            medicineMenu.closest('.sidebar-dropdown').classList.add('open');
+            medicineMenu.classList.add('active');
+        }
+        
+        // Initialize tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+        
+        // Color selection
+        const colorOptions = document.querySelectorAll('.color-option');
+        const selectedColorInput = document.getElementById('selectedColor');
+        
+        colorOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                colorOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedColorInput.value = this.getAttribute('data-color');
+            });
+        });
+        
+        // Select first color by default
+        if (colorOptions.length > 0) {
+            colorOptions[0].classList.add('selected');
+        }
+        
+        // Save category
+        document.getElementById('saveCategoryBtn').addEventListener('click', function() {
+            const categoryName = document.getElementById('categoryName').value;
+            const categoryDescription = document.getElementById('categoryDescription').value;
+            
+            if (!categoryName) {
+                alert('Please enter a category name');
+                return;
+            }
+            
+            // In a real application, you would send this data to the server
+            console.log('Saving category:', {
+                name: categoryName,
+                description: categoryDescription,
+                color: selectedColorInput.value,
+                status: document.getElementById('categoryStatus').checked
+            });
+            
+            // Show success message
+            alert(`Category "${categoryName}" has been created successfully!`);
+            
+            // Close the modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addCategoryModal'));
+            modal.hide();
+            
+            // Reset the form
+            document.getElementById('addCategoryForm').reset();
+        });
+        
+        // Search functionality
+        document.getElementById('categorySearch').addEventListener('input', function() {
+            const searchText = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#categoriesTable tbody tr');
+            
+            rows.forEach(row => {
+                const name = row.cells[0].textContent.toLowerCase();
+                const description = row.cells[1].textContent.toLowerCase();
+                
+                if (name.includes(searchText) || description.includes(searchText)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+        
+        // Filter by status
+        document.getElementById('statusFilter').addEventListener('change', function() {
+            const status = this.value;
+            const rows = document.querySelectorAll('#categoriesTable tbody tr');
+            
+            rows.forEach(row => {
+                if (!status) {
+                    row.style.display = '';
+                    return;
+                }
+                
+                const statusText = row.cells[3].textContent.toLowerCase();
+                
+                if (status === 'active' && statusText === 'active') {
+                    row.style.display = '';
+                } else if (status === 'inactive' && statusText !== 'active') {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+{% endblock content %}
