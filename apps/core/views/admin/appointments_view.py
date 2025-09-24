@@ -12,4 +12,4 @@ class AppointmentAddView(View):
     
 class AppointmentHistoryView(View):
     def get(self, request):
-        return render(request, "admin/appoinments/weekly_schedule.html")       
+        return render(request, "admin/appoinments/appointment_history.html")       
