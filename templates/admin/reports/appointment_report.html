@@ -1,0 +1,952 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}Appointment Reports - Curexa Admin{% endblock %}
+
+{% block navbar_extra %}
+<!-- Breadcrumb navigation -->
+<nav aria-label="breadcrumb" class="ms-3">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="{% url 'admin_dashboard' %}" class="text-white">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'appointment_list' %}" class="text-white">Appointments</a></li>
+        <li class="breadcrumb-item active text-light" aria-current="page">Appointment Reports</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-section">
+            <h2><i class="fas fa-calendar-alt me-2"></i>Appointment Reports & Analytics</h2>
+            <p class="mb-0">Comprehensive appointment scheduling and performance analytics</p>
+        </div>
+    </div>
+</div>
+
+<!-- Appointment Overview Cards -->
+<div class="row mt-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title text-muted mb-2">Total Appointments</h6>
+                        <h3 class="mb-0 text-primary">1,842</h3>
+                        <small class="text-success"><i class="bi bi-arrow-up"></i> 15.3% from last month</small>
+                    </div>
+                    <div class="card-icon text-primary">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title text-muted mb-2">Completed</h6>
+                        <h3 class="mb-0 text-success">1,524</h3>
+                        <small class="text-success"><i class="bi bi-arrow-up"></i> 82.7% completion rate</small>
+                    </div>
+                    <div class="card-icon text-success">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card medical-warning">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title text-muted mb-2">Cancelled</h6>
+                        <h3 class="mb-0 text-warning">156</h3>
+                        <small class="text-warning"><i class="bi bi-exclamation-triangle"></i> 8.5% cancellation rate</small>
+                    </div>
+                    <div class="card-icon text-warning">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card medical-alert">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title text-muted mb-2">No Shows</h6>
+                        <h3 class="mb-0 text-danger">62</h3>
+                        <small class="text-danger"><i class="bi bi-x-circle"></i> 3.4% no-show rate</small>
+                    </div>
+                    <div class="card-icon text-danger">
+                        <i class="fas fa-user-slash"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filters and Controls -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card medical-border">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-filter me-2"></i>Report Filters</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Date Range</label>
+                        <select class="form-select" id="dateRange">
+                            <option value="today">Today</option>
+                            <option value="week" selected>This Week</option>
+                            <option value="month">This Month</option>
+                            <option value="quarter">This Quarter</option>
+                            <option value="year">This Year</option>
+                            <option value="custom">Custom Range</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Start Date</label>
+                        <input type="date" class="form-control" id="startDate" value="2024-01-01">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">End Date</label>
+                        <input type="date" class="form-control" id="endDate" value="2024-12-31">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Doctor</label>
+                        <select class="form-select" id="doctorFilter">
+                            <option value="all" selected>All Doctors</option>
+                            <option value="dr_johnson">Dr. Sarah Johnson</option>
+                            <option value="dr_chen">Dr. Michael Chen</option>
+                            <option value="dr_patel">Dr. Anita Patel</option>
+                            <option value="dr_wilson">Dr. James Wilson</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Report Type</label>
+                        <select class="form-select" id="reportType">
+                            <option value="summary" selected>Summary Report</option>
+                            <option value="detailed">Detailed Appointments</option>
+                            <option value="doctor">Doctor Performance</option>
+                            <option value="patient">Patient Analytics</option>
+                            <option value="revenue">Revenue Report</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-primary me-2" id="generateReport">
+                            <i class="fas fa-sync-alt me-1"></i> Generate Report
+                        </button>
+                        <button class="btn btn-outline-light me-2" id="exportReport">
+                            <i class="fas fa-download me-1"></i> Export Report
+                        </button>
+                        <button class="btn btn-info" id="scheduleAnalysis">
+                            <i class="fas fa-chart-bar me-1"></i> Schedule Analysis
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div class="row mt-4">
+    <div class="col-lg-8">
+        <div class="card medical-border">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-chart-line me-2"></i>Appointment Trends</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="appointmentTrendChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card medical-border">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-chart-pie me-2"></i>Status Distribution</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="statusChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Additional Charts -->
+<div class="row mt-4">
+    <div class="col-lg-6">
+        <div class="card medical-border">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-user-md me-2"></i>Doctor Performance</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="doctorChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card medical-border">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-clock me-2"></i>Peak Hours Analysis</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="peakHoursChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Appointment Type Analysis -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card medical-border">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-stethoscope me-2"></i>Appointment Type Analysis</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 text-center">
+                        <div class="stat-box">
+                            <h3 class="text-primary">45%</h3>
+                            <p class="text-muted mb-0">Consultations</p>
+                            <small>828 appointments</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="stat-box">
+                            <h3 class="text-info">25%</h3>
+                            <p class="text-muted mb-0">Follow-ups</p>
+                            <small>461 appointments</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="stat-box">
+                            <h3 class="text-success">15%</h3>
+                            <p class="text-muted mb-0">Check-ups</p>
+                            <small>276 appointments</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="stat-box">
+                            <h3 class="text-warning">15%</h3>
+                            <p class="text-muted mb-0">Other</p>
+                            <small>277 appointments</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Detailed Appointments Report -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card medical-border">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0"><i class="fas fa-table me-2"></i>Appointment Details</h5>
+                <div class="btn-group">
+                    <button class="btn btn-sm btn-outline-light active" data-filter="all">All</button>
+                    <button class="btn btn-sm btn-outline-light" data-filter="completed">Completed</button>
+                    <button class="btn btn-sm btn-outline-light" data-filter="scheduled">Scheduled</button>
+                    <button class="btn btn-sm btn-outline-light" data-filter="cancelled">Cancelled</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-dark" id="appointmentsTable">
+                        <thead>
+                            <tr>
+                                <th>Appointment ID</th>
+                                <th>Date & Time</th>
+                                <th>Patient</th>
+                                <th>Doctor</th>
+                                <th>Type</th>
+                                <th>Duration</th>
+                                <th>Status</th>
+                                <th>Revenue</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#APT-2024-0012</td>
+                                <td>Dec 15, 2024<br><small>10:00 AM</small></td>
+                                <td>John Smith</td>
+                                <td>Dr. Sarah Johnson</td>
+                                <td>Consultation</td>
+                                <td>30 mins</td>
+                                <td><span class="badge bg-success">Completed</span></td>
+                                <td>$85.00</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info me-1 view-details">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#APT-2024-0011</td>
+                                <td>Dec 15, 2024<br><small>2:30 PM</small></td>
+                                <td>Maria Garcia</td>
+                                <td>Dr. Michael Chen</td>
+                                <td>Follow-up</td>
+                                <td>20 mins</td>
+                                <td><span class="badge bg-success">Completed</span></td>
+                                <td>$65.00</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info me-1 view-details">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#APT-2024-0010</td>
+                                <td>Dec 16, 2024<br><small>9:00 AM</small></td>
+                                <td>Robert Johnson</td>
+                                <td>Dr. Anita Patel</td>
+                                <td>Check-up</td>
+                                <td>45 mins</td>
+                                <td><span class="badge bg-info">Scheduled</span></td>
+                                <td>$120.00</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info me-1 view-details">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#APT-2024-0009</td>
+                                <td>Dec 14, 2024<br><small>11:00 AM</small></td>
+                                <td>Sarah Williams</td>
+                                <td>Dr. James Wilson</td>
+                                <td>Consultation</td>
+                                <td>30 mins</td>
+                                <td><span class="badge bg-warning">Cancelled</span></td>
+                                <td>$0.00</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info me-1 view-details">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>#APT-2024-0008</td>
+                                <td>Dec 13, 2024<br><small>3:15 PM</small></td>
+                                <td>Michael Brown</td>
+                                <td>Dr. Sarah Johnson</td>
+                                <td>Follow-up</td>
+                                <td>20 mins</td>
+                                <td><span class="badge bg-danger">No Show</span></td>
+                                <td>$0.00</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info me-1 view-details">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <nav aria-label="Appointments pagination" class="mt-3">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Key Performance Indicators -->
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card medical-border">
+            <div class="card-header">
+                <h6 class="card-title mb-0"><i class="fas fa-tachometer-alt me-2"></i>Efficiency Metrics</h6>
+            </div>
+            <div class="card-body">
+                <div class="kpi-item">
+                    <span class="kpi-label">Average Wait Time</span>
+                    <span class="kpi-value text-success">8.2 mins</span>
+                </div>
+                <div class="kpi-item">
+                    <span class="kpi-label">Doctor Utilization</span>
+                    <span class="kpi-value text-info">78.5%</span>
+                </div>
+                <div class="kpi-item">
+                    <span class="kpi-label">Patient Satisfaction</span>
+                    <span class="kpi-value text-primary">4.7/5.0</span>
+                </div>
+                <div class="kpi-item">
+                    <span class="kpi-label">Follow-up Rate</span>
+                    <span class="kpi-value text-warning">62.3%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card medical-border">
+            <div class="card-header">
+                <h6 class="card-title mb-0"><i class="fas fa-money-bill-wave me-2"></i>Revenue Metrics</h6>
+            </div>
+            <div class="card-body">
+                <div class="kpi-item">
+                    <span class="kpi-label">Total Revenue</span>
+                    <span class="kpi-value text-success">$156,840</span>
+                </div>
+                <div class="kpi-item">
+                    <span class="kpi-label">Avg. Appointment Value</span>
+                    <span class="kpi-value text-info">$85.20</span>
+                </div>
+                <div class="kpi-item">
+                    <span class="kpi-label">Revenue Lost (Cancellations)</span>
+                    <span class="kpi-value text-danger">$13,260</span>
+                </div>
+                <div class="kpi-item">
+                    <span class="kpi-label">Monthly Growth</span>
+                    <span class="kpi-value text-success">+12.8%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card medical-border">
+            <div class="card-header">
+                <h6 class="card-title mb-0"><i class="fas fa-chart-bar me-2"></i>Performance Metrics</h6>
+            </div>
+            <div class="card-body">
+                <div class="kpi-item">
+                    <span class="kpi-label">Appointment Capacity</span>
+                    <span class="kpi-value text-info">84.7%</span>
+                </div>
+                <div class="kpi-item">
+                    <span class="kpi-label">Same-day Appointments</span>
+                    <span class="kpi-value text-primary">22.5%</span>
+                </div>
+                <div class="kpi-item">
+                    <span class="kpi-label">Online Bookings</span>
+                    <span class="kpi-value text-success">68.3%</span>
+                </div>
+                <div class="kpi-item">
+                    <span class="kpi-label">Reschedule Rate</span>
+                    <span class="kpi-value text-warning">15.7%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Appointment Details Modal -->
+<div class="modal fade" id="appointmentDetailsModal" tabindex="-1" aria-labelledby="appointmentDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header medical-border">
+                <h5 class="modal-title" id="appointmentDetailsModalLabel">Appointment Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Appointment Information</h6>
+                        <div class="detail-item">
+                            <span class="detail-label">Appointment ID:</span>
+                            <span class="detail-value">#APT-2024-0012</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Date & Time:</span>
+                            <span class="detail-value">Dec 15, 2024 at 10:00 AM</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Patient:</span>
+                            <span class="detail-value">John Smith (PT-0012)</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Doctor:</span>
+                            <span class="detail-value">Dr. Sarah Johnson</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Appointment Details</h6>
+                        <div class="detail-item">
+                            <span class="detail-label">Type:</span>
+                            <span class="detail-value">Consultation</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Duration:</span>
+                            <span class="detail-value">30 minutes</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Status:</span>
+                            <span class="detail-value"><span class="badge bg-success">Completed</span></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Revenue:</span>
+                            <span class="detail-value">$85.00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <h6>Medical Notes</h6>
+                <div class="medical-notes">
+                    <p class="text-muted">Patient presented with hypertension symptoms. Blood pressure measured at 145/95. Prescribed Lisinopril 10mg daily. Recommended lifestyle changes and follow-up in 4 weeks.</p>
+                </div>
+                
+                <h6 class="mt-3">Prescription</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm table-dark">
+                        <thead>
+                            <tr>
+                                <th>Medication</th>
+                                <th>Dosage</th>
+                                <th>Frequency</th>
+                                <th>Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Lisinopril</td>
+                                <td>10mg</td>
+                                <td>Once daily</td>
+                                <td>30 days</td>
+                            </tr>
+                            <tr>
+                                <td>Amlodipine</td>
+                                <td>5mg</td>
+                                <td>Once daily</td>
+                                <td>30 days</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Print Report</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .medical-warning {
+        background: rgba(243, 156, 18, 0.1);
+        border-left: 4px solid var(--med-warning);
+    }
+    
+    .medical-alert {
+        background: rgba(231, 76, 60, 0.1);
+        border-left: 4px solid var(--med-alert);
+    }
+    
+    .table th {
+        border-top: none;
+        border-bottom: 1px solid var(--med-primary);
+        font-weight: 600;
+    }
+    
+    .badge {
+        font-size: 0.75rem;
+        padding: 0.35em 0.65em;
+    }
+    
+    .detail-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .detail-label {
+        font-weight: 500;
+        color: #ddd;
+    }
+    
+    .detail-value {
+        color: #fff;
+        text-align: right;
+    }
+    
+    .btn-group .btn.active {
+        background-color: var(--med-primary);
+        border-color: var(--med-primary);
+    }
+    
+    .stat-box {
+        background-color: rgba(42, 107, 156, 0.1);
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+    
+    .stat-box h3 {
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    
+    .kpi-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .kpi-label {
+        color: #ddd;
+        font-size: 0.9rem;
+    }
+    
+    .kpi-value {
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+    
+    /* Chart containers */
+    #appointmentTrendChart, #statusChart, #doctorChart, #peakHoursChart {
+        max-height: 300px;
+        width: 100% !important;
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize charts
+        let trendChart, statusChart, doctorChart, peakHoursChart;
+        
+        function initCharts() {
+            // Appointment Trend Chart
+            const trendCtx = document.getElementById('appointmentTrendChart').getContext('2d');
+            trendChart = new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Total Appointments',
+                        data: [120, 135, 148, 162, 175, 190, 185, 195, 210, 225, 240, 255],
+                        borderColor: 'rgba(42, 107, 156, 1)',
+                        backgroundColor: 'rgba(42, 107, 156, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'Completed',
+                        data: [98, 110, 122, 135, 148, 160, 152, 165, 178, 190, 205, 220],
+                        borderColor: 'rgba(76, 175, 80, 1)',
+                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ddd'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ddd'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ddd'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Status Distribution Chart
+            const statusCtx = document.getElementById('statusChart').getContext('2d');
+            statusChart = new Chart(statusCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Completed', 'Scheduled', 'Cancelled', 'No Show'],
+                    datasets: [{
+                        data: [1524, 100, 156, 62],
+                        backgroundColor: [
+                            'rgba(76, 175, 80, 0.8)',
+                            'rgba(41, 182, 246, 0.8)',
+                            'rgba(243, 156, 18, 0.8)',
+                            'rgba(231, 76, 60, 0.8)'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#ddd',
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Doctor Performance Chart
+            const doctorCtx = document.getElementById('doctorChart').getContext('2d');
+            doctorChart = new Chart(doctorCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Dr. Johnson', 'Dr. Chen', 'Dr. Patel', 'Dr. Wilson'],
+                    datasets: [{
+                        label: 'Appointments',
+                        data: [480, 420, 380, 320],
+                        backgroundColor: 'rgba(42, 107, 156, 0.6)',
+                        borderColor: 'rgba(42, 107, 156, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ddd'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ddd'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Peak Hours Chart
+            const peakCtx = document.getElementById('peakHoursChart').getContext('2d');
+            peakHoursChart = new Chart(peakCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['8 AM', '9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM', '5 PM'],
+                    datasets: [{
+                        label: 'Appointments',
+                        data: [45, 120, 185, 160, 90, 110, 175, 150, 95, 40],
+                        backgroundColor: 'rgba(156, 39, 176, 0.6)',
+                        borderColor: 'rgba(156, 39, 176, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ddd'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ddd'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize charts
+        initCharts();
+
+        // Filter functionality
+        const filterButtons = document.querySelectorAll('.btn-group .btn');
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const filter = this.getAttribute('data-filter');
+                filterAppointmentsTable(filter);
+            });
+        });
+
+        function filterAppointmentsTable(filter) {
+            const rows = document.querySelectorAll('#appointmentsTable tbody tr');
+            rows.forEach(row => {
+                const status = row.querySelector('.badge').textContent.toLowerCase();
+                if (filter === 'all' || status === filter) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Generate Report
+        document.getElementById('generateReport').addEventListener('click', function() {
+            const dateRange = document.getElementById('dateRange').value;
+            const doctor = document.getElementById('doctorFilter').value;
+            const reportType = document.getElementById('reportType').value;
+            
+            Swal.fire({
+                title: 'Generating Report',
+                text: 'Please wait while we generate your appointment report...',
+                icon: 'info',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        });
+
+        // Export Report
+        document.getElementById('exportReport').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Export Report',
+                html: 'Choose export format:',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'PDF',
+                cancelButtonText: 'Excel',
+                confirmButtonColor: 'var(--med-primary)',
+                cancelButtonColor: 'var(--med-accent)'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire('Exported!', 'Appointment report exported as PDF successfully.', 'success');
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire('Exported!', 'Appointment report exported as Excel successfully.', 'success');
+                }
+            });
+        });
+
+        // Schedule Analysis
+        document.getElementById('scheduleAnalysis').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Schedule Analysis',
+                html: `
+                    <div class="text-start">
+                        <p><strong>Optimal Schedule Recommendations:</strong></p>
+                        <ul>
+                            <li>📈 Peak hours: 10 AM - 11 AM (185 appointments)</li>
+                            <li>📊 Underutilized: 8 AM - 9 AM (45 appointments)</li>
+                            <li>👥 Doctor capacity: 78.5% utilization</li>
+                            <li>⏰ Average wait time: 8.2 minutes</li>
+                        </ul>
+                        <p><strong>Recommendations:</strong></p>
+                        <ul>
+                            <li>Add more slots during peak hours</li>
+                            <li>Consider extending clinic hours</li>
+                            <li>Implement online waitlist for popular time slots</li>
+                        </ul>
+                    </div>
+                `,
+                icon: 'info',
+                confirmButtonText: 'Apply Recommendations',
+                confirmButtonColor: 'var(--med-primary)',
+                width: '600px'
+            });
+        });
+
+        // View Appointment Details
+        const viewButtons = document.querySelectorAll('.view-details');
+        viewButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const modal = new bootstrap.Modal(document.getElementById('appointmentDetailsModal'));
+                modal.show();
+            });
+        });
+
+        // Date range change handler
+        document.getElementById('dateRange').addEventListener('change', function() {
+            if (this.value === 'custom') {
+                document.getElementById('startDate').disabled = false;
+                document.getElementById('endDate').disabled = false;
+            } else {
+                document.getElementById('startDate').disabled = true;
+                document.getElementById('endDate').disabled = true;
+            }
+        });
+    });
+</script>
+
+{% endblock %}

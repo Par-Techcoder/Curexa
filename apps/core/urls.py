@@ -35,5 +35,10 @@ urlpatterns = [
     # Inventory
     path("admin/inventory/", views.InventoryListView.as_view(), name="inventory_list"),
     
+    # Reports
+    path("admin/reports/sales", views.SalesReportsView.as_view(), name="sales_reports"),
+    path("admin/reports/inventory", views.InventoryReportsView.as_view(), name="inventory_reports"),
+    path("admin/reports/appoinment", views.AppointmentReportsView.as_view(), name="appoinment_reports"),
+    
 ]
 

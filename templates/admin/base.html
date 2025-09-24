@@ -597,15 +597,15 @@
           <span class="sidebar-tooltip">Reports</span>
         </a>
         <div class="submenu">
-          <a href="#"><i class="fas fa-file-invoice-dollar me-2"></i> Sales Reports</a>
-          <a href="#"><i class="fas fa-pills me-2"></i> Inventory Reports</a>
-          <a href="#"><i class="fas fa-user-md me-2"></i> Appointment Reports</a>
+          <a href="{% url 'sales_reports' %}"><i class="fas fa-file-invoice-dollar me-2"></i> Sales Reports</a>
+          <a href="{% url 'inventory_reports' %}"><i class="fas fa-pills me-2"></i> Inventory Reports</a>
+          <a href="{% url 'appoinment_reports' %}"><i class="fas fa-user-md me-2"></i> Appointment Reports</a>
         </div>
         <div class="hover-submenu">
           <div class="hover-submenu-header">Reports</div>
-          <a href="#"><i class="fas fa-file-invoice-dollar"></i> Sales Reports</a>
-          <a href="#"><i class="fas fa-pills"></i> Inventory Reports</a>
-          <a href="#"><i class="fas fa-user-md"></i> Appointment Reports</a>
+          <a href="{% url 'sales_reports' %}"><i class="fas fa-file-invoice-dollar"></i> Sales Reports</a>
+          <a href="{% url 'inventory_reports' %}"><i class="fas fa-pills"></i> Inventory Reports</a>
+          <a href="{% url 'appoinment_reports' %}"><i class="fas fa-user-md"></i> Appointment Reports</a>
         </div>
       </div>
 

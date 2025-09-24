@@ -1,0 +1,910 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}Inventory Reports - Curexa Admin{% endblock %}
+
+{% block navbar_extra %}
+<!-- Breadcrumb navigation -->
+<nav aria-label="breadcrumb" class="ms-3">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="{% url 'admin_dashboard' %}" class="text-white">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'inventory_list' %}" class="text-white">Inventory</a></li>
+        <li class="breadcrumb-item active text-light" aria-current="page">Inventory Reports</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-section">
+            <h2><i class="fas fa-boxes me-2"></i>Inventory Reports & Analytics</h2>
+            <p class="mb-0">Comprehensive inventory management and stock analysis</p>
+        </div>
+    </div>
+</div>
+
+<!-- Inventory Overview Cards -->
+<div class="row mt-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title text-muted mb-2">Total Products</h6>
+                        <h3 class="mb-0 text-primary">1,248</h3>
+                        <small class="text-success"><i class="bi bi-arrow-up"></i> 24 new this month</small>
+                    </div>
+                    <div class="card-icon text-primary">
+                        <i class="fas fa-pills"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title text-muted mb-2">Total Stock Value</h6>
+                        <h3 class="mb-0 text-info">$286,450</h3>
+                        <small class="text-success"><i class="bi bi-arrow-up"></i> 8.5% from last month</small>
+                    </div>
+                    <div class="card-icon text-info">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card medical-warning">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title text-muted mb-2">Low Stock Items</h6>
+                        <h3 class="mb-0 text-warning">28</h3>
+                        <small class="text-warning"><i class="bi bi-exclamation-triangle"></i> Needs attention</small>
+                    </div>
+                    <div class="card-icon text-warning">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card medical-alert">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title text-muted mb-2">Out of Stock</h6>
+                        <h3 class="mb-0 text-danger">12</h3>
+                        <small class="text-danger"><i class="bi bi-x-circle"></i> Urgent restock needed</small>
+                    </div>
+                    <div class="card-icon text-danger">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filters and Controls -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card medical-border">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-filter me-2"></i>Report Filters</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Category</label>
+                        <select class="form-select" id="categoryFilter">
+                            <option value="all" selected>All Categories</option>
+                            <option value="prescription">Prescription Drugs</option>
+                            <option value="otc">OTC Medications</option>
+                            <option value="medical">Medical Devices</option>
+                            <option value="supplements">Supplements</option>
+                            <option value="personal">Personal Care</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Stock Status</label>
+                        <select class="form-select" id="stockStatus">
+                            <option value="all" selected>All Status</option>
+                            <option value="充足">In Stock</option>
+                            <option value="low">Low Stock</option>
+                            <option value="out">Out of Stock</option>
+                            <option value="expiring">Expiring Soon</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Supplier</label>
+                        <select class="form-select" id="supplierFilter">
+                            <option value="all" selected>All Suppliers</option>
+                            <option value="pfizer">Pfizer</option>
+                            <option value="johnson">Johnson & Johnson</option>
+                            <option value="novartis">Novartis</option>
+                            <option value="roche">Roche</option>
+                            <option value="merck">Merck</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Report Type</label>
+                        <select class="form-select" id="reportType">
+                            <option value="summary" selected>Summary Report</option>
+                            <option value="detailed">Detailed Inventory</option>
+                            <option value="movement">Stock Movement</option>
+                            <option value="expiry">Expiry Analysis</option>
+                            <option value="valuation">Valuation Report</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <button class="btn btn-primary me-2" id="generateReport">
+                            <i class="fas fa-sync-alt me-1"></i> Generate Report
+                        </button>
+                        <button class="btn btn-outline-light me-2" id="exportReport">
+                            <i class="fas fa-download me-1"></i> Export Report
+                        </button>
+                        <button class="btn btn-warning" id="lowStockAlert">
+                            <i class="fas fa-bell me-1"></i> Low Stock Alert
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div class="row mt-4">
+    <div class="col-lg-6">
+        <div class="card medical-border">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-chart-pie me-2"></i>Inventory by Category</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="categoryChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card medical-border">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-chart-bar me-2"></i>Stock Value Distribution</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="valueChart" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Additional Charts -->
+<div class="row mt-4">
+    <div class="col-lg-6">
+        <div class="card medical-border">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-chart-line me-2"></i>Stock Movement Trend</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="movementChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card medical-border">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-calendar-alt me-2"></i>Expiry Timeline</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="expiryChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Low Stock Alerts -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card medical-warning">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0"><i class="fas fa-exclamation-triangle me-2"></i>Low Stock Alerts</h5>
+                <span class="badge bg-warning">28 items need attention</span>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-dark">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>SKU</th>
+                                <th>Current Stock</th>
+                                <th>Minimum Required</th>
+                                <th>Days Until Stockout</th>
+                                <th>Last Sold</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Amoxicillin 500mg Capsules</td>
+                                <td>AMOX-500-30</td>
+                                <td><span class="badge bg-warning">15 units</span></td>
+                                <td>50 units</td>
+                                <td><span class="text-warning">7 days</span></td>
+                                <td>Dec 14, 2024</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-plus-circle me-1"></i> Reorder
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Paracetamol 500mg Tablets</td>
+                                <td>PARA-500-100</td>
+                                <td><span class="badge bg-warning">28 units</span></td>
+                                <td>100 units</td>
+                                <td><span class="text-warning">14 days</span></td>
+                                <td>Dec 15, 2024</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-plus-circle me-1"></i> Reorder
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Insulin Syringes 1ml</td>
+                                <td>SYR-INS-1ML</td>
+                                <td><span class="badge bg-warning">35 units</span></td>
+                                <td>80 units</td>
+                                <td><span class="text-warning">10 days</span></td>
+                                <td>Dec 13, 2024</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-plus-circle me-1"></i> Reorder
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Blood Glucose Test Strips</td>
+                                <td>STRIP-BG-50</td>
+                                <td><span class="badge bg-warning">12 units</span></td>
+                                <td>40 units</td>
+                                <td><span class="text-warning">5 days</span></td>
+                                <td>Dec 15, 2024</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-plus-circle me-1"></i> Reorder
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Detailed Inventory Report -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card medical-border">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0"><i class="fas fa-table me-2"></i>Inventory Summary</h5>
+                <div class="btn-group">
+                    <button class="btn btn-sm btn-outline-light active" data-filter="all">All Items</button>
+                    <button class="btn btn-sm btn-outline-light" data-filter="prescription">Prescription</button>
+                    <button class="btn btn-sm btn-outline-light" data-filter="otc">OTC</button>
+                    <button class="btn btn-sm btn-outline-light" data-filter="devices">Devices</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-dark" id="inventoryTable">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>SKU</th>
+                                <th>Category</th>
+                                <th>Current Stock</th>
+                                <th>Reorder Level</th>
+                                <th>Unit Price</th>
+                                <th>Stock Value</th>
+                                <th>Status</th>
+                                <th>Last Updated</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Amoxicillin 500mg Capsules</td>
+                                <td>AMOX-500-30</td>
+                                <td>Prescription</td>
+                                <td>15</td>
+                                <td>50</td>
+                                <td>$15.00</td>
+                                <td>$225.00</td>
+                                <td><span class="badge bg-warning">Low Stock</span></td>
+                                <td>Dec 15, 2024</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info me-1">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Paracetamol 500mg Tablets</td>
+                                <td>PARA-500-100</td>
+                                <td>OTC</td>
+                                <td>28</td>
+                                <td>100</td>
+                                <td>$8.50</td>
+                                <td>$238.00</td>
+                                <td><span class="badge bg-warning">Low Stock</span></td>
+                                <td>Dec 15, 2024</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info me-1">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Vitamin C 1000mg Tablets</td>
+                                <td>VITC-1000-60</td>
+                                <td>Supplements</td>
+                                <td>150</td>
+                                <td>30</td>
+                                <td>$12.00</td>
+                                <td>$1,800.00</td>
+                                <td><span class="badge bg-success">In Stock</span></td>
+                                <td>Dec 14, 2024</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info me-1">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Blood Pressure Monitor</td>
+                                <td>BPM-DIGITAL-1</td>
+                                <td>Devices</td>
+                                <td>8</td>
+                                <td>5</td>
+                                <td>$65.00</td>
+                                <td>$520.00</td>
+                                <td><span class="badge bg-success">In Stock</span></td>
+                                <td>Dec 13, 2024</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info me-1">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Insulin Syringes 1ml</td>
+                                <td>SYR-INS-1ML</td>
+                                <td>Devices</td>
+                                <td>0</td>
+                                <td>20</td>
+                                <td>$0.85</td>
+                                <td>$0.00</td>
+                                <td><span class="badge bg-danger">Out of Stock</span></td>
+                                <td>Dec 15, 2024</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info me-1">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <nav aria-label="Inventory pagination" class="mt-3">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Inventory Details Modal -->
+<div class="modal fade" id="inventoryDetailsModal" tabindex="-1" aria-labelledby="inventoryDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header medical-border">
+                <h5 class="modal-title" id="inventoryDetailsModalLabel">Product Inventory Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Product Information</h6>
+                        <div class="detail-item">
+                            <span class="detail-label">Product Name:</span>
+                            <span class="detail-value">Amoxicillin 500mg Capsules</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">SKU:</span>
+                            <span class="detail-value">AMOX-500-30</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Category:</span>
+                            <span class="detail-value">Prescription Drugs</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Supplier:</span>
+                            <span class="detail-value">Pfizer Pharmaceuticals</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Stock Information</h6>
+                        <div class="detail-item">
+                            <span class="detail-label">Current Stock:</span>
+                            <span class="detail-value"><span class="badge bg-warning">15 units</span></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Reorder Level:</span>
+                            <span class="detail-value">50 units</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Unit Price:</span>
+                            <span class="detail-value">$15.00</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Total Value:</span>
+                            <span class="detail-value">$225.00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <h6>Stock Movement (Last 30 Days)</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm table-dark">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Quantity</th>
+                                <th>Reference</th>
+                                <th>Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Dec 15, 2024</td>
+                                <td><span class="badge bg-danger">Outgoing</span></td>
+                                <td>-5 units</td>
+                                <td>#ORD-2024-0012</td>
+                                <td>15 units</td>
+                            </tr>
+                            <tr>
+                                <td>Dec 10, 2024</td>
+                                <td><span class="badge bg-success">Incoming</span></td>
+                                <td>+50 units</td>
+                                <td>#PO-2024-0456</td>
+                                <td>20 units</td>
+                            </tr>
+                            <tr>
+                                <td>Dec 05, 2024</td>
+                                <td><span class="badge bg-danger">Outgoing</span></td>
+                                <td>-10 units</td>
+                                <td>#ORD-2024-0008</td>
+                                <td>-30 units</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-warning">
+                    <i class="fas fa-plus-circle me-1"></i> Reorder Now
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .medical-warning {
+        background: rgba(243, 156, 18, 0.1);
+        border-left: 4px solid var(--med-warning);
+    }
+    
+    .medical-alert {
+        background: rgba(231, 76, 60, 0.1);
+        border-left: 4px solid var(--med-alert);
+    }
+    
+    .table th {
+        border-top: none;
+        border-bottom: 1px solid var(--med-primary);
+        font-weight: 600;
+    }
+    
+    .badge {
+        font-size: 0.75rem;
+        padding: 0.35em 0.65em;
+    }
+    
+    .detail-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .detail-label {
+        font-weight: 500;
+        color: #ddd;
+    }
+    
+    .detail-value {
+        color: #fff;
+        text-align: right;
+    }
+    
+    .btn-group .btn.active {
+        background-color: var(--med-primary);
+        border-color: var(--med-primary);
+    }
+    
+    /* Chart containers */
+    #categoryChart, #valueChart, #movementChart, #expiryChart {
+        max-height: 300px;
+        width: 100% !important;
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize charts
+        let categoryChart, valueChart, movementChart, expiryChart;
+        
+        function initCharts() {
+            // Inventory by Category Chart
+            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+            categoryChart = new Chart(categoryCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Prescription Drugs', 'OTC Medications', 'Medical Devices', 'Supplements', 'Personal Care'],
+                    datasets: [{
+                        data: [35, 28, 20, 12, 5],
+                        backgroundColor: [
+                            'rgba(42, 107, 156, 0.8)',
+                            'rgba(76, 175, 80, 0.8)',
+                            'rgba(243, 156, 18, 0.8)',
+                            'rgba(156, 39, 176, 0.8)',
+                            'rgba(96, 125, 139, 0.8)'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#ddd',
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Stock Value Distribution Chart
+            const valueCtx = document.getElementById('valueChart').getContext('2d');
+            valueChart = new Chart(valueCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Prescription', 'OTC', 'Devices', 'Supplements', 'Personal Care'],
+                    datasets: [{
+                        label: 'Stock Value ($)',
+                        data: [125000, 85400, 45200, 21850, 9800],
+                        backgroundColor: 'rgba(42, 107, 156, 0.6)',
+                        borderColor: 'rgba(42, 107, 156, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ddd'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ddd',
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ddd'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Stock Movement Trend Chart
+            const movementCtx = document.getElementById('movementChart').getContext('2d');
+            movementChart = new Chart(movementCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Stock In',
+                        data: [450, 520, 480, 610, 550, 600, 580, 620, 590, 630, 610, 650],
+                        borderColor: 'rgba(76, 175, 80, 1)',
+                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                        borderWidth: 2,
+                        fill: true
+                    }, {
+                        label: 'Stock Out',
+                        data: [420, 480, 450, 520, 500, 550, 530, 560, 540, 580, 560, 590],
+                        borderColor: 'rgba(231, 76, 60, 1)',
+                        backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                        borderWidth: 2,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ddd'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ddd'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ddd'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Expiry Timeline Chart
+            const expiryCtx = document.getElementById('expiryChart').getContext('2d');
+            expiryChart = new Chart(expiryCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan 2025', 'Feb 2025', 'Mar 2025', 'Apr 2025', 'May 2025', 'Jun 2025'],
+                    datasets: [{
+                        label: 'Products Expiring',
+                        data: [45, 38, 52, 28, 35, 42],
+                        backgroundColor: 'rgba(243, 156, 18, 0.6)',
+                        borderColor: 'rgba(243, 156, 18, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ddd'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ddd'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize charts
+        initCharts();
+
+        // Filter functionality
+        const filterButtons = document.querySelectorAll('.btn-group .btn');
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const filter = this.getAttribute('data-filter');
+                filterInventoryTable(filter);
+            });
+        });
+
+        function filterInventoryTable(filter) {
+            const rows = document.querySelectorAll('#inventoryTable tbody tr');
+            rows.forEach(row => {
+                const category = row.cells[2].textContent.toLowerCase();
+                if (filter === 'all' || category.includes(filter)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Generate Report
+        document.getElementById('generateReport').addEventListener('click', function() {
+            const category = document.getElementById('categoryFilter').value;
+            const status = document.getElementById('stockStatus').value;
+            const reportType = document.getElementById('reportType').value;
+            
+            Swal.fire({
+                title: 'Generating Report',
+                text: 'Please wait while we generate your inventory report...',
+                icon: 'info',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        });
+
+        // Export Report
+        document.getElementById('exportReport').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Export Report',
+                html: 'Choose export format:',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'PDF',
+                cancelButtonText: 'Excel',
+                confirmButtonColor: 'var(--med-primary)',
+                cancelButtonColor: 'var(--med-accent)'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire('Exported!', 'Inventory report exported as PDF successfully.', 'success');
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire('Exported!', 'Inventory report exported as Excel successfully.', 'success');
+                }
+            });
+        });
+
+        // Low Stock Alert
+        document.getElementById('lowStockAlert').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Low Stock Alert',
+                html: `
+                    <div class="text-start">
+                        <p><strong>28 items are running low on stock!</strong></p>
+                        <ul>
+                            <li>15 items are below minimum stock level</li>
+                            <li>8 items will run out within 7 days</li>
+                            <li>5 items are out of stock</li>
+                        </ul>
+                        <p>Would you like to generate purchase orders?</p>
+                    </div>
+                `,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Generate POs',
+                cancelButtonText: 'View Details',
+                confirmButtonColor: 'var(--med-warning)'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire('POs Generated!', 'Purchase orders have been created for low stock items.', 'success');
+                }
+            });
+        });
+
+        // View Inventory Details
+        const viewButtons = document.querySelectorAll('.btn-outline-info');
+        viewButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const modal = new bootstrap.Modal(document.getElementById('inventoryDetailsModal'));
+                modal.show();
+            });
+        });
+
+        // Reorder buttons
+        const reorderButtons = document.querySelectorAll('.btn-outline-warning');
+        reorderButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Reorder Product',
+                    text: 'Generate purchase order for this product?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Reorder',
+                    cancelButtonText: 'Cancel',
+                    confirmButtonColor: 'var(--med-warning)'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire('Reorder Created!', 'Purchase order has been generated.', 'success');
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+{% endblock %}
