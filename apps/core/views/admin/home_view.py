@@ -9,5 +9,4 @@ class AdminDashboardView(View):
         context = {
         "user": request.user,
         }
-        return render(request, 'admin/base.html', context)
-
+        return render(request, "admin/dashboard/dasboard.html", context)

@@ -1,0 +1,779 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard - Curexa Admin{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-section">
+            <h2><i class="fas fa-tachometer-alt me-2"></i>Medical Dashboard</h2>
+            <p class="mb-0">Welcome back, {{ user.first_name }}! Here's your practice overview.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Stats Cards -->
+<div class="row mt-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title text-muted mb-2">Today's Appointments</h6>
+                        <h3 class="mb-0 text-primary">18</h3>
+                        <small class="text-success"><i class="bi bi-arrow-up"></i> 3 more than yesterday</small>
+                    </div>
+                    <div class="card-icon text-primary">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title text-muted mb-2">Total Patients</h6>
+                        <h3 class="mb-0 text-info">1,248</h3>
+                        <small class="text-success"><i class="bi bi-arrow-up"></i> 24 new this month</small>
+                    </div>
+                    <div class="card-icon text-info">
+                        <i class="fas fa-user-injured"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title text-muted mb-2">Monthly Revenue</h6>
+                        <h3 class="mb-0 text-success">$48,256</h3>
+                        <small class="text-success"><i class="bi bi-arrow-up"></i> 12.5% growth</small>
+                    </div>
+                    <div class="card-icon text-success">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card medical-warning">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="card-title text-muted mb-2">Pending Tasks</h6>
+                        <h3 class="mb-0 text-warning">8</h3>
+                        <small class="text-warning"><i class="bi bi-exclamation-triangle"></i> Requires attention</small>
+                    </div>
+                    <div class="card-icon text-warning">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Dashboard Content -->
+<div class="row mt-4">
+    <!-- Left Column - Charts -->
+    <div class="col-lg-8">
+        <!-- Revenue Chart -->
+        <div class="card medical-border mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0"><i class="fas fa-chart-line me-2"></i>Revenue Overview</h5>
+                <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-light active" data-period="month">Month</button>
+                    <button class="btn btn-outline-light" data-period="quarter">Quarter</button>
+                    <button class="btn btn-outline-light" data-period="year">Year</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <canvas id="revenueChart" height="250"></canvas>
+            </div>
+        </div>
+
+        <!-- Appointments Chart -->
+        <div class="card medical-border">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-calendar-alt me-2"></i>Appointment Trends</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="appointmentChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column - Side Panels -->
+    <div class="col-lg-4">
+        <!-- Today's Schedule -->
+        <div class="card medical-border mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-clock me-2"></i>Today's Schedule</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">09:00 AM</h6>
+                                <small class="text-muted">John Smith - Consultation</small>
+                            </div>
+                            <span class="badge bg-success">Confirmed</span>
+                        </div>
+                    </div>
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">10:30 AM</h6>
+                                <small class="text-muted">Maria Garcia - Follow-up</small>
+                            </div>
+                            <span class="badge bg-success">Confirmed</span>
+                        </div>
+                    </div>
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">11:45 AM</h6>
+                                <small class="text-muted">Robert Johnson - Check-up</small>
+                            </div>
+                            <span class="badge bg-warning">Pending</span>
+                        </div>
+                    </div>
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">02:15 PM</h6>
+                                <small class="text-muted">Sarah Williams - Vaccination</small>
+                            </div>
+                            <span class="badge bg-success">Confirmed</span>
+                        </div>
+                    </div>
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">04:00 PM</h6>
+                                <small class="text-muted">Michael Brown - Consultation</small>
+                            </div>
+                            <span class="badge bg-info">New Patient</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <a href="{% url 'appointment_list' %}" class="btn btn-sm btn-outline-light">View All Appointments</a>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card medical-border">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-2">
+                    <div class="col-6">
+                        <a href="{% url 'appointment_add' %}" class="btn btn-outline-primary w-100 mb-2">
+                            <i class="fas fa-plus me-1"></i> New Appointment
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="{% url 'patient_add' %}" class="btn btn-outline-info w-100 mb-2">
+                            <i class="fas fa-user-plus me-1"></i> Add Patient
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="{% url 'medicine_list' %}" class="btn btn-outline-success w-100 mb-2">
+                            <i class="fas fa-pills me-1"></i> Manage Medicines
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="{% url 'inventory_list' %}" class="btn btn-outline-warning w-100 mb-2">
+                            <i class="fas fa-boxes me-1"></i> Inventory
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Second Row - Additional Metrics -->
+<div class="row mt-4">
+    <!-- Patient Statistics -->
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card medical-border">
+            <div class="card-body text-center">
+                <i class="fas fa-user-friends fa-2x text-primary mb-3"></i>
+                <h4>1,248</h4>
+                <p class="text-muted mb-0">Total Patients</p>
+                <small class="text-success">+5.2% this month</small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card medical-border">
+            <div class="card-body text-center">
+                <i class="fas fa-user-plus fa-2x text-info mb-3"></i>
+                <h4>42</h4>
+                <p class="text-muted mb-0">New Patients</p>
+                <small class="text-success">+8% from last month</small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card medical-border">
+            <div class="card-body text-center">
+                <i class="fas fa-stethoscope fa-2x text-success mb-3"></i>
+                <h4>156</h4>
+                <p class="text-muted mb-0">This Week's Visits</p>
+                <small class="text-success">12% increase</small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card medical-border">
+            <div class="card-body text-center">
+                <i class="fas fa-calendar-week fa-2x text-warning mb-3"></i>
+                <h4>84%</h4>
+                <p class="text-muted mb-0">Appointment Rate</p>
+                <small class="text-success">2.5% improvement</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Third Row - Tables and Alerts -->
+<div class="row mt-4">
+    <!-- Recent Patients -->
+    <div class="col-lg-6 mb-4">
+        <div class="card medical-border">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0"><i class="fas fa-users me-2"></i>Recent Patients</h5>
+                <a href="{% url 'patient_list' %}" class="btn btn-sm btn-outline-light">View All</a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-dark">
+                        <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>Last Visit</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{% static 'images/patient1.jpg' %}" class="rounded-circle me-2" width="30" height="30" alt="Patient">
+                                        <div>John Smith</div>
+                                    </div>
+                                </td>
+                                <td>Today</td>
+                                <td><span class="badge bg-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{% static 'images/patient2.jpg' %}" class="rounded-circle me-2" width="30" height="30" alt="Patient">
+                                        <div>Maria Garcia</div>
+                                    </div>
+                                </td>
+                                <td>Yesterday</td>
+                                <td><span class="badge bg-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{% static 'images/patient3.jpg' %}" class="rounded-circle me-2" width="30" height="30" alt="Patient">
+                                        <div>Robert Johnson</div>
+                                    </div>
+                                </td>
+                                <td>Dec 14</td>
+                                <td><span class="badge bg-warning">Follow-up</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{% static 'images/patient4.jpg' %}" class="rounded-circle me-2" width="30" height="30" alt="Patient">
+                                        <div>Sarah Williams</div>
+                                    </div>
+                                </td>
+                                <td>Dec 13</td>
+                                <td><span class="badge bg-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Alerts -->
+    <div class="col-lg-6 mb-4">
+        <div class="card medical-border">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0"><i class="fas fa-bell me-2"></i>System Alerts</h5>
+                <span class="badge bg-danger">3 Critical</span>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning d-flex align-items-center">
+                    <i class="fas fa-exclamation-triangle me-3 fa-lg"></i>
+                    <div>
+                        <strong>Low Stock Alert</strong><br>
+                        <small>5 medications are running low on stock</small>
+                    </div>
+                </div>
+                
+                <div class="alert alert-danger d-flex align-items-center">
+                    <i class="fas fa-times-circle me-3 fa-lg"></i>
+                    <div>
+                        <strong>Out of Stock</strong><br>
+                        <small>2 medications are out of stock</small>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info d-flex align-items-center">
+                    <i class="fas fa-calendar-times me-3 fa-lg"></i>
+                    <div>
+                        <strong>Appointment Cancellations</strong><br>
+                        <small>3 appointments cancelled today</small>
+                    </div>
+                </div>
+                
+                <div class="alert alert-success d-flex align-items-center">
+                    <i class="fas fa-check-circle me-3 fa-lg"></i>
+                    <div>
+                        <strong>System Update</strong><br>
+                        <small>All systems running optimally</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Fourth Row - Additional Charts -->
+<div class="row mt-4">
+    <!-- Doctor Performance -->
+    <div class="col-lg-6 mb-4">
+        <div class="card medical-border">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-user-md me-2"></i>Doctor Performance</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="doctorChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Medicine Categories -->
+    <div class="col-lg-6 mb-4">
+        <div class="card medical-border">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-pills me-2"></i>Medicine Categories</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="medicineChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        margin-bottom: 1.5rem;
+        transition: transform 0.2s ease-in-out;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+    }
+    
+    .medical-warning {
+        background: rgba(243, 156, 18, 0.1);
+        border-left: 4px solid var(--med-warning);
+    }
+    
+    .table th {
+        border-top: none;
+        border-bottom: 1px solid var(--med-primary);
+        font-weight: 600;
+    }
+    
+    .badge {
+        font-size: 0.75rem;
+        padding: 0.35em 0.65em;
+    }
+    
+    .list-group-item {
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #fff;
+    }
+    
+    .alert {
+        border: none;
+        border-left: 4px solid;
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    .btn-group .btn.active {
+        background-color: var(--med-primary);
+        border-color: var(--med-primary);
+    }
+    
+    /* Chart containers */
+    #revenueChart, #appointmentChart, #doctorChart, #medicineChart {
+        max-height: 250px;
+        width: 100% !important;
+    }
+    
+    .quick-action-btn {
+        background: var(--med-dark-light);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-radius: 8px;
+        padding: 15px;
+        text-align: center;
+        transition: all 0.3s ease;
+        height: 100%;
+        text-decoration: none;
+        display: block;
+    }
+    
+    .quick-action-btn:hover {
+        background: var(--med-primary);
+        transform: translateY(-2px);
+        text-decoration: none;
+        color: #fff;
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize charts
+        let revenueChart, appointmentChart, doctorChart, medicineChart;
+        
+        function initCharts() {
+            // Revenue Chart
+            const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+            revenueChart = new Chart(revenueCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Revenue ($)',
+                        data: [32000, 35000, 38000, 42000, 45000, 48000, 46000, 47000, 49000, 50000, 52000, 55000],
+                        borderColor: 'rgba(42, 107, 156, 1)',
+                        backgroundColor: 'rgba(42, 107, 156, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ddd'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ddd',
+                                callback: function(value) {
+                                    return '$' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ddd'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Appointment Chart
+            const appointmentCtx = document.getElementById('appointmentChart').getContext('2d');
+            appointmentChart = new Chart(appointmentCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                    datasets: [{
+                        label: 'Appointments',
+                        data: [45, 52, 48, 55, 50, 25],
+                        backgroundColor: 'rgba(76, 175, 80, 0.6)',
+                        borderColor: 'rgba(76, 175, 80, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ddd'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#ddd'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Doctor Performance Chart
+            const doctorCtx = document.getElementById('doctorChart').getContext('2d');
+            doctorChart = new Chart(doctorCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Dr. Johnson', 'Dr. Chen', 'Dr. Patel', 'Dr. Wilson'],
+                    datasets: [{
+                        data: [35, 28, 22, 15],
+                        backgroundColor: [
+                            'rgba(42, 107, 156, 0.8)',
+                            'rgba(76, 175, 80, 0.8)',
+                            'rgba(243, 156, 18, 0.8)',
+                            'rgba(156, 39, 176, 0.8)'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#ddd',
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Medicine Categories Chart
+            const medicineCtx = document.getElementById('medicineChart').getContext('2d');
+            medicineChart = new Chart(medicineCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Prescription', 'OTC', 'Medical Devices', 'Supplements'],
+                    datasets: [{
+                        data: [45, 30, 15, 10],
+                        backgroundColor: [
+                            'rgba(42, 107, 156, 0.8)',
+                            'rgba(76, 175, 80, 0.8)',
+                            'rgba(243, 156, 18, 0.8)',
+                            'rgba(156, 39, 176, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#ddd',
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize charts
+        initCharts();
+
+        // Period selector functionality
+        const periodButtons = document.querySelectorAll('.btn-group .btn');
+        periodButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                periodButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const period = this.getAttribute('data-period');
+                updateCharts(period);
+            });
+        });
+
+        function updateCharts(period) {
+            // Simulate data update based on period
+            let revenueData, appointmentData;
+            
+            switch(period) {
+                case 'month':
+                    revenueData = [32000, 35000, 38000, 42000, 45000, 48000, 46000, 47000, 49000, 50000, 52000, 55000];
+                    appointmentData = [45, 52, 48, 55, 50, 25];
+                    break;
+                case 'quarter':
+                    revenueData = [125000, 135000, 142000, 148000];
+                    appointmentData = [480, 520, 490, 510];
+                    break;
+                case 'year':
+                    revenueData = [420000, 480000, 520000, 580000];
+                    appointmentData = [5200, 5800, 6200, 6800];
+                    break;
+            }
+            
+            revenueChart.data.datasets[0].data = revenueData;
+            revenueChart.update();
+            
+            // Show loading effect
+            Swal.fire({
+                title: 'Updating Data',
+                text: 'Loading ' + period + 'ly statistics...',
+                icon: 'info',
+                showConfirmButton: false,
+                timer: 800
+            });
+        }
+
+        // Quick stats animation
+        function animateValue(id, start, end, duration) {
+            const obj = document.getElementById(id);
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // Animate stats on page load
+        setTimeout(() => {
+            animateValue('todayAppointments', 0, 18, 1000);
+            animateValue('totalPatients', 0, 1248, 1500);
+            animateValue('monthlyRevenue', 0, 48256, 2000);
+        }, 500);
+
+        // System alert interactions
+        document.querySelectorAll('.alert').forEach(alert => {
+            alert.addEventListener('click', function() {
+                const alertType = this.classList.contains('alert-warning') ? 'Low Stock' : 
+                                this.classList.contains('alert-danger') ? 'Out of Stock' :
+                                this.classList.contains('alert-info') ? 'Cancellations' : 'System Status';
+                
+                Swal.fire({
+                    title: alertType + ' Details',
+                    text: 'View detailed information about this alert.',
+                    icon: 'info',
+                    confirmButtonText: 'View Details',
+                    confirmButtonColor: 'var(--med-primary)'
+                });
+            });
+        });
+
+        // Patient view buttons
+        document.querySelectorAll('.btn-outline-info').forEach(btn => {
+            btn.addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Patient Details',
+                    text: 'View complete patient information and history.',
+                    icon: 'info',
+                    confirmButtonText: 'Open Patient Profile',
+                    confirmButtonColor: 'var(--med-primary)'
+                });
+            });
+        });
+
+        // Real-time updates simulation
+        setInterval(() => {
+            // Simulate live data updates
+            const appointmentsElement = document.querySelector('.card-body h3.mb-0');
+            const currentAppointments = parseInt(appointmentsElement.textContent);
+            
+            // Random small fluctuation
+            const fluctuation = Math.random() > 0.5 ? 1 : -1;
+            const newValue = Math.max(0, currentAppointments + fluctuation);
+            
+            if (newValue !== currentAppointments) {
+                appointmentsElement.textContent = newValue;
+                
+                // Add visual feedback
+                appointmentsElement.style.color = fluctuation > 0 ? 'var(--med-accent)' : 'var(--med-alert)';
+                setTimeout(() => {
+                    appointmentsElement.style.color = '';
+                }, 1000);
+            }
+        }, 10000); // Update every 10 seconds
+    });
+</script>
+
+{% endblock %}
