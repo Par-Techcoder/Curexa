@@ -8,7 +8,7 @@ class Medicine(BaseModel):
     medicine_image = models.ImageField(upload_to='static/images/medicines/', blank=True, null=True)
     category = models.ForeignKey('medistore.Category', on_delete=models.CASCADE, related_name='fk_category_medicines_category_id')
     classification = models.IntegerField(
-        choices=[(tag.name, tag.value) for tag in DosageForm],
+        choices=[(tag.value, tag.name) for tag in DosageForm],
         default=DosageForm.TABLET.value, 
         null=False, blank=False
     )

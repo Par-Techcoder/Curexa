@@ -3,19 +3,30 @@ from apps.accounts.models.users_model import User
 from apps.core.models.address_model import AddressModel
 from apps.core.constants.default_values import Gender
 
-class Profile(User, AddressModel):
-    dob = models.DateField(blank=True, null=True)
-    gender = models.IntegerField(   
-        choices=[(gender.value, gender.name) for gender in Gender],
-        null=True, blank=True
+
+class PatientProfile(AddressModel):
+    patient = models.OneToOneField(
+        'accounts.User',
+        on_delete=models.CASCADE,
+        related_name='patient_profile'
     )
-    profile_picture = models.ImageField(upload_to='static/images/profile_pictures/', blank=True, null=True)
+    dob = models.DateField(blank=True, null=True)
+    gender = models.IntegerField(
+        choices=[(gender.value, gender.name) for gender in Gender],
+        null=True,
+        blank=True
+    )
+    profile_picture = models.ImageField(
+        upload_to='static/images/profile_pictures/',
+        blank=True,
+        null=True
+    )
     phone_number = models.CharField(max_length=15, blank=True, null=True)
 
     class Meta:
-        db_table = 'profiles'
-        verbose_name = 'Profile'
-        verbose_name_plural = 'Profiles'
+        db_table = 'patients'
+        verbose_name = 'Patient Profile'
+        verbose_name_plural = 'Patient Profiles'
 
     def __str__(self):
-        return f"ID:{self.id}, Profile of {self.get_full_name()} | Email: {self.email} | Active: {self.is_active}"
+        return f"Profile of {self.patient.get_full_name()} | Email: {self.patient.email} | Active: {self.patient.is_active}"

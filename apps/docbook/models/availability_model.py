@@ -14,4 +14,4 @@ class Availability(BaseModel):
         ordering = ['day_of_week', 'start_time']
 
     def __str__(self):
-        return f"{self.doctor.user.get_full_name()} - {self.day_of_week} {self.start_time}-{self.end_time}"
+        return f"{self.doctor.get_full_name()} - {self.day_of_week} {self.start_time}-{self.end_time}"

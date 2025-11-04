@@ -29,4 +29,4 @@ class Appointment(BaseModel):
         ordering = ['appointment_date']
 
     def __str__(self):
-        return f"{self.patient.get_full_name()} - {self.doctor.user.get_full_name()} on {self.appointment_date}"
+        return f"{self.patient.get_full_name()} - {self.doctor.get_full_name()} on {self.appointment_date}"

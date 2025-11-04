@@ -19,4 +19,4 @@ class Qualification(BaseModel):
         unique_together = ('doctor', 'degree', 'institute')
 
     def __str__(self):
-        return f"Doctor: {self.doctor.get_full_name()} | Degree:{self.degree} | Active: {self.is_active}"
+        return f"Doctor: {self.doctor.doctor.get_full_name()} | Degree:{self.degree} | Active: {self.is_active}" # since doctor here refers to a DoctorProfile, whose doctor is the actual user

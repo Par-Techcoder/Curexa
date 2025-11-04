@@ -6,7 +6,7 @@ class Order(BaseModel):
     customer = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='fk_orders_orders_user_id')
     order_date = models.DateTimeField(auto_now_add=True)
     order_status = models.IntegerField(
-        choices=[(status, status.value) for status in OrderStatus ],
+        choices=[(status.value, status.name) for status in OrderStatus],
         default=OrderStatus.PROCESSING.value,
     )
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Total Amount")
@@ -18,5 +18,5 @@ class Order(BaseModel):
         ordering = ['-order_date']
 
     def __str__(self):
-        return f"Order {self.id} by {self.customer_name}"
+        return f"Order {self.id} by {self.customer.get_full_name()}"
     
