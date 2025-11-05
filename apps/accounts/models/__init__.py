@@ -1,2 +1,2 @@
 from .users_model import *
-from .profile_model import *
+from .patientprofile_model import *

@@ -25,7 +25,8 @@ INSTALLED_APPS = [
     'apps.docbook',
     'apps.doctors',
     'apps.medistore',
-    'apps.orders',    
+    'apps.orders',
+    'apps.labtests'
 ]
 
 MIDDLEWARE = [

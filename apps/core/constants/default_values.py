@@ -54,8 +54,13 @@ class ResponseMessageType(Enum):
     SUCCESS = "success"
     ERROR = "error"
     WARNING = "warning"
-    INFO = "info"    
-    
+    INFO = "info"
+
+class TestBookingStatus(Enum):
+        PENDING = 1
+        COMPLETED =2
+        CANCELLED = 3
+
 DAYS_OF_WEEK = [
     ('Monday', 'Monday'),
     ('Tuesday', 'Tuesday'),
@@ -65,3 +70,10 @@ DAYS_OF_WEEK = [
     ('Saturday', 'Saturday'),
     ('Sunday', 'Sunday'),
 ]    
+
+TEST_CATEGORY = [
+    ('blood', 'Blood Test'),
+    ('urine', 'Urine Test'),
+    ('imaging', 'Imaging'),
+    ('other', 'Other'),
+]
