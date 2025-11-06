@@ -1,13 +1,15 @@
 from django.db import models
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 from apps.core.models.base_model import BaseModel
 
 class InvoiceModel(BaseModel):
-    order = models.ForeignKey(
-        'orders.Order', on_delete=models.CASCADE, related_name='fk_orders_invoices_order_id'
-    )
-    user = models.ForeignKey(
-        'accounts.User', on_delete=models.CASCADE, related_name='fk_user_invoices_user_id'
-    )
+    user = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='invoices')
+
+    # Generic relation to Order, TestBooking, Appointment
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.UUIDField()
+    content_object = GenericForeignKey('content_type', 'object_id')
 
     invoice_number = models.CharField(max_length=20, unique=True)
     billing_address = models.TextField(null=True, blank=True)
@@ -25,4 +27,4 @@ class InvoiceModel(BaseModel):
         ordering = ['-issued_at']
 
     def __str__(self):
-        return f"Invoice #{self.invoice_number} for Order #{self.order_id}"
+        return f"Invoice #{self.invoice_number} for {self.content_object}"
