@@ -6,7 +6,11 @@ class Medicine(BaseModel):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     medicine_image = models.ImageField(upload_to='static/images/medicines/', blank=True, null=True)
-    category = models.ForeignKey('medistore.Category', on_delete=models.CASCADE, related_name='fk_category_medicines_category_id')
+    category = models.ForeignKey(
+        'medistore.Category',
+        on_delete=models.CASCADE,
+        related_name='fk_category_medicines_category_id'
+    )
     classification = models.IntegerField(
         choices=[(tag.value, tag.name) for tag in DosageForm],
         default=DosageForm.TABLET.value, 
