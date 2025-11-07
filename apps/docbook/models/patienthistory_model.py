@@ -3,14 +3,14 @@ from apps.core.models.base_model import BaseModel
 
 class PatientHistory(BaseModel):
     doctor = models.ForeignKey(
-        'accounts.User',
+        'doctors.DoctorProfile',
         on_delete=models.CASCADE,
-        related_name='fk_doctor_patient_history_user_id'
+        related_name='fk_doctor_patient_history_doctor_id'
     )
     patient = models.ForeignKey(
-        'accounts.User',
+        'accounts.PatientProfile',
         on_delete=models.CASCADE,
-        related_name='fk_patient_patient_history_user_id'
+        related_name='fk_patient_patient_history_patient_id'
     )
     diagnosis_date = models.DateField(null=True, blank=True)
 

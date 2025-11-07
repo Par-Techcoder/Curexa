@@ -3,7 +3,11 @@ from apps.core.models.base_model import BaseModel
 from apps.core.constants.default_values import OrderStatus
 
 class Order(BaseModel):
-    customer = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='fk_orders_orders_user_id')
+    patient = models.ForeignKey(
+        'accounts.PatientProfile',
+        on_delete=models.CASCADE,
+        related_name='fk_patient_orders_patient_id'
+    )
     order_date = models.DateTimeField(auto_now_add=True)
     order_status = models.IntegerField(
         choices=[(status.value, status.name) for status in OrderStatus],

@@ -5,9 +5,9 @@ from apps.core.constants.default_values import TestBookingStatus
 class TestBooking(BaseModel):
 
     patient = models.ForeignKey(
-        'accounts.User',
+        'accounts.PatientProfile',
         on_delete=models.CASCADE,
-        related_name='fk_patient_testbooking_user_id'
+        related_name='fk_patient_testbooking_patient_id'
     )
     test = models.ForeignKey(
         'labtests.MedicalTest',

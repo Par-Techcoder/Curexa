@@ -10,14 +10,14 @@ class Appointment(BaseModel):
         default=AppointmentStatus.PENDING.value
     )
     patient = models.ForeignKey(
-        'accounts.User',
+        'accounts.PatientProfile',
         on_delete=models.CASCADE,
-        related_name='fk_patient_appointment_user_id'
+        related_name='fk_patient_appointment_patient_id'
     )
     doctor = models.ForeignKey(
-        'accounts.User',
+        'doctors.DoctorProfile',
         on_delete=models.CASCADE,
-        related_name='fk_doctor_appointment_user_id'
+        related_name='fk_doctor_appointments_doctor_id'
     )
     
     notes = models.TextField(max_length=255, blank=True, null=True)

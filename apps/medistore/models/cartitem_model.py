@@ -9,9 +9,9 @@ class CartItem(BaseModel):
     )
     quantity = models.PositiveIntegerField(default=1)
     cart_owner = models.ForeignKey(
-        'accounts.User', 
+        'accounts.PatientProfile',
         on_delete=models.CASCADE, 
-        related_name='fk_performed_cart_items_user_id'
+        related_name='fk_performed_cart_items_ppatient_id'
     )
 
     class Meta:

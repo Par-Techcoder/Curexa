@@ -4,7 +4,11 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from apps.core.models.base_model import BaseModel
 
 class InvoiceModel(BaseModel):
-    user = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='invoices')
+    patient = models.ForeignKey(
+        'accounts.PatientProfile',
+        on_delete=models.CASCADE,
+        related_name='fk_patient_invoices_patient_id'
+    )
 
     # Generic relation to Order, TestBooking, Appointment
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
