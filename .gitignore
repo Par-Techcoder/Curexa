@@ -22,6 +22,6 @@ Thumbs.db
 # python Environment file
 .env
 
-# Django migration files
+# Ignore all migration files completely
 **/migrations/
-!**/migrations/__init__.py
+
