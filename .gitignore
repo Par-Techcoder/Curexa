@@ -21,3 +21,7 @@ Thumbs.db
 
 # python Environment file
 .env
+
+# Django migration files
+**/migrations/
+!**/migrations/__init__.py
