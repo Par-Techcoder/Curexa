@@ -10,6 +10,8 @@ class PatientProfile(AddressModel):
         on_delete=models.CASCADE,
         related_name='patient_profile'
     )
+    allergies=models.TextField(blank=True, null=True)
+    chronic_conditions=models.TextField(blank=True, null=True)
     dob = models.DateField(blank=True, null=True)
     gender = models.IntegerField(
         choices=[(gender.value, gender.name) for gender in Gender],

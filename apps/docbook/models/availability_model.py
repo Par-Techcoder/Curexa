@@ -8,6 +8,7 @@ class Availability(BaseModel):
         on_delete=models.CASCADE,
         related_name='fk_doctor_availabilities_doctor_id'
     )
+    is_available = models.BooleanField(default=True)
     day_of_week = models.CharField(max_length=9 , choices=DAYS_OF_WEEK)
     start_time = models.TimeField()
     end_time = models.TimeField()

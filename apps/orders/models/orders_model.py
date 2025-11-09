@@ -22,5 +22,5 @@ class Order(BaseModel):
         ordering = ['-order_date']
 
     def __str__(self):
-        return f"Order {self.id} by {self.customer.get_full_name()}"
+        return f"Order {self.id} by {self.patient.patient.get_full_name()}"
     

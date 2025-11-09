@@ -7,12 +7,12 @@ class CartItem(BaseModel):
         on_delete=models.CASCADE, 
         related_name='fk_medicine_cart_items_medicine_id'
     )
-    quantity = models.PositiveIntegerField(default=1)
-    cart_owner = models.ForeignKey(
-        'accounts.PatientProfile',
+    cart = models.ForeignKey(
+        'medistore.Cart',
         on_delete=models.CASCADE, 
-        related_name='fk_performed_cart_items_ppatient_id'
+        related_name='fk_cart_cart_items_cart_id'
     )
+    quantity = models.PositiveIntegerField(default=1)
 
     class Meta:
         db_table = 'cart_items'
@@ -20,4 +20,4 @@ class CartItem(BaseModel):
         verbose_name_plural = 'Cart Items'
 
     def __str__(self):
-        return f"{self.medicine.name} | Quantity: {self.quantity} | User: {self.cart_owner.get_full_name()}"
+        return f"{self.medicine.name} | Quantity: {self.quantity} | Cart Owner: {self.cart.user.get_full_name()}"
