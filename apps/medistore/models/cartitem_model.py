@@ -20,4 +20,4 @@ class CartItem(BaseModel):
         verbose_name_plural = 'Cart Items'
 
     def __str__(self):
-        return f"{self.medicine.name} | Quantity: {self.quantity} | Cart Owner: {self.cart.user.get_full_name()}"
+        return f"{self.medicine.name} | Quantity: {self.quantity} | Cart Owner: {self.cart.cart_owner.patient.get_full_name()}"
