@@ -9,6 +9,11 @@ class Role(Enum):
     ADMIN = 1
     PATIENT = 2
     DOCTOR = 3
+    
+class AppointmentType(Enum):
+    CONSULTATION = 1
+    FOLLOW_UP = 2
+    EMERGENCY = 3
 
 class AppointmentStatus(Enum):
     PENDING = 1

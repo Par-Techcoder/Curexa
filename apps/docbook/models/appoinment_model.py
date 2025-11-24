@@ -1,8 +1,12 @@
 from django.db import models
 from apps.core.models.base_model import BaseModel
-from apps.core.constants.default_values import AppointmentStatus
+from apps.core.constants.default_values import AppointmentType, AppointmentStatus
 
 class Appointment(BaseModel):
+    appointment_types = models.IntegerField(
+        choices=[(status.value, status.name) for status in AppointmentType],
+        default=AppointmentType.CONSULTATION.value
+    )
     appointment_date = models.DateField()
     appointment_time = models.TimeField()
     appointment_status = models.IntegerField(
