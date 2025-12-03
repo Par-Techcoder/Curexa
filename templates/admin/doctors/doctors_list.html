@@ -1,436 +1,579 @@
-{% extends 'admin/base.html' %}
-{% load static %}
+{% extends 'admin/base.html' %} {% load static %} 
+{% block title %}Doctors - Curexa Admin{% endblock %} 
 
-{% block title %}Doctors - Curexa Admin{% endblock %}
-
-
+{% block page_header %}
+<!-- Breadcrumb above title -->
+<div class="breadcrumb-above-title">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+      <li class="breadcrumb-item">
+        <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Doctors</li>
+    </ol>
+  </nav>
+</div>
+{% endblock %}
 
 {% block content %}
-<!-- Breadcrumb navigation -->
-    <ol class="breadcrumb mb-0">
-        <li class="breadcrumb-item"><a href="#" class="text-white">Dashboard</a></li>
-        <li class="breadcrumb-item active text-light" aria-current="page">Doctors</li>
-    </ol>
 <div class="row">
-    <div class="col-12">
-        <div class="page-title-section">
-            <h2><i class="fas fa-user-md me-2"></i>Doctor Management</h2>
-        </div>
+  <div class="col-12">
+    <div class="page-title-section">
+      <h2><i class="fas fa-user-md me-2"></i>Doctor Management</h2>
     </div>
+  </div>
 </div>
 
 <!-- Quick Stats Row - MOVED TO TOP -->
 <div class="row mt-4">
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card medical-border h-100">
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-8">
-                        <h5 class="card-title stats-number">12</h5>
-                        <p class="card-text stats-label">Total Doctors</p>
-                    </div>
-                    <div class="col-4 text-end">
-                        <i class="fas fa-user-md card-icon text-primary"></i>
-                    </div>
-                </div>
-            </div>
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card medical-border h-100">
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col-8">
+            <h5 class="card-title stats-number">12</h5>
+            <p class="card-text stats-label">Total Doctors</p>
+          </div>
+          <div class="col-4 text-end">
+            <i class="fas fa-user-md card-icon text-primary"></i>
+          </div>
         </div>
+      </div>
     </div>
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card medical-border h-100">
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-8">
-                        <h5 class="card-title stats-number">9</h5>
-                        <p class="card-text stats-label">Active Today</p>
-                    </div>
-                    <div class="col-4 text-end">
-                        <i class="fas fa-check-circle card-icon text-success"></i>
-                    </div>
-                </div>
-            </div>
+  </div>
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card medical-border h-100">
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col-8">
+            <h5 class="card-title stats-number">9</h5>
+            <p class="card-text stats-label">Active Today</p>
+          </div>
+          <div class="col-4 text-end">
+            <i class="fas fa-check-circle card-icon text-success"></i>
+          </div>
         </div>
+      </div>
     </div>
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card medical-border h-100">
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-8">
-                        <h5 class="card-title stats-number">3</h5>
-                        <p class="card-text stats-label">On Leave</p>
-                    </div>
-                    <div class="col-4 text-end">
-                        <i class="fas fa-bed card-icon text-warning"></i>
-                    </div>
-                </div>
-            </div>
+  </div>
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card medical-border h-100">
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col-8">
+            <h5 class="card-title stats-number">3</h5>
+            <p class="card-text stats-label">On Leave</p>
+          </div>
+          <div class="col-4 text-end">
+            <i class="fas fa-bed card-icon text-warning"></i>
+          </div>
         </div>
+      </div>
     </div>
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card medical-border h-100">
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-8">
-                        <h5 class="card-title stats-number">6</h5>
-                        <p class="card-text stats-label">Specializations</p>
-                    </div>
-                    <div class="col-4 text-end">
-                        <i class="fas fa-stethoscope card-icon text-info"></i>
-                    </div>
-                </div>
-            </div>
+  </div>
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card medical-border h-100">
+      <div class="card-body">
+        <div class="row align-items-center">
+          <div class="col-8">
+            <h5 class="card-title stats-number">6</h5>
+            <p class="card-text stats-label">Specializations</p>
+          </div>
+          <div class="col-4 text-end">
+            <i class="fas fa-stethoscope card-icon text-info"></i>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <div class="row mb-4">
-    <div class="col-md-6">
-        <div class="d-flex">
-            <input type="text" class="form-control me-2" placeholder="Search doctors..." id="searchInput">
-            <button class="btn btn-primary" id="searchButton">
-                <i class="bi bi-search"></i>
-            </button>
-        </div>
+  <div class="col-md-6">
+    <div class="d-flex">
+      <input
+        type="text"
+        class="form-control me-2"
+        placeholder="Search doctors..."
+        id="searchInput"
+      />
+      <button class="btn btn-primary" id="searchButton">
+        <i class="bi bi-search"></i>
+      </button>
     </div>
-    <div class="col-md-6 text-end">
-        <a href="{% url 'doctor_add' %}" class="btn btn-success">
-            <i class="fas fa-user-plus me-1"></i> Add New Doctor
-        </a>
-        <div class="btn-group ms-2">
-            <button type="button" class="btn btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fas fa-filter me-1"></i> Filter
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#" data-filter="all">All Doctors</a></li>
-                <li><a class="dropdown-item" href="#" data-filter="active">Active</a></li>
-                <li><a class="dropdown-item" href="#" data-filter="on_leave">On Leave</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#" data-filter="cardiology">Cardiology</a></li>
-                <li><a class="dropdown-item" href="#" data-filter="neurology">Neurology</a></li>
-                <li><a class="dropdown-item" href="#" data-filter="orthopedics">Orthopedics</a></li>
-                <li><a class="dropdown-item" href="#" data-filter="pediatrics">Pediatrics</a></li>
-            </ul>
-        </div>
+  </div>
+  <div class="col-md-6 text-end">
+    <a href="{% url 'doctor_add' %}" class="btn btn-success">
+      <i class="fas fa-user-plus me-1"></i> Add New Doctor
+    </a>
+    <div class="btn-group ms-2">
+      <button
+        type="button"
+        class="btn btn-outline-light dropdown-toggle"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <i class="fas fa-filter me-1"></i> Filter
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li>
+          <a class="dropdown-item" href="#" data-filter="all">All Doctors</a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="#" data-filter="active">Active</a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="#" data-filter="on_leave">On Leave</a>
+        </li>
+        <li><hr class="dropdown-divider" /></li>
+        <li>
+          <a class="dropdown-item" href="#" data-filter="cardiology"
+            >Cardiology</a
+          >
+        </li>
+        <li>
+          <a class="dropdown-item" href="#" data-filter="neurology"
+            >Neurology</a
+          >
+        </li>
+        <li>
+          <a class="dropdown-item" href="#" data-filter="orthopedics"
+            >Orthopedics</a
+          >
+        </li>
+        <li>
+          <a class="dropdown-item" href="#" data-filter="pediatrics"
+            >Pediatrics</a
+          >
+        </li>
+      </ul>
     </div>
+  </div>
 </div>
 
 <div class="row">
-    <div class="col-12">
-        <div class="card medical-border">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover table" id="doctorsTable">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Doctor</th>
-                                <th>Specialization</th>
-                                <th>Contact</th>
-                                <th>Status</th>
-                                <th>Appointments</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>DR001</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <img src="{% static 'images/doctor1.jpg' %}" alt="Doctor" class="rounded-circle me-2" width="40" height="40">
-                                        <div>
-                                            <div>Dr. Sarah Johnson</div>
-                                            <small class="text-muted">MD, Cardiology</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>Cardiology</td>
-                                <td>sarah.j@example.com<br><small>(555) 123-4567</small></td>
-                                <td><span class="badge bg-success">Active</span></td>
-                                <td>
-                                    <div class="progress" style="height: 8px;">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <small>15/20 today</small>
-                                </td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-outline-info" title="View Profile">
-                                            <i class="bi bi-eye"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-warning" title="Edit">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-light" title="Schedule">
-                                            <i class="bi bi-calendar"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>DR002</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <img src="{% static 'images/doctor2.jpg' %}" alt="Doctor" class="rounded-circle me-2" width="40" height="40">
-                                        <div>
-                                            <div>Dr. Michael Chen</div>
-                                            <small class="text-muted">MD, Neurology</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>Neurology</td>
-                                <td>m.chen@example.com<br><small>(555) 987-6543</small></td>
-                                <td><span class="badge bg-success">Active</span></td>
-                                <td>
-                                    <div class="progress" style="height: 8px;">
-                                        <div class="progress-bar bg-info" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <small>12/20 today</small>
-                                </td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-outline-info" title="View Profile">
-                                            <i class="bi bi-eye"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-warning" title="Edit">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-light" title="Schedule">
-                                            <i class="bi bi-calendar"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>DR003</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <img src="{% static 'images/doctor3.jpg' %}" alt="Doctor" class="rounded-circle me-2" width="40" height="40">
-                                        <div>
-                                            <div>Dr. Anita Patel</div>
-                                            <small class="text-muted">MD, Pediatrics</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>Pediatrics</td>
-                                <td>a.patel@example.com<br><small>(555) 456-7890</small></td>
-                                <td><span class="badge bg-warning">On Leave</span></td>
-                                <td>
-                                    <div class="progress" style="height: 8px;">
-                                        <div class="progress-bar bg-secondary" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <small>0/15 today</small>
-                                </td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-outline-info" title="View Profile">
-                                            <i class="bi bi-eye"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-warning" title="Edit">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-light" title="Schedule">
-                                            <i class="bi bi-calendar"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>DR004</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <img src="{% static 'images/doctor4.jpg' %}" alt="Doctor" class="rounded-circle me-2" width="40" height="40">
-                                        <div>
-                                            <div>Dr. James Williams</div>
-                                            <small class="text-muted">MD, Orthopedics</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>Orthopedics</td>
-                                <td>j.williams@example.com<br><small>(555) 234-5678</small></td>
-                                <td><span class="badge bg-success">Active</span></td>
-                                <td>
-                                    <div class="progress" style="height: 8px;">
-                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <small>17/20 today</small>
-                                </td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-outline-info" title="View Profile">
-                                            <i class="bi bi-eye"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-warning" title="Edit">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-light" title="Schedule">
-                                            <i class="bi bi-calendar"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>DR005</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <img src="{% static 'images/doctor5.jpg' %}" alt="Doctor" class="rounded-circle me-2" width="40" height="40">
-                                        <div>
-                                            <div>Dr. Emily Rodriguez</div>
-                                            <small class="text-muted">MD, Dermatology</small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>Dermatology</td>
-                                <td>e.rodriguez@example.com<br><small>(555) 876-5432</small></td>
-                                <td><span class="badge bg-success">Active</span></td>
-                                <td>
-                                    <div class="progress" style="height: 8px;">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <small>14/20 today</small>
-                                </td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-outline-info" title="View Profile">
-                                            <i class="bi bi-eye"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-warning" title="Edit">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-light" title="Schedule">
-                                            <i class="bi bi-calendar"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <!-- Pagination -->
-                <nav aria-label="Doctor pagination">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">Previous</a>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+  <div class="col-12">
+    <div class="card medical-border">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover table" id="doctorsTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Doctor</th>
+                <th>Specialization</th>
+                <th>Contact</th>
+                <th>Status</th>
+                <th>Appointments</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>DR001</td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <img
+                      src="{% static 'images/doctor1.jpg' %}"
+                      alt="Doctor"
+                      class="rounded-circle me-2"
+                      width="40"
+                      height="40"
+                    />
+                    <div>
+                      <div>Dr. Sarah Johnson</div>
+                      <small class="text-muted">MD, Cardiology</small>
+                    </div>
+                  </div>
+                </td>
+                <td>Cardiology</td>
+                <td>sarah.j@example.com<br /><small>(555) 123-4567</small></td>
+                <td><span class="badge bg-success">Active</span></td>
+                <td>
+                  <div class="progress" style="height: 8px">
+                    <div
+                      class="progress-bar bg-success"
+                      role="progressbar"
+                      style="width: 75%"
+                      aria-valuenow="75"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    ></div>
+                  </div>
+                  <small>15/20 today</small>
+                </td>
+                <td>
+                  <div class="btn-group">
+                    <button
+                      class="btn btn-sm btn-outline-info"
+                      title="View Profile"
+                    >
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-warning" title="Edit">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button
+                      class="btn btn-sm btn-outline-light"
+                      title="Schedule"
+                    >
+                      <i class="bi bi-calendar"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>DR002</td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <img
+                      src="{% static 'images/doctor2.jpg' %}"
+                      alt="Doctor"
+                      class="rounded-circle me-2"
+                      width="40"
+                      height="40"
+                    />
+                    <div>
+                      <div>Dr. Michael Chen</div>
+                      <small class="text-muted">MD, Neurology</small>
+                    </div>
+                  </div>
+                </td>
+                <td>Neurology</td>
+                <td>m.chen@example.com<br /><small>(555) 987-6543</small></td>
+                <td><span class="badge bg-success">Active</span></td>
+                <td>
+                  <div class="progress" style="height: 8px">
+                    <div
+                      class="progress-bar bg-info"
+                      role="progressbar"
+                      style="width: 60%"
+                      aria-valuenow="60"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    ></div>
+                  </div>
+                  <small>12/20 today</small>
+                </td>
+                <td>
+                  <div class="btn-group">
+                    <button
+                      class="btn btn-sm btn-outline-info"
+                      title="View Profile"
+                    >
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-warning" title="Edit">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button
+                      class="btn btn-sm btn-outline-light"
+                      title="Schedule"
+                    >
+                      <i class="bi bi-calendar"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>DR003</td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <img
+                      src="{% static 'images/doctor3.jpg' %}"
+                      alt="Doctor"
+                      class="rounded-circle me-2"
+                      width="40"
+                      height="40"
+                    />
+                    <div>
+                      <div>Dr. Anita Patel</div>
+                      <small class="text-muted">MD, Pediatrics</small>
+                    </div>
+                  </div>
+                </td>
+                <td>Pediatrics</td>
+                <td>a.patel@example.com<br /><small>(555) 456-7890</small></td>
+                <td><span class="badge bg-warning">On Leave</span></td>
+                <td>
+                  <div class="progress" style="height: 8px">
+                    <div
+                      class="progress-bar bg-secondary"
+                      role="progressbar"
+                      style="width: 0%"
+                      aria-valuenow="0"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    ></div>
+                  </div>
+                  <small>0/15 today</small>
+                </td>
+                <td>
+                  <div class="btn-group">
+                    <button
+                      class="btn btn-sm btn-outline-info"
+                      title="View Profile"
+                    >
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-warning" title="Edit">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button
+                      class="btn btn-sm btn-outline-light"
+                      title="Schedule"
+                    >
+                      <i class="bi bi-calendar"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>DR004</td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <img
+                      src="{% static 'images/doctor4.jpg' %}"
+                      alt="Doctor"
+                      class="rounded-circle me-2"
+                      width="40"
+                      height="40"
+                    />
+                    <div>
+                      <div>Dr. James Williams</div>
+                      <small class="text-muted">MD, Orthopedics</small>
+                    </div>
+                  </div>
+                </td>
+                <td>Orthopedics</td>
+                <td>
+                  j.williams@example.com<br /><small>(555) 234-5678</small>
+                </td>
+                <td><span class="badge bg-success">Active</span></td>
+                <td>
+                  <div class="progress" style="height: 8px">
+                    <div
+                      class="progress-bar bg-warning"
+                      role="progressbar"
+                      style="width: 85%"
+                      aria-valuenow="85"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    ></div>
+                  </div>
+                  <small>17/20 today</small>
+                </td>
+                <td>
+                  <div class="btn-group">
+                    <button
+                      class="btn btn-sm btn-outline-info"
+                      title="View Profile"
+                    >
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-warning" title="Edit">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button
+                      class="btn btn-sm btn-outline-light"
+                      title="Schedule"
+                    >
+                      <i class="bi bi-calendar"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>DR005</td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <img
+                      src="{% static 'images/doctor5.jpg' %}"
+                      alt="Doctor"
+                      class="rounded-circle me-2"
+                      width="40"
+                      height="40"
+                    />
+                    <div>
+                      <div>Dr. Emily Rodriguez</div>
+                      <small class="text-muted">MD, Dermatology</small>
+                    </div>
+                  </div>
+                </td>
+                <td>Dermatology</td>
+                <td>
+                  e.rodriguez@example.com<br /><small>(555) 876-5432</small>
+                </td>
+                <td><span class="badge bg-success">Active</span></td>
+                <td>
+                  <div class="progress" style="height: 8px">
+                    <div
+                      class="progress-bar bg-success"
+                      role="progressbar"
+                      style="width: 70%"
+                      aria-valuenow="70"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    ></div>
+                  </div>
+                  <small>14/20 today</small>
+                </td>
+                <td>
+                  <div class="btn-group">
+                    <button
+                      class="btn btn-sm btn-outline-info"
+                      title="View Profile"
+                    >
+                      <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-warning" title="Edit">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <button
+                      class="btn btn-sm btn-outline-light"
+                      title="Schedule"
+                    >
+                      <i class="bi bi-calendar"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Doctor pagination">
+          <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+              <a class="page-link" href="#" tabindex="-1">Previous</a>
+            </li>
+            <li class="page-item active">
+              <a class="page-link" href="#">1</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#">Next</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </div>
+  </div>
 </div>
 
 <style>
-    .table th {
-        border-top: none;
-        border-bottom: 1px solid var(--med-primary);
-        font-weight: 600;
-    }
-    
-    .table-hover tbody tr:hover {
-        background-color: rgba(42, 107, 156, 0.2);
-        cursor: pointer;
-    }
-    
-    .badge {
-        font-size: 0.8em;
-        padding: 0.4em 0.6em;
-    }
-    
-    .progress {
-        background-color: rgba(255, 255, 255, 0.1);
-        width: 100px;
-    }
+  .table th {
+    border-top: none;
+    border-bottom: 1px solid var(--med-primary);
+    font-weight: 600;
+  }
+
+  .table-hover tbody tr:hover {
+    background-color: rgba(42, 107, 156, 0.2);
+    cursor: pointer;
+  }
+
+  .badge {
+    font-size: 0.8em;
+    padding: 0.4em 0.6em;
+  }
+
+  .progress {
+    background-color: rgba(255, 255, 255, 0.1);
+    width: 100px;
+  }
 </style>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Search functionality
-        const searchInput = document.getElementById('searchInput');
-        const searchButton = document.getElementById('searchButton');
-        const table = document.getElementById('doctorsTable');
-        const rows = table.getElementsByTagName('tr');
-        
-        function performSearch() {
-            const searchText = searchInput.value.toLowerCase();
-            
-            for (let i = 1; i < rows.length; i++) {
-                const row = rows[i];
-                let found = false;
-                
-                for (let j = 0; j < row.cells.length; j++) {
-                    const cellText = row.cells[j].textContent.toLowerCase();
-                    if (cellText.includes(searchText)) {
-                        found = true;
-                        break;
-                    }
-                }
-                
-                if (found) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            }
+  document.addEventListener("DOMContentLoaded", function () {
+    // Search functionality
+    const searchInput = document.getElementById("searchInput");
+    const searchButton = document.getElementById("searchButton");
+    const table = document.getElementById("doctorsTable");
+    const rows = table.getElementsByTagName("tr");
+
+    function performSearch() {
+      const searchText = searchInput.value.toLowerCase();
+
+      for (let i = 1; i < rows.length; i++) {
+        const row = rows[i];
+        let found = false;
+
+        for (let j = 0; j < row.cells.length; j++) {
+          const cellText = row.cells[j].textContent.toLowerCase();
+          if (cellText.includes(searchText)) {
+            found = true;
+            break;
+          }
         }
-        
-        searchButton.addEventListener('click', performSearch);
-        searchInput.addEventListener('keyup', performSearch);
-        
-        // Filter functionality
-        const filterItems = document.querySelectorAll('.dropdown-item[data-filter]');
-        
-        filterItems.forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-                const filterValue = this.getAttribute('data-filter');
-                
-                for (let i = 1; i < rows.length; i++) {
-                    const row = rows[i];
-                    
-                    if (filterValue === 'all') {
-                        row.style.display = '';
-                    } else if (filterValue === 'active' || filterValue === 'on_leave') {
-                        const statusCell = row.cells[4];
-                        if (statusCell.textContent.toLowerCase().includes(filterValue)) {
-                            row.style.display = '';
-                        } else {
-                            row.style.display = 'none';
-                        }
-                    } else {
-                        // Specialization filter
-                        const specializationCell = row.cells[2];
-                        if (specializationCell.textContent.toLowerCase().includes(filterValue)) {
-                            row.style.display = '';
-                        } else {
-                            row.style.display = 'none';
-                        }
-                    }
-                }
-                
-                // Update dropdown text
-                document.querySelector('.dropdown-toggle').textContent = 'Filter: ' + this.textContent;
-            });
-        });
-        
-        // Row click to view doctor details
-        const tableRows = table.querySelectorAll('tbody tr');
-        tableRows.forEach(row => {
-            row.addEventListener('click', (e) => {
-                // Don't trigger if clicking on action buttons
-                if (!e.target.closest('.btn-group')) {
-                    const doctorId = row.cells[0].textContent;
-                    // In a real application, this would redirect to doctor details
-                    console.log(`Viewing doctor: ${doctorId}`);
-                    // window.location.href = `/doctor-details/${doctorId}/`;
-                }
-            });
-        });
+
+        if (found) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+      }
+    }
+
+    searchButton.addEventListener("click", performSearch);
+    searchInput.addEventListener("keyup", performSearch);
+
+    // Filter functionality
+    const filterItems = document.querySelectorAll(
+      ".dropdown-item[data-filter]"
+    );
+
+    filterItems.forEach((item) => {
+      item.addEventListener("click", function (e) {
+        e.preventDefault();
+        const filterValue = this.getAttribute("data-filter");
+
+        for (let i = 1; i < rows.length; i++) {
+          const row = rows[i];
+
+          if (filterValue === "all") {
+            row.style.display = "";
+          } else if (filterValue === "active" || filterValue === "on_leave") {
+            const statusCell = row.cells[4];
+            if (statusCell.textContent.toLowerCase().includes(filterValue)) {
+              row.style.display = "";
+            } else {
+              row.style.display = "none";
+            }
+          } else {
+            // Specialization filter
+            const specializationCell = row.cells[2];
+            if (
+              specializationCell.textContent.toLowerCase().includes(filterValue)
+            ) {
+              row.style.display = "";
+            } else {
+              row.style.display = "none";
+            }
+          }
+        }
+
+        // Update dropdown text
+        document.querySelector(".dropdown-toggle").textContent =
+          "Filter: " + this.textContent;
+      });
     });
+
+    // Row click to view doctor details
+    const tableRows = table.querySelectorAll("tbody tr");
+    tableRows.forEach((row) => {
+      row.addEventListener("click", (e) => {
+        // Don't trigger if clicking on action buttons
+        if (!e.target.closest(".btn-group")) {
+          const doctorId = row.cells[0].textContent;
+          // In a real application, this would redirect to doctor details
+          console.log(`Viewing doctor: ${doctorId}`);
+          // window.location.href = `/doctor-details/${doctorId}/`;
+        }
+      });
+    });
+  });
 </script>
 {% endblock %}
