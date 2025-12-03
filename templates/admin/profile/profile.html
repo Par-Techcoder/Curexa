@@ -1,0 +1,365 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+
+{% block title %}Admin Profile Management - Curexa Admin{% endblock %}
+
+{% block navbar_extra %}
+<!-- Breadcrumb navigation -->
+<nav aria-label="breadcrumb" class="ms-3">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="{% url 'admin_dashboard' %}" class="text-white">Dashboard</a></li>
+        <li class="breadcrumb-item active text-white">Profile</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="page-title-section">
+        <h2 class="mb-0"><i class="fas fa-user-circle me-2"></i>Admin Profile</h2>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card dashboard-card">
+                <div class="card-body">
+                    <div id="view-mode">
+                        <div class="profile-header mb-4">
+                            <div class="profile-avatar me-4">
+                                {% if user.first_name and user.last_name %}
+                                    {{ user.first_name|first }}{{ user.last_name|first }}
+                                {% else %}
+                                    {{ user.username|first|upper }}
+                                {% endif %}
+                                <div class="edit-overlay" data-bs-toggle="tooltip" title="Change Avatar">
+                                    <i class="fas fa-camera"></i>
+                                </div>
+                            </div>
+                            <div class="profile-info">
+                                <h2 class="mb-1">
+                                    {% if user.first_name and user.last_name %}
+                                        {{ user.first_name }} {{ user.last_name }}
+                                    {% else %}
+                                        {{ user.username }}
+                                    {% endif %}
+                                </h2>
+                                <p class="text-muted mb-2">Administrator</p>
+                                <span class="badge bg-success">Active</span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="detail-group mb-3">
+                                    <label class="form-label fw-bold">Full Name</label>
+                                    <div class="detail-value p-3 bg-light rounded">
+                                        {% if user.first_name and user.last_name %}
+                                            {{ user.first_name }} {{ user.last_name }}
+                                        {% else %}
+                                            Not set
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="detail-group mb-3">
+                                    <label class="form-label fw-bold">Email Address</label>
+                                    <div class="detail-value p-3 bg-light rounded">{{ user.email }}</div>
+                                </div>
+                                <div class="detail-group mb-3">
+                                    <label class="form-label fw-bold">Phone Number</label>
+                                    <div class="detail-value p-3 bg-light rounded">
+                                        {% if user.phone %}
+                                            {{ user.phone }}
+                                        {% else %}
+                                            Not set
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="detail-group mb-3">
+                                    <label class="form-label fw-bold">Username</label>
+                                    <div class="detail-value p-3 bg-light rounded">{{ user.username }}</div>
+                                </div>
+                                <div class="detail-group mb-3">
+                                    <label class="form-label fw-bold">Department</label>
+                                    <div class="detail-value p-3 bg-light rounded">
+                                        {% if user.department %}
+                                            {{ user.department }}
+                                        {% else %}
+                                            IT Administration
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="detail-group mb-3">
+                                    <label class="form-label fw-bold">Last Login</label>
+                                    <div class="detail-value p-3 bg-light rounded">
+                                        {% if user.last_login %}
+                                            {{ user.last_login|date:"F j, Y, g:i A" }}
+                                        {% else %}
+                                            Never
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="btn-group mt-4">
+                            <button class="btn btn-primary" id="edit-profile-btn">
+                                <i class="fas fa-edit me-2"></i> Edit Profile
+                            </button>
+                            <button class="btn btn-outline-secondary">
+                                <i class="fas fa-key me-2"></i> Change Password
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="edit-mode" class="d-none">
+                        <div class="alert alert-success d-flex align-items-center" role="alert" id="success-notification" style="display: none !important;">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <span>Profile updated successfully!</span>
+                        </div>
+
+                        <div class="profile-header mb-4">
+                            <div class="profile-avatar me-4">
+                                {% if user.first_name and user.last_name %}
+                                    {{ user.first_name|first }}{{ user.last_name|first }}
+                                {% else %}
+                                    {{ user.username|first|upper }}
+                                {% endif %}
+                                <div class="edit-overlay" data-bs-toggle="tooltip" title="Change Avatar">
+                                    <i class="fas fa-camera"></i>
+                                </div>
+                            </div>
+                            <div class="profile-info">
+                                <h2 class="mb-1">Edit Profile</h2>
+                                <p class="text-muted">Update your personal information</p>
+                            </div>
+                        </div>
+
+                        <form id="profile-form" method="POST" action="{% url 'admin_profile_update' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="first_name" class="form-label fw-bold">First Name</label>
+                                        <input type="text" id="first_name" name="first_name" class="form-control" 
+                                               value="{{ user.first_name|default:'' }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label fw-bold">Email Address</label>
+                                        <input type="email" id="email" name="email" class="form-control" 
+                                               value="{{ user.email }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="phone" class="form-label fw-bold">Phone Number</label>
+                                        <input type="text" id="phone" name="phone" class="form-control" 
+                                               value="{{ user.phone|default:'' }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="last_name" class="form-label fw-bold">Last Name</label>
+                                        <input type="text" id="last_name" name="last_name" class="form-control" 
+                                               value="{{ user.last_name|default:'' }}">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="department" class="form-label fw-bold">Department</label>
+                                        <select id="department" name="department" class="form-control">
+                                            <option value="IT Administration" {% if user.department == "IT Administration" %}selected{% endif %}>IT Administration</option>
+                                            <option value="Human Resources" {% if user.department == "Human Resources" %}selected{% endif %}>Human Resources</option>
+                                            <option value="Finance" {% if user.department == "Finance" %}selected{% endif %}>Finance</option>
+                                            <option value="Marketing" {% if user.department == "Marketing" %}selected{% endif %}>Marketing</option>
+                                            <option value="Operations" {% if user.department == "Operations" %}selected{% endif %}>Operations</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="bio" class="form-label fw-bold">Bio</label>
+                                        <textarea id="bio" name="bio" class="form-control" rows="3">{% if user.bio %}{{ user.bio }}{% else %}Senior administrator with experience in system management and user support.{% endif %}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="btn-group mt-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-2"></i> Save Changes
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary" id="cancel-edit-btn">
+                                    <i class="fas fa-times me-2"></i> Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .profile-header {
+        display: flex;
+        align-items: center;
+        padding-bottom: 25px;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--med-primary), var(--med-accent));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 40px;
+        position: relative;
+    }
+
+    .profile-avatar .edit-overlay {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background-color: var(--med-dark);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .profile-avatar .edit-overlay:hover {
+        background-color: var(--med-primary);
+    }
+
+    .profile-info h2 {
+        font-size: 24px;
+        margin-bottom: 5px;
+        color: var(--med-dark);
+    }
+
+    .detail-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--med-dark);
+    }
+
+    .detail-value {
+        padding: 12px 15px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        border: 1px solid #eaecee;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 15px;
+    }
+
+    @media (max-width: 768px) {
+        .profile-header {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .profile-avatar {
+            margin-bottom: 20px;
+        }
+        
+        .btn-group {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const viewMode = document.getElementById('view-mode');
+        const editMode = document.getElementById('edit-mode');
+        const editProfileBtn = document.getElementById('edit-profile-btn');
+        const cancelEditBtn = document.getElementById('cancel-edit-btn');
+        const profileForm = document.getElementById('profile-form');
+        const successNotification = document.getElementById('success-notification');
+        
+        // Initialize Bootstrap tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+        
+        // Switch to edit mode
+        if (editProfileBtn) {
+            editProfileBtn.addEventListener('click', function() {
+                viewMode.classList.add('d-none');
+                editMode.classList.remove('d-none');
+            });
+        }
+        
+        // Switch back to view mode
+        if (cancelEditBtn) {
+            cancelEditBtn.addEventListener('click', function() {
+                editMode.classList.add('d-none');
+                viewMode.classList.remove('d-none');
+            });
+        }
+        
+        // Handle form submission
+        if (profileForm) {
+            profileForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // In a real application, you would send the data to a server here
+                // For this example, we'll simulate a successful update
+                
+                // Show success notification
+                if (successNotification) {
+                    successNotification.style.display = 'flex !important';
+                }
+                
+                // Update the view with the new values
+                const firstName = document.getElementById('first_name').value;
+                const lastName = document.getElementById('last_name').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+                const department = document.getElementById('department').value;
+                
+                // Update view mode display
+                const fullNameDisplay = document.querySelector('.profile-info h2');
+                const fullNameDetail = document.querySelectorAll('.detail-value')[0];
+                const emailDetail = document.querySelectorAll('.detail-value')[1];
+                const phoneDetail = document.querySelectorAll('.detail-value')[2];
+                const departmentDetail = document.querySelectorAll('.detail-value')[4];
+                
+                if (firstName || lastName) {
+                    fullNameDisplay.textContent = `${firstName} ${lastName}`;
+                    fullNameDetail.textContent = `${firstName} ${lastName}`;
+                }
+                
+                emailDetail.textContent = email;
+                phoneDetail.textContent = phone || 'Not set';
+                departmentDetail.textContent = department;
+                
+                // Update avatar initials
+                const avatar = document.querySelector('.profile-avatar');
+                if (avatar) {
+                    avatar.textContent = (firstName ? firstName[0] : '') + (lastName ? lastName[0] : '');
+                    if (!firstName && !lastName) {
+                        avatar.textContent = email ? email[0].toUpperCase() : 'U';
+                    }
+                }
+                
+                // Switch back to view mode after a delay
+                setTimeout(function() {
+                    editMode.classList.add('d-none');
+                    viewMode.classList.remove('d-none');
+                }, 2000);
+            });
+        }
+    });
+</script>
+{% endblock %}

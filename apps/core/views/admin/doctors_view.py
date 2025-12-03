@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 
 class DoctorListView(View):
     def get(self, request):
-        return render(request, "admin/doctors/doctors_list.htmml")
+        return render(request, "admin/doctors/doctors_list.html")
     
 
 class DoctorAddView(View):

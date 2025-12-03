@@ -1,4 +1,5 @@
 from .auth_view import *
+from .admin_view import *
 from .doctors_view import *
 from .patients_view import *
 from .medistore_view import *

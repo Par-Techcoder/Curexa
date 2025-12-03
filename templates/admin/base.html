@@ -4,10 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">    
-  <title>{% block title %}Curexa Admin{% endblock %}</title>
+  <title>{% block title %}Curexa Healthcare Admin{% endblock %}</title>
 
   <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
-
 
   <!-- Bootstrap & Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
@@ -17,8 +16,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 
-  <!-- Toast Message Implemention-->
-   
+  <!-- Toast Message Implementation-->
   <script>
     window.djangoMessages = [
       {% for message in messages %}
@@ -28,126 +26,221 @@
         }{% if not forloop.last %},{% endif %}
       {% endfor %}
     ];
-    console.log("djangoMessages:", window.djangoMessages);  // Debug output
   </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.17.2/dist/sweetalert2.all.min.js" integrity="sha256-lCHT/LfuZjRp+PdpWns/vKrnSn367D/g1E6Ju18wiH0=" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.17.2/dist/sweetalert2.min.css" integrity="sha256-SCRy3fXoOamBaidKByHs9iJVLYJ65R/v6ycZNN4JhmE=" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.17.2/dist/sweetalert2.all.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.17.2/dist/sweetalert2.min.css">
   
   <!-- Include external toast script -->
   <script src="{% static 'js/toast_message.js' %}"></script>
-<!-- End Toast -->
 
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    // Apply saved theme from localStorage if available
-    if (localStorage.getItem("theme") === "dark") {
-      document.body.classList.add("dark-theme");
-      document.getElementById("themeIcon").classList.replace("bi-moon", "bi-sun");
-    }
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Theme toggle functionality
+      if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark-theme");
+        document.getElementById("themeIcon").classList.replace("bi-moon", "bi-sun");
+      }
+      
+      const themeToggle = document.getElementById("themeToggle");
+      const themeIcon = document.getElementById("themeIcon");
+      
+      if (themeToggle) {
+        themeToggle.addEventListener("click", function() {
+          document.body.classList.toggle("dark-theme");
+          
+          if (document.body.classList.contains("dark-theme")) {
+            themeIcon.classList.replace("bi-moon", "bi-sun");
+            localStorage.setItem("theme", "dark");
+          } else {
+            themeIcon.classList.replace("bi-sun", "bi-moon");
+            localStorage.setItem("theme", "light");
+          }
+        });
+      }
+      
+      // Auto-update time in navbar
+      updateDateTime();
+      setInterval(updateDateTime, 60000);
+    });
     
-    const themeToggle = document.getElementById("themeToggle");
-    const themeIcon = document.getElementById("themeIcon");
-    
-    if (themeToggle) {
-      themeToggle.addEventListener("click", function() {
-        // Toggle the dark theme class on body
-        document.body.classList.toggle("dark-theme");
-        
-        // Update icon and localStorage based on the new theme state
-        if (document.body.classList.contains("dark-theme")) {
-          themeIcon.classList.replace("bi-moon", "bi-sun");
-          localStorage.setItem("theme", "dark");
-        } else {
-          themeIcon.classList.replace("bi-sun", "bi-moon");
-          localStorage.setItem("theme", "light");
-        }
-      });
+    function updateDateTime() {
+      const now = new Date();
+      const dateTimeElement = document.getElementById('currentDateTime');
+      if (dateTimeElement) {
+        const options = { 
+          weekday: 'short', 
+          year: 'numeric', 
+          month: 'short', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        };
+        dateTimeElement.textContent = now.toLocaleDateString('en-US', options);
+      }
     }
-  });
-</script>
+  </script>
 
   <style>
     :root {
-      --med-primary: #2A6B9C;
-      --med-primary-light: #3A8ECC;
-      --med-accent: #4CAF50;
-      --med-accent-light: #6EC071;
-      --med-dark: #0d1b2a;
-      --med-dark-light: #1E2F40;
-      --med-light: #f8f9fa;
-      --med-alert: #E74C3C;
-      --med-warning: #F39C12;
+      --medical-blue: #1A5F7A;
+      --medical-teal: #2D8C8C;
+      --medical-green: #57CC99;
+      --medical-light-blue: #C7F9CC;
+      --medical-dark: #0A1931;
+      --medical-light: #F8F9FA;
+      --medical-alert: #FF6B6B;
+      --medical-warning: #FFD93D;
+      --medical-purple: #6A67CE;
+      --medical-gray: #6C757D;
     }
 
     body {
-      background: linear-gradient(to right, #0d1b2a, #1b263b);
-      color: #fff;
-      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #f0f8ff 0%, #e6f7ff 100%);
+      color: #333;
+      font-family: 'Segoe UI', 'Roboto', 'Open Sans', sans-serif;
       min-height: 100vh;
-      padding-top: 70px;
+      padding-top: 30px;
+    }
+
+    .dark-theme {
+      background-color: #343a40 !important;
+      color: #f8f9fa !important;
+    }
+    .dark-theme a {
+      color: #f8f9fa !important;
+    }
+    .dark-theme .navbar {
+      background-color: #212529 !important;
+    }
+    .dark-theme #sidebar {
+      background-color: #212529;
+      color: #f8f9fa;
+    }
+    .dark-theme .list-group-item {
+      background-color: #343a40;
+      border-color: #495057;
+      color: #f8f9fa;
+    }
+    .dark-theme .list-group-item:hover, 
+    .dark-theme .list-group-item.active {
+      background-color: #495057;
+      color: #fff;
+    }
+    .dark-theme .submenu {
+      background-color: #343a40;
+      color: #f8f9fa;
+    }
+    .dark-theme .submenu-header {
+      color: #f8f9fa;
+    }
+    .dark-theme .center-bodycontent {
+      background-color: #343a40;
+      color: #f8f9fa;
     }
 
     .navbar {
       z-index: 1030;
-      background: linear-gradient(90deg, var(--med-primary), var(--med-accent));
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      background: linear-gradient(135deg, var(--medical-blue), var(--medical-teal)) !important;
+      border-bottom: 3px solid var(--medical-green);
+      box-shadow: 0 2px 15px rgba(26, 95, 122, 0.2);
     }
 
+    .navbar-brand {
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      font-size: 1.2rem;
+    }
+
+    /* Page Title Section with Dot Pattern */
     .page-title-section {
-      background: linear-gradient(90deg, var(--med-primary), var(--med-primary-light));
-      padding: 20px;
-      margin: -20px -20px 25px -20px;
-      border-radius: 0 0 10px 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background: linear-gradient(135deg, var(--medical-blue), var(--medical-teal));
+      padding: 25px 30px;
+      margin: -20px -20px 30px -20px;
+      border-radius: 0 0 15px 15px;
+      box-shadow: 0 4px 20px rgba(26, 95, 122, 0.15);
+      position: relative;
+      overflow: hidden;
     }
 
-    /* Sidebar */
+    .page-title-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+    }
+
+    .page-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      margin: 0;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    .page-title i {
+      margin-right: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 8px;
+      border-radius: 8px;
+    }
+
+    .page-subtitle {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1rem;
+      margin-top: 5px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Sidebar Implementation like Quick-come */
     #sidebar {
       position: fixed;
       top: 56px;
       left: 0;
       height: calc(100vh - 56px);
-      background: var(--med-dark-light);
-      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: #fff;
+      border-right: 1px solid #ddd;
       transition: width 0.3s ease;
-      overflow-y: auto;
-      width: 70px;
+      overflow: visible;
+      width: 60px;
       z-index: 1020;
-      scrollbar-width: thin;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
     }
+    
     #sidebar.expanded {
-      width: 260px;
-    }
-    #sidebar::-webkit-scrollbar {
-      width: 5px;
-    }
-    #sidebar::-webkit-scrollbar-thumb {
-      background: var(--med-primary);
-      border-radius: 10px;
+      width: 250px;
     }
 
     /* Profile Section */
     .profile-section {
       padding: 1rem;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid #ddd;
+      background-color: #f8f9fa;
       display: flex;
       align-items: center;
-      color: #fff;
     }
+    
     .profile-section img {
       width: 40px;
       height: 40px;
       object-fit: cover;
       border-radius: 50%;
-      border: 2px solid var(--med-accent);
     }
+    
     #sidebar .profile-text {
       opacity: 0;
       transition: opacity 0.3s ease;
       margin-left: 10px;
       white-space: nowrap;
     }
+    
     #sidebar.expanded .profile-text {
       opacity: 1;
     }
@@ -157,264 +250,258 @@
       border: none;
       height: 50px;
       padding: 0.75rem 1rem;
-      background: transparent;
-      color: #ddd;
       cursor: pointer;
-      transition: all 0.3s ease;
-      border-radius: 0;
       position: relative;
+      transition: background-color 0.3s ease;
+      color: #333;
     }
+    
     #sidebar .list-group-item:hover {
-      background: rgba(42, 107, 156, 0.3);
-      color: #fff;
+      background-color: #e9ecef;
     }
+    
     #sidebar .list-group-item.active {
-      background: rgba(42, 107, 156, 0.5);
-      color: #fff;
-      border-left: 4px solid var(--med-accent);
+      background: linear-gradient(90deg, var(--medical-blue), transparent);
+      color: white;
+      border-left: 3px solid var(--medical-green);
     }
+    
     .sidebar-icon {
       display: inline-block;
       width: 30px;
       text-align: center;
-      font-size: 18px;
+      font-size: 1.1rem;
     }
+    
     .sidebar-text {
       opacity: 0;
       transition: opacity 0.3s ease;
       margin-left: 10px;
       white-space: nowrap;
+      font-size: 0.95rem;
     }
+    
     #sidebar.expanded .sidebar-text {
       opacity: 1;
     }
 
-    /* Dropdown caret */
+    /* Dropdown caret: hidden in collapsed mode, visible in expanded mode */
     #sidebar:not(.expanded) .sidebar-caret {
       display: none;
     }
+    
     #sidebar.expanded .sidebar-caret {
       display: inline-block;
       margin-left: auto;
       transition: transform 0.3s ease;
     }
+    
     #sidebar.expanded .sidebar-dropdown.open .sidebar-caret {
       transform: rotate(180deg);
     }
+    
+    /* Force parent items in expanded mode to use flex layout */
+    #sidebar.expanded .list-group-item.parent-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-    /* Submenu */
+    /* Sidebar Dropdown container */
+    .sidebar-dropdown {
+      position: relative;
+    }
+
+    /* Highlight effect for parent items in collapsed mode */
+    #sidebar:not(.expanded) .sidebar-dropdown:hover > .list-group-item {
+      background-color: #e0e0e0;
+      border-right: 4px solid var(--medical-blue);
+    }
+
+    /* Custom submenu styles */
     .submenu {
       display: none;
-      padding-left: 0;
-      background: rgba(0, 0, 0, 0.1);
+    }
+
+    /* In collapsed mode: show submenu on hover attached to the parent container */
+    #sidebar:not(.expanded) .sidebar-dropdown:hover .submenu {
+      display: block !important;
+      position: absolute;
+      top: 0;
+      left: 60px;
+      width: 200px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+      z-index: 1100;
+      border-radius: 0 5px 5px 0;
       overflow: hidden;
     }
-    #sidebar.expanded .sidebar-dropdown.open .submenu {
+
+    /* Expanded mode: animate submenu open/close */
+    #sidebar.expanded .sidebar-dropdown .submenu {
       display: block;
+      position: static;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+      background: rgba(26, 95, 122, 0.05);
+      border-left: 2px solid var(--medical-teal);
+      margin-left: 10px;
     }
+    
+    #sidebar.expanded .sidebar-dropdown.open .submenu {
+      max-height: 300px;
+      opacity: 1;
+    }
+
+    /* Add header and divider for submenu pop-up in collapsed mode */
+    .submenu-header {
+      font-weight: bold;
+      padding: 0.75rem 1rem;
+      background: linear-gradient(90deg, var(--medical-blue), var(--medical-teal));
+      color: white;
+      font-size: 0.9rem;
+    }
+    
+    .submenu-divider {
+      margin: 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Hide submenu header and divider in expanded mode */
+    #sidebar.expanded .submenu .submenu-header,
+    #sidebar.expanded .submenu .submenu-divider {
+      display: none;
+    }
+
+    /* Style submenu links */
     .submenu a {
       display: flex;
       align-items: center;
-      padding: 12px 15px 12px 55px;
-      font-size: 14px;
-      color: #bbb;
+      padding: 0.75rem 1rem;
+      color: #333;
       text-decoration: none;
       transition: all 0.3s ease;
-      border-left: 2px solid transparent;
+      border-left: 3px solid transparent;
     }
+    
     .submenu a:hover {
-      color: var(--med-accent-light);
-      background: rgba(255, 255, 255, 0.05);
-      border-left: 2px solid var(--med-accent);
+      background-color: #f1f1f1;
+      border-left: 3px solid var(--medical-green);
+      padding-left: 1.25rem;
     }
-    .submenu a.active {
-      color: var(--med-accent);
-      border-left: 2px solid var(--med-accent);
+    
+    .submenu a i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
     }
 
-    /* Main Content */
+    /* Dashboard hover tooltip effect in collapsed mode */
+    #sidebar:not(.expanded) .dashboard:hover::after {
+      content: attr(data-title);
+      position: absolute;
+      left: 60px;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: var(--medical-dark);
+      border: 1px solid #ddd;
+      padding: 0.75rem 1rem;
+      min-width: 120px;
+      z-index: 1100;
+      white-space: nowrap;
+      font-size: 14px;
+      color: white;
+      border-radius: 0 5px 5px 0;
+    }
+
+    /* Main Content Area */
     .center-bodycontent {
-      {% comment %} margin-top: 70px; {% endcomment %}
-      margin-left: 70px;
+      margin-top: 56px;
+      margin-left: 60px;
       transition: margin-left 0.3s ease;
       padding: 20px;
-      min-height: calc(100vh - 70px);
+      min-height: calc(100vh - 56px);
+      background: #f8fafc;
     }
+    
     .center-bodycontent.expanded {
-      margin-left: 260px;
+      margin-left: 250px;
     }
 
-    /* Dashboard Cards */
-    .dashboard-card {
-      background: var(--med-dark-light);
-      border-radius: 10px;
-      border: none;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      height: 100%;
-    }
-    .dashboard-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    }
-    .card-icon {
-      font-size: 2.5rem;
-      opacity: 0.8;
-    }
-    .stats-number {
-      font-size: 1.8rem;
-      font-weight: bold;
-    }
-    .stats-label {
-      font-size: 0.9rem;
-      opacity: 0.8;
+    .list-group-item:first-child {
+      border-top-left-radius: 0 !important;
+      border-top-right-radius: 0 !important;
     }
 
-    /* Quick Actions */
-    .quick-action-btn {
-      background: var(--med-dark-light);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #fff;
-      border-radius: 8px;
-      padding: 15px;
-      text-align: center;
-      transition: all 0.3s ease;
-      height: 100%;
-    }
-    .quick-action-btn:hover {
-      background: var(--med-primary);
-      transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-    .quick-action-icon {
-      font-size: 1.8rem;
-      margin-bottom: 10px;
-    }
-
-    /* Notifications */
+    /* Medical badges and status indicators */
     .notification-badge {
       position: absolute;
       top: 5px;
       right: 5px;
-      background: var(--med-alert);
+      background: var(--medical-alert);
       color: white;
       border-radius: 50%;
-      width: 20px;
+      min-width: 20px;
       height: 20px;
       font-size: 0.7rem;
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-
-    /* Medical-themed elements */
-    .medical-border {
-      border-left: 4px solid var(--med-accent);
-    }
-    .medical-alert {
-      background: rgba(231, 76, 60, 0.2);
-      border-left: 4px solid var(--med-alert);
-    }
-    .medical-warning {
-      background: rgba(243, 156, 18, 0.2);
-      border-left: 4px solid var(--med-warning);
-    }
-
-    /* Hover Tooltip for Collapsed Sidebar - FIXED */
-    .sidebar-tooltip {
-      position: fixed;
-      left: 70px;
-      background: var(--med-primary);
-      color: white;
-      padding: 8px 12px;
-      border-radius: 4px;
-      font-size: 14px;
-      white-space: nowrap;
-      z-index: 1040;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-      transform: translateY(-50%);
-    }
-    .sidebar-tooltip:after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: -5px;
-      transform: translateY(-50%);
-      width: 0;
-      height: 0;
-      border-top: 5px solid transparent;
-      border-bottom: 5px solid transparent;
-      border-right: 5px solid var(--med-primary);
-    }
-    
-    /* Hover submenu for collapsed sidebar */
-    .sidebar-dropdown {
-      position: relative;
-    }
-    
-    .hover-submenu {
-      position: fixed;
-      left: 70px;
-      background: var(--med-dark-light);
-      border-radius: 4px;
-      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
-      z-index: 1050;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-      padding: 5px 0;
-      min-width: 200px;
-      transform: translateY(-50%);
-    }
-
-    /* >>> ADDED: Header inside hover-submenu so the title shows on hover <<< */
-    .hover-submenu-header {
       font-weight: bold;
-      color: #fff;
-      padding: 8px 15px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      background: var(--med-primary);
-      border-radius: 4px 4px 0 0;
-      font-size: 14px;
+    }
+
+    .status-indicator {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 8px;
     }
     
-    .hover-submenu a {
-      display: flex;
-      align-items: center;
+    .status-indicator.active {
+      background: var(--medical-green);
+    }
+    
+    .status-indicator.pending {
+      background: var(--medical-warning);
+    }
+    
+    .status-indicator.emergency {
+      background: var(--medical-alert);
+    }
+
+    /* Medical Form Elements */
+    .medical-form-control {
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
       padding: 10px 15px;
-      font-size: 14px;
-      color: #ddd;
-      text-decoration: none;
-      transition: all 0.3s ease;
+      transition: all 0.3s;
     }
     
-    .hover-submenu a:hover {
-      color: var(--med-accent-light);
-      background: rgba(255, 255, 255, 0.05);
+    .medical-form-control:focus {
+      border-color: var(--medical-teal);
+      box-shadow: 0 0 0 0.25rem rgba(26, 95, 122, 0.1);
     }
     
-    .hover-submenu a i {
-      margin-right: 10px;
-      width: 20px;
-      text-align: center;
+    .btn-medical-primary {
+      background: linear-gradient(135deg, var(--medical-blue), var(--medical-teal));
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      padding: 10px 25px;
+      transition: all 0.3s;
     }
     
-    #sidebar:not(.expanded) .sidebar-dropdown:hover .hover-submenu {
-      opacity: 1;
-      pointer-events: auto;
+    .btn-medical-primary:hover {
+      background: linear-gradient(135deg, var(--medical-teal), var(--medical-blue));
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(26, 95, 122, 0.3);
     }
-    
-    #sidebar:not(.expanded) .list-group-item:hover .sidebar-tooltip {
-      opacity: 1;
-    }
-    
-    /* FIX: Show tooltip when hovering over dropdown container */
-    #sidebar:not(.expanded) .sidebar-dropdown:hover .list-group-item .sidebar-tooltip {
-      opacity: 1;
-    }
-    
+
     /* Responsive adjustments */
     @media (max-width: 768px) {
       body {
@@ -425,23 +512,28 @@
         width: 0;
         transform: translateX(-100%);
       }
+      
       #sidebar.expanded {
-        width: 260px;
+        width: 250px;
         transform: translateX(0);
       }
+      
       .center-bodycontent {
         margin-left: 0;
       }
+      
       .center-bodycontent.expanded {
         margin-left: 0;
       }
-      .sidebar-tooltip, .hover-submenu {
+      
+      #sidebar:not(.expanded) .dashboard:hover::after {
         display: none;
       }
       
       .page-title-section {
         margin: -20px -15px 25px -15px;
         border-radius: 0;
+        padding: 20px;
       }
     }
   </style>
@@ -450,40 +542,100 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container-fluid">
-      <button class="btn btn-outline-light me-3" id="sidebarToggle">
-        <i class="bi bi-list"></i>
+      <button class="btn btn-outline-light me-2" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
       </button>
+      
       {% block navbar_extra %}{% endblock %}
+      
       <span class="navbar-brand fw-bold text-white">
-        <i class="fas fa-hospital-alt me-2"></i>Curexa Medical Admin
+        <i class="fas fa-heartbeat me-2"></i>Curexa Healthcare Admin
+        <small class="d-none d-md-inline ms-2" style="font-size: 0.8rem; opacity: 0.9;">Comprehensive Healthcare Management</small>
       </span>
       
-      <div class="d-flex align-items-center">
+      <div class="d-flex align-items-center ms-auto">
+        <!-- Current Date/Time -->
+        <div class="text-white me-3 d-none d-md-block">
+          <i class="fas fa-clock me-1"></i>
+          <span id="currentDateTime" style="font-size: 0.85rem;"></span>
+        </div>
+        
         <!-- Notifications -->
         <div class="dropdown me-3">
           <button class="btn btn-outline-light position-relative" type="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-bell"></i>
-            <span class="notification-badge">3</span>
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge">5</span>
           </button>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
-            <li><h6 class="dropdown-header">Notifications</h6></li>
-            <li><a class="dropdown-item" href="#">Low stock alert: Amoxicillin</a></li>
-            <li><a class="dropdown-item" href="#">5 new appointments today</a></li>            
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item text-center" href="#">View all</a></li>
+          <ul class="dropdown-menu dropdown-menu-end p-0" style="min-width: 350px;" aria-labelledby="notificationDropdown">
+            <li class="dropdown-header bg-light py-3">
+              <div class="d-flex justify-content-between align-items-center">
+                <h6 class="mb-0"><i class="fas fa-bell me-2 text-primary"></i>Medical Alerts</h6>
+                <span class="badge bg-primary">5 New</span>
+              </div>
+            </li>
+            <li>
+              <div class="list-group list-group-flush">
+                <a href="#" class="list-group-item list-group-item-action">
+                  <div class="d-flex align-items-start">
+                    <div class="me-3">
+                      <span class="status-indicator emergency"></span>
+                    </div>
+                    <div class="flex-grow-1">
+                      <div class="fw-bold">Critical Patient Alert</div>
+                      <small class="text-danger">Room 204 - BP 180/110</small>
+                      <div class="text-muted small mt-1">2 minutes ago</div>
+                    </div>
+                  </div>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">
+                  <div class="d-flex align-items-start">
+                    <div class="me-3">
+                      <span class="status-indicator warning"></span>
+                    </div>
+                    <div class="flex-grow-1">
+                      <div class="fw-bold">Low Stock Warning</div>
+                      <small class="text-warning">Amoxicillin - 15 units left</small>
+                      <div class="text-muted small mt-1">1 hour ago</div>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </li>
+            <li class="dropdown-footer text-center py-2">
+              <a href="#" class="text-decoration-none small">
+                <i class="fas fa-list me-1"></i> View All Alerts
+              </a>
+            </li>
           </ul>
         </div>
         
-        <!-- User profile -->
+        <!-- User Profile & Theme Toggle -->
         <div class="dropdown">
-          <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-person-circle me-1"></i> {{ user.first_name }}
+          <button class="btn btn-outline-light dropdown-toggle d-flex align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-user-md me-2"></i>
+            <span class="d-none d-md-inline">{{ user.first_name }}</span>
           </button>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
-            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+            <li class="dropdown-header">
+              <div class="d-flex align-items-center">
+                <img src="{% if user.profile_picture %}{{ user.profile_picture }}{% else %}{% static 'images/default_pic.jpg' %}{% endif %}" 
+                     alt="Profile" class="rounded-circle me-2" width="40" height="40">
+                <div>
+                  <strong>{{ user.first_name }}</strong>
+                  <div class="small text-muted">Healthcare Administrator</div>
+                </div>
+              </div>
+            </li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{% url 'admin_logout' %}"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+            <li>
+              <button id="themeToggle" class="dropdown-item">
+                <i id="themeIcon" class="bi bi-moon me-2"></i>Toggle Theme
+              </button>
+            </li>
+            <li><a class="dropdown-item" href="#"><i class="fas fa-user-circle me-2"></i>My Profile</a></li>
+            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Account Settings</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="{% url 'admin_logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
           </ul>
         </div>
       </div>
@@ -496,123 +648,103 @@
     <div class="profile-section">      
       <img src="{% if user.profile_picture %}{{ user.profile_picture }}{% else %}{% static 'images/default_pic.jpg' %}{% endif %}" alt="Profile">
       <div class="profile-text">
-        <strong>{{ user.first_name }}</strong><br>
+        <strong>{{ user.first_name }}</strong>
         <small>{{ user.email }}</small>
       </div>
     </div>
 
     <!-- Menu -->
     <div class="list-group">
-      <a href="{% url 'admin_dashboard' %}" class="list-group-item active">
-        <i class="bi bi-speedometer2 sidebar-icon"></i>
-        <span class="sidebar-text">Dashboard</span>
-        <span class="sidebar-tooltip">Dashboard</span>
+      <!-- Dashboard with hover tooltip -->
+      <a href="{% url 'admin_dashboard' %}" class="list-group-item dashboard" data-title="Dashboard">
+        <i class="fas fa-tachometer-alt sidebar-icon"></i>
+        <span class="sidebar-text">Medical Dashboard</span>
       </a>
 
+      <!-- Medical Staff with submenu -->
       <div class="sidebar-dropdown">
         <a href="{% url 'doctor_list' %}" class="list-group-item parent-item">
           <i class="fas fa-user-md sidebar-icon"></i>
-          <span class="sidebar-text">Doctors</span>
+          <span class="sidebar-text">Medical Staff</span>
           <i class="bi bi-chevron-down sidebar-caret"></i>
-          <span class="sidebar-tooltip">Doctors</span>
         </a>
         <div class="submenu">
-          <a href="{% url 'doctor_list' %}"><i class="fas fa-list me-2"></i> All Doctors</a>
-          <a href="{% url 'doctor_add' %}"><i class="fas fa-plus-circle me-2"></i> Add Doctor</a>
-          <a href="{% url 'doctor_schedles' 1 %}"><i class="fas fa-calendar-check me-2"></i> Schedules</a>
-        </div>
-        <div class="hover-submenu">
-          <div class="hover-submenu-header">Doctors</div>
-          <a href="{% url 'doctor_list' %}"><i class="fas fa-list"></i> All Doctors</a>
-          <a href="{% url 'doctor_add' %}"><i class="fas fa-plus-circle"></i> Add Doctor</a>
-          <a href="{% url 'doctor_schedles' 1 %}"><i class="fas fa-calendar-check"></i> Schedules</a>
+          <div class="submenu-header">Medical Staff</div>
+          <hr class="submenu-divider">
+          <a href="{% url 'doctor_list' %}"><i class="fas fa-list me-2"></i>All Doctors</a>
+          <a href="{% url 'doctor_add' %}"><i class="fas fa-plus-circle me-2"></i>Add Doctor</a>
+          <a href="{% url 'doctor_schedles' 1 %}"><i class="fas fa-calendar-check me-2"></i>Schedules</a>
         </div>
       </div>
 
+      <!-- Pharmacy with submenu -->
       <div class="sidebar-dropdown">
         <a href="{% url 'medicine_list' %}" class="list-group-item parent-item">
           <i class="fas fa-pills sidebar-icon"></i>
-          <span class="sidebar-text">Medicines</span>
+          <span class="sidebar-text">Pharmacy</span>
           <i class="bi bi-chevron-down sidebar-caret"></i>
-          <span class="sidebar-tooltip">Medicines</span>
         </a>
         <div class="submenu">
-          <a href="{% url 'medicine_list' %}"><i class="fas fa-capsules me-2"></i> Medicine List</a>
-          <a href="{% url 'inventory_list' %}"><i class="fas fa-cube me-2"></i> Inventory</a>
-          <a href="{% url 'category_list' %}"><i class="fas fa-tags me-2"></i> Categories</a>
-        </div>
-        <div class="hover-submenu">
-          <div class="hover-submenu-header">Medicines</div>
-          <a href="{% url 'medicine_list' %}"><i class="fas fa-capsules"></i> Medicine List</a>
-          <a href="{% url 'inventory_list' %}"><i class="fas fa-cube"></i> Inventory</a>
-          <a href="{% url 'category_list' %}"><i class="fas fa-tags"></i> Categories</a>
+          <div class="submenu-header">Pharmacy</div>
+          <hr class="submenu-divider">
+          <a href="{% url 'medicine_list' %}"><i class="fas fa-capsules me-2"></i>Medicine List</a>
+          <a href="{% url 'inventory_list' %}"><i class="fas fa-cube me-2"></i>Inventory</a>
+          <a href="{% url 'category_list' %}"><i class="fas fa-tags me-2"></i>Categories</a>
         </div>
       </div>
 
+      <!-- Patients with submenu -->
       <div class="sidebar-dropdown">
-        <a href="#" class="list-group-item parent-item">
-          <i class="fas fa-notes-medical sidebar-icon"></i>
+        <a href="{% url 'patient_list' %}" class="list-group-item parent-item">
+          <i class="fas fa-procedures sidebar-icon"></i>
           <span class="sidebar-text">Patients</span>
           <i class="bi bi-chevron-down sidebar-caret"></i>
-          <span class="sidebar-tooltip">Patients</span>
         </a>
         <div class="submenu">
-          <a href="{% url 'patient_list' %}"><i class="fas fa-users me-2"></i> All Patients</a>
-          <a href="{% url 'patient_add' %}"><i class="fas fa-user-plus me-2"></i> Add Patient</a>
-          <a href="{% url 'patient_medical_records' 8 %}"><i class="fas fa-file-medical me-2"></i> Medical Records</a>
-        </div>
-        <div class="hover-submenu">
-          <div class="hover-submenu-header">Patients</div>
-          <a href="{% url 'patient_list' %}"><i class="fas fa-users"></i> All Patients</a>
-          <a href="{% url 'patient_add' %}"><i class="fas fa-user-plus"></i> Add Patient</a>
-          <a href="{% url 'patient_medical_records' 8 %}"><i class="fas fa-file-medical"></i> Medical Records</a>
+          <div class="submenu-header">Patients</div>
+          <hr class="submenu-divider">
+          <a href="{% url 'patient_list' %}"><i class="fas fa-users me-2"></i>All Patients</a>
+          <a href="{% url 'patient_add' %}"><i class="fas fa-user-plus me-2"></i>Add Patient</a>
+          <a href="{% url 'patient_medical_records' 8 %}"><i class="fas fa-file-medical me-2"></i>Medical Records</a>
         </div>
       </div>
 
+      <!-- Appointments with submenu -->
       <div class="sidebar-dropdown">
         <a href="{% url 'appointment_list' %}" class="list-group-item parent-item">
           <i class="fas fa-calendar-alt sidebar-icon"></i>
           <span class="sidebar-text">Appointments</span>
           <i class="bi bi-chevron-down sidebar-caret"></i>
-          <span class="sidebar-tooltip">Appointments</span>
         </a>
         <div class="submenu">
-          <a href="{% url 'appointment_list' %}"><i class="fas fa-calendar-day me-2"></i> Today's Appointments</a>
-          <a href="{% url 'appointment_add' %}"><i class="fas fa-plus-circle me-2"></i> Book Appointment</a>
-          <a href="{% url 'appointment_history' %}"><i class="fas fa-calendar-week me-2"></i> Appointment History</a>
-        </div>
-        <div class="hover-submenu">
-          <div class="hover-submenu-header">Appointments</div>
-          <a href="{% url 'appointment_list' %}"><i class="fas fa-calendar-day"></i> Today's Appointments</a>
-          <a href="{% url 'appointment_add' %}"><i class="fas fa-plus-circle"></i> Book Appointment</a>
-          <a href="{% url 'appointment_history' %}"><i class="fas fa-calendar-week"></i> Appointment History </a>
+          <div class="submenu-header">Appointments</div>
+          <hr class="submenu-divider">
+          <a href="{% url 'appointment_list' %}"><i class="fas fa-calendar-day me-2"></i>Today's Schedule</a>
+          <a href="{% url 'appointment_add' %}"><i class="fas fa-plus-circle me-2"></i>Book Appointment</a>
+          <a href="{% url 'appointment_history' %}"><i class="fas fa-history me-2"></i>Appointment History</a>
         </div>
       </div>
 
+      <!-- Reports with submenu -->
       <div class="sidebar-dropdown">
-        <a href="#" class="list-group-item parent-item">
+        <a href="{% url 'sales_reports' %}" class="list-group-item parent-item">
           <i class="fas fa-chart-line sidebar-icon"></i>
           <span class="sidebar-text">Reports</span>
           <i class="bi bi-chevron-down sidebar-caret"></i>
-          <span class="sidebar-tooltip">Reports</span>
         </a>
         <div class="submenu">
-          <a href="{% url 'sales_reports' %}"><i class="fas fa-file-invoice-dollar me-2"></i> Sales Reports</a>
-          <a href="{% url 'inventory_reports' %}"><i class="fas fa-pills me-2"></i> Inventory Reports</a>
-          <a href="{% url 'appoinment_reports' %}"><i class="fas fa-user-md me-2"></i> Appointment Reports</a>
-        </div>
-        <div class="hover-submenu">
-          <div class="hover-submenu-header">Reports</div>
-          <a href="{% url 'sales_reports' %}"><i class="fas fa-file-invoice-dollar"></i> Sales Reports</a>
-          <a href="{% url 'inventory_reports' %}"><i class="fas fa-pills"></i> Inventory Reports</a>
-          <a href="{% url 'appoinment_reports' %}"><i class="fas fa-user-md"></i> Appointment Reports</a>
+          <div class="submenu-header">Reports</div>
+          <hr class="submenu-divider">
+          <a href="{% url 'sales_reports' %}"><i class="fas fa-file-invoice-dollar me-2"></i>Financial Reports</a>
+          <a href="{% url 'inventory_reports' %}"><i class="fas fa-pills me-2"></i>Pharmacy Reports</a>
+          <a href="{% url 'appoinment_reports' %}"><i class="fas fa-user-md me-2"></i>Clinical Reports</a>
         </div>
       </div>
 
+      <!-- Settings -->
       <a href="#" class="list-group-item">
-        <i class="bi bi-gear sidebar-icon"></i>
-        <span class="sidebar-text">Settings</span>
-        <span class="sidebar-tooltip">Settings</span>
+        <i class="fas fa-cogs sidebar-icon"></i>
+        <span class="sidebar-text">System Settings</span>
       </a>
     </div>
   </div>
@@ -627,6 +759,7 @@
   </div>
 
   <script>
+    // Toggle sidebar expanded/collapsed state
     const sidebarToggle = document.getElementById('sidebarToggle');
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.getElementById('mainContent');
@@ -634,83 +767,21 @@
     sidebarToggle.addEventListener('click', function() {
       sidebar.classList.toggle('expanded');
       mainContent.classList.toggle('expanded');
-      
-      // Close all dropdowns when collapsing sidebar
-      if (!sidebar.classList.contains('expanded')) {
-        document.querySelectorAll('.sidebar-dropdown.open').forEach(dropdown => {
-          dropdown.classList.remove('open');
-        });
-      }
     });
 
+    // In expanded mode, toggle submenu on click of parent item and close others
     document.querySelectorAll('#sidebar .sidebar-dropdown .parent-item').forEach(item => {
       item.addEventListener('click', function(e) {
         if (sidebar.classList.contains('expanded')) {
           e.preventDefault();
           const currentDropdown = this.closest('.sidebar-dropdown');
-          
-          // Close other dropdowns
-          document.querySelectorAll('.sidebar-dropdown.open').forEach(dropdown => {
+          // Close any other open submenus
+          document.querySelectorAll('#sidebar .sidebar-dropdown.open').forEach(dropdown => {
             if (dropdown !== currentDropdown) {
               dropdown.classList.remove('open');
             }
           });
-          
           currentDropdown.classList.toggle('open');
-        }
-      });
-    });
-
-    // Position hover submenus correctly
-    document.querySelectorAll('#sidebar .sidebar-dropdown').forEach(dropdown => {
-      dropdown.addEventListener('mouseenter', function() {
-        if (!sidebar.classList.contains('expanded')) {
-          const hoverMenu = this.querySelector('.hover-submenu');
-          if (hoverMenu) {
-            const rect = this.getBoundingClientRect();
-            hoverMenu.style.top = (rect.top + rect.height/2) + 'px';
-            
-            // Show the tooltip for the parent item
-            const tooltip = this.querySelector('.sidebar-tooltip');
-            if (tooltip) {
-              tooltip.style.top = (rect.top + rect.height/2) + 'px';
-              tooltip.style.opacity = '1';
-            }
-          }
-        }
-      });
-      
-      dropdown.addEventListener('mouseleave', function() {
-        if (!sidebar.classList.contains('expanded')) {
-          // Hide the tooltip when leaving the dropdown
-          const tooltip = this.querySelector('.sidebar-tooltip');
-          if (tooltip) {
-            tooltip.style.opacity = '0';
-          }
-        }
-      });
-    });
-
-    // Position tooltips correctly for all menu items
-    document.querySelectorAll('#sidebar .list-group-item').forEach(item => {
-      item.addEventListener('mouseenter', function() {
-        if (!sidebar.classList.contains('expanded')) {
-          const tooltip = this.querySelector('.sidebar-tooltip');
-          if (tooltip) {
-            // Position the tooltip vertically centered with the menu item
-            const rect = this.getBoundingClientRect();
-            tooltip.style.top = (rect.top + rect.height/2) + 'px';
-            tooltip.style.opacity = '1';
-          }
-        }
-      });
-      
-      item.addEventListener('mouseleave', function() {
-        if (!sidebar.classList.contains('expanded')) {
-          const tooltip = this.querySelector('.sidebar-tooltip');
-          if (tooltip) {
-            tooltip.style.opacity = '0';
-          }
         }
       });
     });
@@ -723,6 +794,29 @@
           mainContent.classList.remove('expanded');
         }
       }
+    });
+
+    // Highlight current page in sidebar
+    document.addEventListener('DOMContentLoaded', function() {
+      const currentPath = window.location.pathname;
+      
+      // Remove active class from all menu items
+      document.querySelectorAll('#sidebar .list-group-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      
+      // Find and activate current page
+      document.querySelectorAll('#sidebar a[href]').forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+          link.classList.add('active');
+          
+          // Also activate parent dropdown if it exists
+          const parentDropdown = link.closest('.sidebar-dropdown');
+          if (parentDropdown) {
+            parentDropdown.classList.add('open');
+          }
+        }
+      });
     });
   </script>
 </body>

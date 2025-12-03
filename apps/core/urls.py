@@ -8,6 +8,8 @@ urlpatterns = [
 
     # Dashboard
     path("admin/", views.AdminDashboardView.as_view(), name="admin_dashboard"),
+    path("admin/profile/", views.AdminProfileView.as_view(), name="admin_profile"),
+    path("admin/profile/update", views.AdminProfileView.as_view(), name="admin_profile_update"),
     
     # Doctors
     path("admin/doctors/", views.DoctorListView.as_view(), name="doctor_list"),
