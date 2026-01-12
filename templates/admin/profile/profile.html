@@ -3,14 +3,18 @@
 
 {% block title %}Admin Profile Management - Curexa Admin{% endblock %}
 
-{% block navbar_extra %}
-<!-- Breadcrumb navigation -->
-<nav aria-label="breadcrumb" class="ms-3">
+{% block page_header %}
+<!-- Breadcrumb above title -->
+<div class="breadcrumb-above-title">
+  <nav aria-label="breadcrumb">
     <ol class="breadcrumb mb-0">
-        <li class="breadcrumb-item"><a href="{% url 'admin_dashboard' %}" class="text-white">Dashboard</a></li>
-        <li class="breadcrumb-item active text-white">Profile</li>
+      <li class="breadcrumb-item">
+        <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Doctors</li>
     </ol>
-</nav>
+  </nav>
+</div>
 {% endblock %}
 
 {% block content %}
@@ -79,17 +83,7 @@
                                 <div class="detail-group mb-3">
                                     <label class="form-label fw-bold">Username</label>
                                     <div class="detail-value p-3 bg-light rounded">{{ user.username }}</div>
-                                </div>
-                                <div class="detail-group mb-3">
-                                    <label class="form-label fw-bold">Department</label>
-                                    <div class="detail-value p-3 bg-light rounded">
-                                        {% if user.department %}
-                                            {{ user.department }}
-                                        {% else %}
-                                            IT Administration
-                                        {% endif %}
-                                    </div>
-                                </div>
+                                </div>                                
                                 <div class="detail-group mb-3">
                                     <label class="form-label fw-bold">Last Login</label>
                                     <div class="detail-value p-3 bg-light rounded">
@@ -162,20 +156,7 @@
                                         <input type="text" id="last_name" name="last_name" class="form-control" 
                                                value="{{ user.last_name|default:'' }}">
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="department" class="form-label fw-bold">Department</label>
-                                        <select id="department" name="department" class="form-control">
-                                            <option value="IT Administration" {% if user.department == "IT Administration" %}selected{% endif %}>IT Administration</option>
-                                            <option value="Human Resources" {% if user.department == "Human Resources" %}selected{% endif %}>Human Resources</option>
-                                            <option value="Finance" {% if user.department == "Finance" %}selected{% endif %}>Finance</option>
-                                            <option value="Marketing" {% if user.department == "Marketing" %}selected{% endif %}>Marketing</option>
-                                            <option value="Operations" {% if user.department == "Operations" %}selected{% endif %}>Operations</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="bio" class="form-label fw-bold">Bio</label>
-                                        <textarea id="bio" name="bio" class="form-control" rows="3">{% if user.bio %}{{ user.bio }}{% else %}Senior administrator with experience in system management and user support.{% endif %}</textarea>
-                                    </div>
+                                    
                                 </div>
                             </div>
 

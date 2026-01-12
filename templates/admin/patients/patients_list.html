@@ -3,8 +3,18 @@
 
 {% block title %}Patient Management - Curexa Admin{% endblock %}
 
-{% block navbar_extra %}
-<!-- Additional navbar content if needed -->
+{% block page_header %}
+<!-- Breadcrumb above title -->
+<div class="breadcrumb-above-title">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+      <li class="breadcrumb-item">
+        <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Patient</li>
+    </ol>
+  </nav>
+</div>
 {% endblock %}
 
 {% block content %}

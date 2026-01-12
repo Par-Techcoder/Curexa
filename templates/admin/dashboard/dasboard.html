@@ -55,11 +55,11 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <h6 class="card-title text-muted mb-2">Monthly Revenue</h6>
-                        <h3 class="mb-0 text-success">$48,256</h3>
+                        <h3 class="mb-0 text-success"><i class="bi bi-currency-rupee"></i>48,256</h3>
                         <small class="text-success"><i class="bi bi-arrow-up"></i> 12.5% growth</small>
                     </div>
                     <div class="card-icon text-success">
-                        <i class="fas fa-dollar-sign"></i>
+                        <i class="bi bi-currency-rupee"></i>
                     </div>
                 </div>
             </div>
@@ -116,6 +116,38 @@
 
     <!-- Right Column - Side Panels -->
     <div class="col-lg-4">
+
+    
+                <!-- Quick Actions -->
+        <div class="card medical-border">
+            <div class="card-header">
+                <h5 class="card-title mb-0"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-2">
+                    <div class="col-6">
+                        <a href="{% url 'appointment_add' %}" class="btn btn-outline-primary w-100 mb-2">
+                            <i class="fas fa-plus me-1"></i> New Appointment
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="{% url 'patient_add' %}" class="btn btn-outline-info w-100 mb-2">
+                            <i class="fas fa-user-plus me-1"></i> Add Patient
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="{% url 'medicine_list' %}" class="btn btn-outline-success w-100 mb-2">
+                            <i class="fas fa-pills me-1"></i> Manage Medicines
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="{% url 'inventory_list' %}" class="btn btn-outline-warning w-100 mb-2">
+                            <i class="fas fa-boxes me-1"></i> Inventory
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Today's Schedule -->
         <div class="card medical-border mb-4">
             <div class="card-header">
@@ -175,36 +207,7 @@
             </div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="card medical-border">
-            <div class="card-header">
-                <h5 class="card-title mb-0"><i class="fas fa-bolt me-2"></i>Quick Actions</h5>
-            </div>
-            <div class="card-body">
-                <div class="row g-2">
-                    <div class="col-6">
-                        <a href="{% url 'appointment_add' %}" class="btn btn-outline-primary w-100 mb-2">
-                            <i class="fas fa-plus me-1"></i> New Appointment
-                        </a>
-                    </div>
-                    <div class="col-6">
-                        <a href="{% url 'patient_add' %}" class="btn btn-outline-info w-100 mb-2">
-                            <i class="fas fa-user-plus me-1"></i> Add Patient
-                        </a>
-                    </div>
-                    <div class="col-6">
-                        <a href="{% url 'medicine_list' %}" class="btn btn-outline-success w-100 mb-2">
-                            <i class="fas fa-pills me-1"></i> Manage Medicines
-                        </a>
-                    </div>
-                    <div class="col-6">
-                        <a href="{% url 'inventory_list' %}" class="btn btn-outline-warning w-100 mb-2">
-                            <i class="fas fa-boxes me-1"></i> Inventory
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+
     </div>
 </div>
 
@@ -337,6 +340,63 @@
                                     </button>
                                 </td>
                             </tr>
+                                                        <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{% static 'images/patient2.jpg' %}" class="rounded-circle me-2" width="30" height="30" alt="Patient">
+                                        <div>Maria Garcia</div>
+                                    </div>
+                                </td>
+                                <td>Yesterday</td>
+                                <td><span class="badge bg-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{% static 'images/patient2.jpg' %}" class="rounded-circle me-2" width="30" height="30" alt="Patient">
+                                        <div>Maria Garcia</div>
+                                    </div>
+                                </td>
+                                <td>Yesterday</td>
+                                <td><span class="badge bg-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{% static 'images/patient2.jpg' %}" class="rounded-circle me-2" width="30" height="30" alt="Patient">
+                                        <div>Maria Garcia</div>
+                                    </div>
+                                </td>
+                                <td>Yesterday</td>
+                                <td><span class="badge bg-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{% static 'images/patient2.jpg' %}" class="rounded-circle me-2" width="30" height="30" alt="Patient">
+                                        <div>Maria Garcia</div>
+                                    </div>
+                                </td>
+                                <td>Yesterday</td>
+                                <td><span class="badge bg-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-info">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -373,14 +433,6 @@
                     <div>
                         <strong>Appointment Cancellations</strong><br>
                         <small>3 appointments cancelled today</small>
-                    </div>
-                </div>
-                
-                <div class="alert alert-success d-flex align-items-center">
-                    <i class="fas fa-check-circle me-3 fa-lg"></i>
-                    <div>
-                        <strong>System Update</strong><br>
-                        <small>All systems running optimally</small>
                     </div>
                 </div>
             </div>
