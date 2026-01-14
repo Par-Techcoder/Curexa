@@ -1,4 +1,3 @@
-# apps/doctors/serializers.py
 from rest_framework import serializers
 from apps.doctors.models import doctorprofile_model 
 

@@ -1,1 +1,1 @@
-from doctor_serializer import *
+from .doctor_serializer import *

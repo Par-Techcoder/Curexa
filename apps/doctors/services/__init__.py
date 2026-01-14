@@ -1,1 +1,1 @@
-from doctor_services import *
+from .doctor_services import *
