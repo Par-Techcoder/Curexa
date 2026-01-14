@@ -20,7 +20,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    # Third Party Apps
     'rest_framework',
+    'drf_spectacular',
     'django_filters',
     
     # Custom Apps
@@ -127,6 +130,8 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'user': '1000/day',
     },
+    
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 

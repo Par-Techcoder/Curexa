@@ -16,13 +16,20 @@ Including another URLconf
 """
 from django.urls import path,include
 from rest_framework_simplejwt.views import TokenRefreshView
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
     path('api/', include('apps.accounts.urls')),
-    path('api/', include('apps.core.urls')),
+    path('', include('apps.core.urls')),
     path('api/', include('apps.docbook.urls')),
     path('api/', include('apps.doctors.urls')),
     path('api/', include('apps.medistore.urls')),
     path('api/', include('apps.orders.urls')),
+    
+    # JWT Token Refresh
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    
+     # Swagger
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger'),
 ]
