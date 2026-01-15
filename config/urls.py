@@ -19,7 +19,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
-    path('api/', include('apps.accounts.urls')),
+    path('', include('apps.accounts.urls')),
     path('', include('apps.core.urls')),
     path('api/', include('apps.docbook.urls')),
     path('api/', include('apps.doctors.urls')),
