@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     
     # Custom Apps
     'apps.accounts',
+    'apps.admin_panel',
     'apps.core',
     'apps.docbook',
     'apps.doctors',
@@ -103,7 +104,7 @@ REST_FRAMEWORK = {
     # Authentication
     'DEFAULT_AUTHENTICATION_CLASSES': (
          'rest_framework.authentication.SessionAuthentication',
-        'apps.core.authentication.CookieJWTAuthentication',
+        'apps.core.utilities.authentication.CookieJWTAuthentication',
     ),
 
     # Permissions
