@@ -25,4 +25,4 @@ class DoctorProfile(AddressModel):
         ordering = ['doctor__first_name']
     
     def __str__(self):
-        return f"Doctor: {self.doctor.get_full_name()} | Specialization: {self.specialization} | Active: {self.is_active}"
+        return f"Doctor: {self.doctor.get_full_name()} | Specialization: {self.specialization} | Active: {self.doctor.is_active}"

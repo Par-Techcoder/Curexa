@@ -1,36 +1,33 @@
 from apps.doctors.models.doctorprofile_model import DoctorProfile
-from apps.docbook.models.appoinment_model import Appointment
-from apps.core.constants.default_values import AppointmentStatus
-from django.utils import timezone
+from apps.docbook.services import appoinment_services
+from apps.docbook.services import availabilities_services
 
 def doctor_list():
     qs = DoctorProfile.objects.select_related(
         'doctor', 'specialization'
     )
-
-    today = timezone.now().date()
+    
     result = []
 
     for obj in qs:
-        active_appointments_count = Appointment.objects.filter(
-            doctor=obj,
-            appointment_status=AppointmentStatus.PENDING.value,
-            appointment_date=today
-        ).count()
-
-        todays_appointments_count = Appointment.objects.filter(
-            doctor=obj,
-            appointment_date=today
-        ).exclude(
-            appointment_status=AppointmentStatus.CANCELLED.value
-        ).count()
-
+        
+        active_appointments_count = appoinment_services.active_appointments_count(obj)
+        todays_appointments_count = appoinment_services.todays_appointments_count(obj)
+        today_availabilities = bool(availabilities_services.today_doctor_availabilities(obj))        
+        
         data = {
-            "doctor_id": obj.doctor.id,
-            "doctor_name": obj.doctor.get_full_name(),
+            "id": obj.doctor.id,
+            "name": obj.doctor.get_full_name(),
+            "email": obj.doctor.email,
+            "qualifications": list(
+                obj.fk_qualifications_doctor_profile_doctor_id
+                .filter(is_active=True)
+                .values_list('degree', flat=True)
+            ),
+            "specialization": obj.specialization.name if obj.specialization else None,
             "contact_number": obj.contact_number,
             "profile_picture": obj.profile_picture.url if obj.profile_picture else None,
-            "is_active": obj.doctor.is_active,
+            "available": today_availabilities,
             "active_appointments_count": active_appointments_count,
             "todays_appointments_count": todays_appointments_count,
         }
@@ -38,8 +35,6 @@ def doctor_list():
         result.append(data)
 
     return result
-
-
 
 def doctor_add(name, specialization, email, phone):
     DoctorProfile.objects.create(
@@ -49,4 +44,8 @@ def doctor_add(name, specialization, email, phone):
         phone=phone,
     )
     
-    
+def total_doctors_count():
+    return DoctorProfile.objects.count()
+
+def specialized_doctors_count():
+    return DoctorProfile.objects.filter(specialization__isnull=False).count()

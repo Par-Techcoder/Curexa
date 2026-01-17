@@ -27,7 +27,7 @@ class Appointment(BaseModel):
     notes = models.TextField(max_length=255, blank=True, null=True)
 
     class Meta:
-        db_table = 'appointmentS'
+        db_table = 'appointments'
         verbose_name = "Appointment"
         verbose_name_plural = "Appointments"
         ordering = ['appointment_date']
