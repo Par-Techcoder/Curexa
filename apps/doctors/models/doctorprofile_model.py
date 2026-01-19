@@ -20,8 +20,6 @@ class DoctorProfile(AddressModel):
     
     class Meta:
         db_table = 'doctors'
-        verbose_name = "Doctor"
-        verbose_name_plural = "Doctors"
         ordering = ['doctor__first_name']
     
     def __str__(self):

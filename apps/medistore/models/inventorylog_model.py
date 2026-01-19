@@ -24,8 +24,6 @@ class InventoryLog(BaseModel):
 
     class Meta:
         db_table = 'inventory_logs'
-        verbose_name = 'Inventory Log'
-        verbose_name_plural = 'Inventory Logs'
 
     def __str__(self):
         return f"{self.medicine.name} | Action: {self.action} | Quantity: {self.quantity} | Time: {self.timestamp}"

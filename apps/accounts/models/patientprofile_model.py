@@ -1,8 +1,6 @@
 from django.db import models
-from apps.accounts.models.users_model import User
 from apps.core.models.address_model import AddressModel
 from apps.core.constants.default_values import Gender
-
 
 class PatientProfile(AddressModel):
     patient = models.OneToOneField(
@@ -27,8 +25,6 @@ class PatientProfile(AddressModel):
 
     class Meta:
         db_table = 'patients'
-        verbose_name = 'Patient Profile'
-        verbose_name_plural = 'Patient Profiles'
 
     def __str__(self):
         return f"Profile of {self.patient.get_full_name()} | Email: {self.patient.email} | Active: {self.patient.is_active}"

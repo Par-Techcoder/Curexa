@@ -5,7 +5,7 @@ from apps.core.constants.default_values import PaymentStatus, PaymentMethod
 class Payment(BaseModel):
     transaction_id = models.CharField(max_length=100, unique=True, editable=False)
     invoice = models.ForeignKey(
-        'orders.InvoiceModel',
+        'orders.Invoice',
         on_delete=models.CASCADE,
         related_name='fk_invoice_payments_invoice_id'
     )
@@ -20,8 +20,6 @@ class Payment(BaseModel):
 
     class Meta:
         db_table = 'payments'
-        verbose_name = "Payment"
-        verbose_name_plural = "Payments"
         ordering = ['-created_at']
 
     def __str__(self):

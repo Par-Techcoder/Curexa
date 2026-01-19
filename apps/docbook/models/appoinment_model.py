@@ -3,7 +3,7 @@ from apps.core.models.base_model import BaseModel
 from apps.core.constants.default_values import AppointmentType, AppointmentStatus
 
 class Appointment(BaseModel):
-    appointment_types = models.IntegerField(
+    appointment_type = models.IntegerField(
         choices=[(status.value, status.name) for status in AppointmentType],
         default=AppointmentType.CONSULTATION.value
     )
@@ -28,8 +28,6 @@ class Appointment(BaseModel):
 
     class Meta:
         db_table = 'appointments'
-        verbose_name = "Appointment"
-        verbose_name_plural = "Appointments"
         ordering = ['appointment_date']
 
     def __str__(self):

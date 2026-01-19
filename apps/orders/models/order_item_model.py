@@ -17,8 +17,6 @@ class OrderItem(BaseModel):
 
     class Meta:
         db_table = 'order_items'
-        verbose_name = "Order Item"
-        verbose_name_plural = "Order Items"
 
     def __str__(self):
         return f"{self.medicine.name} x {self.quantity} in Order #{self.order.id}"

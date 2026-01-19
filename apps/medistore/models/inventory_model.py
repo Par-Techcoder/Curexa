@@ -11,8 +11,6 @@ class Inventory(BaseModel):
 
     class Meta:
         db_table = 'inventory'
-        verbose_name = 'Inventory'
-        verbose_name_plural = 'Inventories'
 
     def __str__(self):
         return f"{self.medicine.name} | Stock: {self.quantity}"

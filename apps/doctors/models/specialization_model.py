@@ -7,8 +7,6 @@ class Specialization(BaseModel):
 
     class Meta:
         db_table = 'specializations'
-        verbose_name = "Specialization"
-        verbose_name_plural = "Specializations"
         ordering = ['name']
 
     def __str__(self):

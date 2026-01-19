@@ -14,7 +14,7 @@ class TestBooking(BaseModel):
         on_delete=models.CASCADE,
         related_name='fk_test_testbooking_test_id'
     )    
-    date = models.DateField()
+    booking_date = models.DateField()
     status = models.IntegerField(
         choices=[(status.value, status.name) for status in TestBookingStatus],
         default=TestBookingStatus.PENDING.value
@@ -23,10 +23,7 @@ class TestBooking(BaseModel):
     
     class Meta:
         db_table = 'test_bookings'
-        verbose_name = "Test Booking"
-        verbose_name_plural = "Test Bookings"
-        ordering = ['date']
+        ordering = ['-booking_date']
 
     def __str__(self):
-        return f"{self.patient.get_full_name()} - {self.test.name} on {self.date}"
-
+        return f"{self.patient.get_full_name()} - {self.test.name} on {self.booking_date}"

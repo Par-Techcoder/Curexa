@@ -17,8 +17,6 @@ class Order(BaseModel):
 
     class Meta:
         db_table = 'orders'
-        verbose_name = "Order"
-        verbose_name_plural = "Orders"
         ordering = ['-order_date']
 
     def __str__(self):

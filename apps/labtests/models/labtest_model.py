@@ -9,8 +9,6 @@ class MedicalTest(BaseModel):
 
     class Meta:
         db_table = 'medical_tests'
-        verbose_name = "Medical Test"
-        verbose_name_plural = "Medical Tests"
         ordering = ['category', 'name']
 
     def __str__(self):

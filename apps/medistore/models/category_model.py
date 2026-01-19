@@ -7,8 +7,6 @@ class Category(BaseModel):
 
     class Meta:
         db_table = 'categories'
-        verbose_name = 'Category'
-        verbose_name_plural = 'Categories'
 
     def __str__(self):
         return f"{self.name} | Description: {self.description[:50]} | Active: {self.is_active}"

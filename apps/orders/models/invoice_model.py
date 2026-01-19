@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from apps.core.models.base_model import BaseModel
 
-class InvoiceModel(BaseModel):
+class Invoice(BaseModel):
     patient = models.ForeignKey(
         'accounts.PatientProfile',
         on_delete=models.CASCADE,

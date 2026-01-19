@@ -21,8 +21,6 @@ class Prescription(BaseModel):
 
     class Meta:
         db_table = 'prescriptions'
-        verbose_name = 'Prescription'
-        verbose_name_plural = 'Prescriptions'
 
     def __str__(self):
         return f"Prescription for {self.patient.get_full_name()} by {self.doctor.get_full_name()}"

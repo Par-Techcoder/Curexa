@@ -27,8 +27,6 @@ class Medicine(BaseModel):
     
     class Meta:
         db_table = 'medicines'
-        verbose_name = 'Medicine'
-        verbose_name_plural = 'Medicines'
         
     def __str__(self):
         return f"{self.name} | Price: ₹{self.price} | Active: {self.is_active}"
