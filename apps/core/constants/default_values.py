@@ -6,6 +6,7 @@ class Gender(Enum):
     OTHER = 3
 
 class Role(Enum):
+    SUPERUSER = 0
     ADMIN = 1
     PATIENT = 2
     DOCTOR = 3

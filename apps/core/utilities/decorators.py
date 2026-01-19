@@ -90,7 +90,7 @@ def doctor_required(view_or_func=None, *, login_url="/login/"):
     return lambda view: auth_required(login_url=login_url)(decorator(view))
 
 
-def admin_required(view_or_func=None, *, login_url="/login/"):
+def admin_required(view_or_func=None, *, login_url="admin/login/"):
     decorator = role_required(Role.ADMIN)
     if view_or_func:
         return auth_required(login_url=login_url)(decorator(view_or_func))

@@ -13,12 +13,12 @@ def today_doctor_availabilities(doctor):
     today = timezone.localdate()
     return Availability.objects.filter(
         doctor=doctor,
-        available_date=today,
+        date=today,
         is_available=True
     )
     
 def today_active_doctors_count():
     return Availability.objects.filter(
         is_available=True,
-        available_date=timezone.localdate()
+        date=timezone.localdate()
     ).values('doctor').distinct().count()
