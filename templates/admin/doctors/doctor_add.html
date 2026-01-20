@@ -3,15 +3,17 @@
 
 {% block title %}Add Doctor - Curexa Admin{% endblock %}
 
-{% block navbar_extra %}
-<!-- Breadcrumb navigation -->
-<nav aria-label="breadcrumb" class="ms-3">
+{% block page_header %}
+<div class="breadcrumb-above-title">
+  <nav aria-label="breadcrumb">
     <ol class="breadcrumb mb-0">
-        <li class="breadcrumb-item"><a href="#" class="text-white">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'doctor_list' %}" class="text-white">Doctors</a></li>
-        <li class="breadcrumb-item active text-light" aria-current="page">Add Doctor</li>
+      <li class="breadcrumb-item">
+        <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Add New Doctor</li>
     </ol>
-</nav>
+  </nav>
+</div>
 {% endblock %}
 
 {% block content %}
@@ -30,118 +32,141 @@
                 <h5 class="card-title mb-0"><i class="fas fa-info-circle me-2"></i>Doctor Information</h5>
             </div>
             <div class="card-body">
-                <form id="addDoctorForm">
+                <form id="addDoctorForm" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <!-- Name -->
                     <div class="row">
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
                             <label for="firstName" class="form-label">First Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="firstName" required>
+                            <input type="text" class="form-control" id="firstName" name="firstName" required>
                         </div>
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-4 mb-3">
+                            <label for="middleName" class="form-label">Middle Name</label>
+                            <input type="text" class="form-control" id="middleName" name="middleName">
+                        </div>
+                        <div class="col-md-4 mb-3">
                             <label for="lastName" class="form-label">Last Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="lastName" required>
+                            <input type="text" class="form-control" id="lastName" name="lastName" required>
                         </div>
                     </div>
-                    
+
+                    <!-- Contact -->
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                            <input type="email" class="form-control" id="email" required>
+                            <input type="email" class="form-control" id="email" name="email" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="phone" class="form-label">Phone <span class="text-danger">*</span></label>
-                            <input type="tel" class="form-control" id="phone" required>
+                            <input type="tel" class="form-control" id="phone" name="phone" required>
                         </div>
                     </div>
-                    
+
+                    <!-- Specialization & Qualification -->
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="specialization" class="form-label">Specialization <span class="text-danger">*</span></label>
-                            <select class="form-select" id="specialization" required>
+                            <select class="form-select" id="specialization" name="specialization" required>
                                 <option value="" selected disabled>Select Specialization</option>
-                                <option value="cardiology">Cardiology</option>
-                                <option value="neurology">Neurology</option>
-                                <option value="orthopedics">Orthopedics</option>
-                                <option value="pediatrics">Pediatrics</option>
-                                <option value="dermatology">Dermatology</option>
-                                <option value="surgery">Surgery</option>
-                                <option value="psychiatry">Psychiatry</option>
-                                <option value="other">Other</option>
+                                {% for specialization in specializations %}
+                                <option value="{{ specialization.id }}">{{ specialization.name }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="qualification" class="form-label">Qualification <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="qualification" placeholder="MD, MBBS, etc." required>
+                            <input type="text" class="form-control" id="qualification" name="degree" placeholder="MD, MBBS, etc." required>
                         </div>
                     </div>
                     
+                    <!-- Institution & Completion Year -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="institution" class="form-label">Institution</label>
+                            <input type="text" class="form-control" id="institution" name="institution" placeholder="University / College">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="completion_year" class="form-label">Completion Year</label>
+                            <input type="date" class="form-control" id="completion_year" name="completion_year" placeholder="YYYY-MM-DD">
+                        </div>
+                    </div>
+
+                    <!-- Experience & DOB -->
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="experience" class="form-label">Years of Experience</label>
-                            <input type="number" class="form-control" id="experience" min="0" max="50">
+                            <input type="number" class="form-control" id="experience" name="experience" min="0" max="50">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="dob" class="form-label">Date of Birth</label>
-                            <input type="date" class="form-control" id="dob">
+                            <input type="date" class="form-control" id="dob" name="dob">
                         </div>
                     </div>
-                    
+
+                    <!-- Clinic Address -->
                     <div class="mb-3">
                         <label for="address" class="form-label">Clinic Address <span class="text-danger">*</span></label>
-                        <textarea class="form-control" id="address" rows="2" required></textarea>
+                        <textarea class="form-control" id="address" name="clinic_address" rows="2" required></textarea>
                     </div>
-                    
+
+                    <!-- City & Pin -->
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="city" class="form-label">City <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="city" required>
+                            <input type="text" class="form-control" id="city" name="city" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="zipCode" class="form-label">ZIP Code</label>
-                            <input type="text" class="form-control" id="zipCode">
+                            <label for="pinCode" class="form-label">Pin Code</label>
+                            <input type="text" class="form-control" id="pinCode" name="pin_code">
                         </div>
                     </div>
-                    
+
                     <hr>
-                    
+
+                    <!-- Professional Details -->
                     <h5 class="mb-3"><i class="fas fa-graduation-cap me-2"></i>Professional Details</h5>
-                    
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="licenseNumber" class="form-label">Medical License Number <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="licenseNumber" required>
+                            <input type="text" class="form-control" id="licenseNumber" name="licenseNumber" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="licenseExpiry" class="form-label">License Expiry Date</label>
-                            <input type="date" class="form-control" id="licenseExpiry">
+                            <input type="date" class="form-control" id="licenseExpiry" name="licenseExpiry">
                         </div>
                     </div>
-                    
+
+                    <!-- Department & Consultation Fee -->
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="department" class="form-label">Department</label>
-                            <select class="form-select" id="department">
+                            <select class="form-select" id="department" name="department">
                                 <option value="" selected disabled>Select Department</option>
-                                <option value="cardiology">Cardiology</option>
-                                <option value="neurology">Neurology</option>
-                                <option value="orthopedics">Orthopedics</option>
-                                <option value="pediatrics">Pediatrics</option>
-                                <option value="dermatology">Dermatology</option>
-                                <option value="surgery">Surgery</option>
-                                <option value="emergency">Emergency Medicine</option>
-                                <option value="radiology">Radiology</option>
+                                {% for department in departments %}
+                                <option value="{{ department.id }}">{{ department.name }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="consultationFee" class="form-label">Consultation Fee ($)</label>
-                            <input type="number" class="form-control" id="consultationFee" min="0" step="0.01">
+                            <input type="number" class="form-control" id="consultationFee" name="consultation_fee" min="0" step="0.01">
                         </div>
                     </div>
-                    
+
+                    <!-- Bio -->
                     <div class="mb-3">
                         <label for="bio" class="form-label">Professional Bio</label>
-                        <textarea class="form-control" id="bio" rows="3" placeholder="Brief professional background, education, achievements..."></textarea>
+                        <textarea class="form-control" id="bio" name="bio" rows="3" placeholder="Brief professional background, education, achievements..."></textarea>
                     </div>
-                    
+
+                        <input
+        type="file"
+        id="profilePhoto"
+        name="profile_photo"
+        accept="image/*"
+        style="display: none;"
+    >
+
                     <div class="d-flex justify-content-end mt-4">
                         <a href="{% url 'doctor_list' %}" class="btn btn-secondary me-2">Cancel</a>
                         <button type="submit" class="btn btn-primary">Add Doctor</button>
@@ -150,8 +175,10 @@
             </div>
         </div>
     </div>
-    
+
+    <!-- Right Panel -->
     <div class="col-lg-4">
+        <!-- Profile Photo -->
         <div class="card medical-border">
             <div class="card-header">
                 <h5 class="card-title mb-0"><i class="fas fa-image me-2"></i>Profile Photo</h5>
@@ -160,31 +187,31 @@
                 <div class="mb-3">
                     <img src="{% static 'images/default-doctor.jpg' %}" id="profilePreview" class="rounded-circle" width="150" height="150" alt="Profile Preview">
                 </div>
-                <div class="mb-3">
-                    <input type="file" class="form-control" id="profilePhoto" accept="image/*" style="display: none;">
-                    <button class="btn btn-outline-light" onclick="document.getElementById('profilePhoto').click()">
+                <div class="mb-3">                    
+                    <button class="btn btn-outline-light" type="button" onclick="document.getElementById('profilePhoto').click()">
                         <i class="fas fa-upload me-1"></i> Upload Photo
                     </button>
                 </div>
                 <small class="text-muted">JPG, PNG or GIF. Max size 2MB.</small>
             </div>
         </div>
-        
+
+        <!-- Doctor ID -->
         <div class="card medical-border mt-4">
             <div class="card-header">
                 <h5 class="card-title mb-0"><i class="fas fa-id-card me-2"></i>Doctor ID</h5>
             </div>
             <div class="card-body text-center">
                 <div class="mb-3">
-                    <div id="doctorIdDisplay" class="fw-bold fs-5">DR-<span id="generatedId">{% now "YmdHis" %}</span></div>
+                    <div id="doctorIdDisplay" class="fw-bold fs-5">
+                        <span id="doctorId">Generating...</span>
+                    </div>
                     <small class="text-muted">This ID will be assigned to the doctor</small>
                 </div>
-                <button class="btn btn-outline-light btn-sm" id="generateNewId">
-                    <i class="fas fa-sync-alt me-1"></i> Generate New ID
-                </button>
             </div>
         </div>
-        
+
+        <!-- Quick Tips -->
         <div class="card medical-border mt-4">
             <div class="card-header">
                 <h5 class="card-title mb-0"><i class="fas fa-lightbulb me-2"></i>Quick Tips</h5>
@@ -210,120 +237,42 @@
 </div>
 
 <style>
-    .form-label {
-        font-weight: 500;
-        margin-bottom: 0.5rem;
-    }
-    
-    .card {
-        border: none;
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-    }
-    
-    .card-header {
-        background: rgba(42, 107, 156, 0.2);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .list-group-item {
-        padding: 0.5rem 0;
-        background: transparent;
-    }
-    
-    .text-danger {
-        color: #e74c3c !important;
-    }
+    .form-label { font-weight: 500; margin-bottom: 0.5rem; }
+    .card { border: none; box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15); }
+    .card-header { background: rgba(42,107,156,0.2); border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .list-group-item { padding: 0.5rem 0; background: transparent; }
+    .text-danger { color: #e74c3c !important; }
 </style>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Profile photo preview
-        const profilePhoto = document.getElementById('profilePhoto');
-        const profilePreview = document.getElementById('profilePreview');
-        
-        profilePhoto.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    profilePreview.src = e.target.result;
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-        
-        // Generate new doctor ID
-        const generateNewIdBtn = document.getElementById('generateNewId');
-        const generatedIdSpan = document.getElementById('generatedId');
-        
-        generateNewIdBtn.addEventListener('click', function() {
-            const timestamp = new Date().getTime();
-            const randomNum = Math.floor(Math.random() * 1000);
-            generatedIdSpan.textContent = `${timestamp}${randomNum}`.substring(0, 10);
-        });
-        
-        // Form submission
-        const addDoctorForm = document.getElementById('addDoctorForm');
-        
-        addDoctorForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Basic validation
-            let isValid = true;
-            const requiredFields = addDoctorForm.querySelectorAll('[required]');
-            
-            requiredFields.forEach(field => {
-                if (!field.value.trim()) {
-                    isValid = false;
-                    field.classList.add('is-invalid');
-                } else {
-                    field.classList.remove('is-invalid');
-                }
-            });
-            
-            if (isValid) {
-                // Show success message
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Doctor Added Successfully!',
-                    text: 'The doctor has been added to the system.',
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: 'var(--med-primary)'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Redirect to doctor list page
-                        window.location.href = "{% url 'doctor_list' %}";
-                    }
-                });
-            } else {
-                // Show error message
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Missing Information',
-                    text: 'Please fill in all required fields.',
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: 'var(--med-alert)'
-                });
-            }
-        });
-        
-        // Real-time validation for email format
-        const emailInput = document.getElementById('email');
-        emailInput.addEventListener('blur', function() {
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (this.value && !emailPattern.test(this.value)) {
-                this.classList.add('is-invalid');
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Invalid Email',
-                    text: 'Please enter a valid email address.',
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: 'var(--med-warning)'
-                });
-            } else {
-                this.classList.remove('is-invalid');
-            }
-        });
+document.addEventListener('DOMContentLoaded', function() {
+    // Profile photo preview
+    const profilePhoto = document.getElementById('profilePhoto');
+    const profilePreview = document.getElementById('profilePreview');
+    profilePhoto.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = e => profilePreview.src = e.target.result;
+            reader.readAsDataURL(file);
+        }
     });
+
+    // Doctor ID preview
+    const doctorIdSpan = document.getElementById("doctorId");
+    function generateDoctorPreviewId() {
+        const now = new Date();
+        const ts =
+            now.getFullYear().toString() +
+            String(now.getMonth()+1).padStart(2,'0') +
+            String(now.getDate()).padStart(2,'0') +
+            String(now.getHours()).padStart(2,'0') +
+            String(now.getMinutes()).padStart(2,'0') +
+            String(now.getSeconds()).padStart(2,'0');
+        return `DR-${ts}-AUTO`;
+    }
+    doctorIdSpan.textContent = generateDoctorPreviewId();
+    setInterval(() => doctorIdSpan.textContent = generateDoctorPreviewId(), 1000);
+});
 </script>
 {% endblock %}

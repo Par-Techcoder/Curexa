@@ -36,13 +36,24 @@ def doctor_list():
 
     return result
 
-def doctor_add(name, specialization, email, phone):
-    DoctorProfile.objects.create(
-        name=name,
+def doctor_add(dr_user, license_number, license_expiry_date, profile_picture,
+               consultation_fee, experience_years, bio, dob, clinic_address, specialization=None, city=None, pin_code=None, contact_number=None):
+    return DoctorProfile.objects.create(
+        doctor=dr_user,
+        license_number=license_number,
+        license_expiry=license_expiry_date,        
+        consultation_fee=consultation_fee,     
         specialization=specialization,
-        email=email,
-        phone=phone,
+        experience_years=experience_years,
+        bio=bio,
+        dob=dob,
+        clinic_address=clinic_address,
+        city=city,
+        pin_code=pin_code,
+        contact_number=contact_number,
+        profile_picture=profile_picture
     )
+
     
 def total_doctors_count():
     return DoctorProfile.objects.count()

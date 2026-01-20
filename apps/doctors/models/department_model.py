@@ -1,19 +1,20 @@
 from django.db import models
 from apps.core.models.base_model import BaseModel
 
-class Specialization(BaseModel):
+class Department(BaseModel):
     name = models.CharField(max_length=100, unique=True)
-    department = models.ForeignKey(
-        'doctors.Department',
-        on_delete=models.CASCADE,
+    head = models.ForeignKey(
+        'doctors.DoctorProfile',
+        on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="fk_department_specialization_department_id"
+        related_name='headed_departments'
     )
+
     description = models.TextField(blank=True, null=True)
 
     class Meta:
-        db_table = 'specializations'
+        db_table = 'departments'
         ordering = ['name']
 
     def __str__(self):

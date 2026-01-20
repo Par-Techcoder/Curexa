@@ -14,9 +14,15 @@ class DoctorProfile(AddressModel):
         blank=True,
         related_name='fk_specialization_doctor_profile_specialization_id'
     )
+    clinic_address = models.CharField(max_length=255, blank=True, null=True)
+    dob = models.DateField(blank=True, null=True)
     experience_years = models.PositiveIntegerField()
+    license_number = models.CharField(max_length=50)
+    license_expiry = models.DateField(blank=True, null=True)
+    consultation_fee = models.DecimalField(max_digits=8, decimal_places=2, default=0.0)
     contact_number = models.CharField(max_length=15, blank=True, null=True)
     profile_picture = models.ImageField(upload_to='static/images/doctor_profiles/', blank=True, null=True)
+    bio = models.TextField(blank=True, null=True)
     
     class Meta:
         db_table = 'doctors'
