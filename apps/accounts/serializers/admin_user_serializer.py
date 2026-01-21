@@ -18,12 +18,8 @@ class AdminUserSerializer(serializers.ModelSerializer):
         email = validated_data['email']
         password = validated_data['password']
 
-        # Get the part before @ for username
-        username = email.split('@')[0]
-
         # Create staff user
-        user = User.objects.create_user(
-            username=username,
+        user = User.objects.create_user( 
             email=email,
             password=password,
             role=role

@@ -1,9 +1,8 @@
 from django.views import View
 from django.shortcuts import render, redirect
 from apps.doctors.services import doctor_services, department_services, specialization_services, qualification_services
-from apps.docbook.services import availabilities_services
+from apps.docbook.services import appointment_services, availabilities_services
 from apps.accounts.services import user_services
-from apps.core.utilities.file_management import save_uploaded_file
 
 class DoctorListView(View):
     def get(self, request):
@@ -20,7 +19,6 @@ class DoctorListView(View):
             "inactive_doctors_today": inactive_doctors_today,
         }
         return render(request, "admin/doctors/doctors_list.html", context)
-    
 
 class DoctorAddView(View):
     def get(self, request):
@@ -29,7 +27,6 @@ class DoctorAddView(View):
         return render(request, "admin/doctors/doctor_add.html", {"departments": departments, "specializations": specializations})
 
     def post(self, request):
-        print("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII", request.POST)
         firstName = request.POST.get("firstName")
         middleName = request.POST.get("middleName")
         lastName = request.POST.get("lastName")
@@ -44,7 +41,6 @@ class DoctorAddView(View):
         license_expiry = request.POST.get("licenseExpiry")
 
         specialization_id = request.POST.get("specialization")
-        department_id = request.POST.get("department")
 
         degree = request.POST.get("degree")
         institution = request.POST.get("institution")
@@ -85,8 +81,19 @@ class DoctorAddView(View):
         
 
         return redirect("doctor_list")
-
-
+    
+class DoctorsSchedulesView(View):
+    def get(self, request):
+        todays_appointments = appointment_services.todays_appointments_count_for_all_doctors()
+        doctor_on_duty = availabilities_services.today_active_doctors_count()
+        available_time_slots = availabilities_services.today_doctor_available_slots()  # Assuming None fetches all doctors' availabilities
+        
+        context={
+            "todays_appointments": todays_appointments,
+            "doctor_on_duty": doctor_on_duty,
+            "available_time_slots": available_time_slots
+        }
+        return render(request, "admin/doctors/doctor_schedules.html", context)    
     
 class DoctorSchedulesView(View):
     def get(self, request, pk):

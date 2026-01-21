@@ -1,5 +1,5 @@
 from apps.doctors.models.doctorprofile_model import DoctorProfile
-from apps.docbook.services import appoinment_services
+from apps.docbook.services import appointment_services
 from apps.docbook.services import availabilities_services
 
 def doctor_list():
@@ -11,8 +11,8 @@ def doctor_list():
 
     for obj in qs:
         
-        active_appointments_count = appoinment_services.active_appointments_count(obj)
-        todays_appointments_count = appoinment_services.todays_appointments_count(obj)
+        active_appointments_count = appointment_services.active_appointments_count(obj)
+        todays_appointments_count = appointment_services.todays_appointments_count(obj)
         today_availabilities = bool(availabilities_services.today_doctor_availabilities(obj))        
         
         data = {

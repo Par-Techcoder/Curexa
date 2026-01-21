@@ -756,7 +756,7 @@
             <a href="{% url 'doctor_add' %}"
               ><i class="fas fa-plus-circle me-2"></i>Add Doctor</a
             >
-            <a href="{% url 'doctor_schedule' 1 %}">
+            <a href="{% url 'doctors_schedules' %}">
               ><i class="fas fa-calendar-check me-2"></i>Schedules</a
             >
           </div>
@@ -826,7 +826,7 @@
             <div class="submenu-header">Appointments</div>
             <hr class="submenu-divider" />
             <a href="{% url 'appointment_list' %}"
-              ><i class="fas fa-calendar-day me-2"></i>Today's Schedule</a
+              ><i class="fas fa-calendar-day me-2"></i>Today's Appointments</a
             >
             <a href="{% url 'appointment_add' %}"
               ><i class="fas fa-plus-circle me-2"></i>Book Appointment</a
