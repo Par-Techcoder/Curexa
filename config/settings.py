@@ -43,6 +43,16 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# Migration Modules
+MIGRATION_MODULES = {
+    'accounts': 'apps.core.migrations.accounts',
+    'doctors': 'apps.core.migrations.doctors',
+    'docbook': 'apps.core.migrations.docbook',
+    'medistore': 'apps.core.migrations.medistore',
+    'orders': 'apps.core.migrations.orders',
+    'labtests': 'apps.core.migrations.labtests',
+}
+
 
 ROOT_URLCONF = 'config.urls'
 
@@ -189,4 +199,4 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = env("EMAIL_ID")
 EMAIL_HOST_PASSWORD = env("EMAIL_PASSWORD")
 SITE_URL = env("SITE_URL", default="http://localhost:8000")
-DEFAULT_FROM_EMAIL = env("EMAIL_ID")
+DEFAULT_FROM_EMAIL = "Curexa <" + env("EMAIL_ID") + ">"

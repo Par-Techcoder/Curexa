@@ -11,13 +11,12 @@ class Appointment(BaseModel):
     availability = models.OneToOneField(
         "docbook.Availability",
         on_delete=models.CASCADE,
-        related_name="appointment",
-        verbose_name="Booked Slot"
+        related_name='fk_availability_appointment_availability_id'
     )
 
     appointment_status = models.IntegerField(
         choices=[(s.value, s.name) for s in AppointmentStatus],
-        default=AppointmentStatus.PENDING.value
+        default=AppointmentStatus.SCHEDULED.value
     )
 
     patient = models.ForeignKey(

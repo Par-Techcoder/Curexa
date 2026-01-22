@@ -13,10 +13,10 @@ class AdminUserViewSet(viewsets.ModelViewSet):
         - Development: any authenticated user
         - Production: superusers only
         """
-        print("DEBUG MODE:", getattr(settings, "DEBUG", True))
         if getattr(settings, "DEBUG", True):
             # Dev mode: any authenticated user
-            permission_classes = [permissions.IsAuthenticated]
+            # permission_classes = [permissions.IsAuthenticated]
+            permission_classes = []
         else:
             # Production: superusers only
             class IsSuperUser(permissions.BasePermission):

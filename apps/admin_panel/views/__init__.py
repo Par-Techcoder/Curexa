@@ -8,3 +8,4 @@ from .home_view import *
 from .catagory_view import *
 from .appointments_view import *
 from .reports_view import *
+from .availability_view import *

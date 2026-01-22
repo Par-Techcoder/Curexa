@@ -1,15 +1,17 @@
 from django.views import View
 from django.shortcuts import render, redirect
 from apps.doctors.services import doctor_services, department_services, specialization_services, qualification_services
-from apps.docbook.services import appointment_services, availabilities_services
+from apps.docbook.services import appointment_services, availability_services
 from apps.accounts.services import user_services
+from apps.core.utilities.decorators import admin_required
 
+@admin_required(login_url="/admin/login/")
 class DoctorListView(View):
     def get(self, request):
         doctors = doctor_services.doctor_list()
         total_doctors = doctor_services.total_doctors_count()
         specialized_doctors  = doctor_services.specialized_doctors_count()
-        active_doctors = availabilities_services.today_active_doctors_count()
+        active_doctors = availability_services.today_active_doctors_count()
         inactive_doctors_today = total_doctors - active_doctors
         context = {
             "doctors": doctors,
@@ -20,6 +22,7 @@ class DoctorListView(View):
         }
         return render(request, "admin/doctors/doctors_list.html", context)
 
+@admin_required(login_url="/admin/login/")
 class DoctorAddView(View):
     def get(self, request):
         departments = department_services.get_all_departments()
@@ -81,29 +84,13 @@ class DoctorAddView(View):
         
 
         return redirect("doctor_list")
-    
-class DoctorsSchedulesView(View):
-    def get(self, request):
-        todays_appointments = appointment_services.todays_appointments_count_for_all_doctors()
-        doctor_on_duty = availabilities_services.today_active_doctors_count()
-        available_time_slots = availabilities_services.today_doctor_available_slots()  # Assuming None fetches all doctors' availabilities
-        
-        context={
-            "todays_appointments": todays_appointments,
-            "doctor_on_duty": doctor_on_duty,
-            "available_time_slots": available_time_slots
-        }
-        return render(request, "admin/doctors/doctor_schedules.html", context)    
-    
-class DoctorSchedulesView(View):
-    def get(self, request, pk):
-        return render(request, "admin/doctors/doctor_schedules.html")    
-    
+
+@admin_required(login_url="/admin/login/")
 class DoctorDetailView(View):
     def get(self, request, pk):
-        return render(request, "admin/doctors/doctor_detail.html")    
-    
-    
+        return render(request, "admin/doctors/doctor_detail.html")
+
+@admin_required(login_url="/admin/login/")    
 class DoctorEditView(View):
     def get(self, request, pk):
         return render(request, "admin/doctors/doctor_edit.html")    

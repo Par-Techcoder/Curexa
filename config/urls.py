@@ -19,14 +19,24 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
+    # CBV and FBV URLs
     path('', include('apps.accounts.urls')),
     path('', include('apps.core.urls')),
     path('', include('apps.admin_panel.urls')),
-    path('api/', include('apps.docbook.urls')),
-    path('api/', include('apps.doctors.urls')),
-    path('api/', include('apps.medistore.urls')),
-    path('api/', include('apps.orders.urls')),
+    path('', include('apps.docbook.urls')),
+    path('', include('apps.doctors.urls')),
+    path('', include('apps.medistore.urls')),
+    path('', include('apps.orders.urls')),    
     
+    # API URLs
+    path('api/', include('apps.accounts.api_urls')),
+    path('api/', include('apps.core.api_urls')),
+    path('api/', include('apps.admin_panel.api_urls')),
+    path('api/', include('apps.docbook.api_urls')),
+    path('api/', include('apps.doctors.api_urls')),
+    path('api/', include('apps.medistore.api_urls')),
+    path('api/', include('apps.orders.api_urls')),
+
     # JWT Token Refresh
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     

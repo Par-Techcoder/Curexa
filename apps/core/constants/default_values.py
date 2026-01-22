@@ -12,12 +12,14 @@ class Role(Enum):
     DOCTOR = 3
     
 class AppointmentType(Enum):
-    CONSULTATION = 1
+    CHECKUP = 1
     FOLLOW_UP = 2
     EMERGENCY = 3
+    CONSULTATION = 4
+    PROCEDURE = 5
 
 class AppointmentStatus(Enum):
-    PENDING = 1
+    SCHEDULED = 1
     CONFIRMED = 2
     CANCELLED = 3
     COMPLETED = 4

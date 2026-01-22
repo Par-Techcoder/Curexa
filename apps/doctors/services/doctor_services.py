@@ -1,6 +1,6 @@
 from apps.doctors.models.doctorprofile_model import DoctorProfile
 from apps.docbook.services import appointment_services
-from apps.docbook.services import availabilities_services
+from apps.docbook.services import availability_services
 
 def doctor_list():
     qs = DoctorProfile.objects.select_related(
@@ -12,8 +12,8 @@ def doctor_list():
     for obj in qs:
         
         active_appointments_count = appointment_services.active_appointments_count(obj)
-        todays_appointments_count = appointment_services.todays_appointments_count(obj)
-        today_availabilities = bool(availabilities_services.today_doctor_availabilities(obj))        
+        todays_appointments_count = appointment_services.active_appointments_count(obj)
+        today_availabilities = bool(availability_services.today_doctor_availabilities(obj))        
         
         data = {
             "id": obj.doctor.id,
@@ -60,3 +60,13 @@ def total_doctors_count():
 
 def specialized_doctors_count():
     return DoctorProfile.objects.filter(specialization__isnull=False).count()
+
+def get_all_doctors():
+    return DoctorProfile.objects.values(
+        'id',        
+        'doctor__first_name',
+        'doctor__middle_name',
+        'doctor__last_name',
+        'profile_picture',
+        'specialization__name'
+    )

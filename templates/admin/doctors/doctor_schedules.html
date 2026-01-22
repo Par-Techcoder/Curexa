@@ -31,7 +31,7 @@
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-8">
-                        <h5 class="card-title stats-number">47</h5>
+                        <h5 class="card-title stats-number">{{todays_appointments}}</h5>
                         <p class="card-text stats-label">Today's Appointments</p>
                     </div>
                     <div class="col-4 text-end">
@@ -46,7 +46,7 @@
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-8">
-                        <h5 class="card-title stats-number">12</h5>
+                        <h5 class="card-title stats-number">{{doctor_on_duty}}</h5>
                         <p class="card-text stats-label">Doctors On Duty</p>
                     </div>
                     <div class="col-4 text-end">
@@ -61,7 +61,7 @@
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-8">
-                        <h5 class="card-title stats-number">28</h5>
+                        <h5 class="card-title stats-number">{{available_time_slots}}</h5>
                         <p class="card-text stats-label">Available Time Slots</p>
                     </div>
                     <div class="col-4 text-end">
@@ -76,7 +76,7 @@
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-8">
-                        <h5 class="card-title stats-number">4</h5>
+                        <h5 class="card-title stats-number">{{emergency_cases}}</h5>
                         <p class="card-text stats-label">Emergency Cases</p>
                     </div>
                     <div class="col-4 text-end">
@@ -94,16 +94,9 @@
         <div class="d-flex">
             <select class="form-select me-2" id="doctorFilter">
                 <option value="all" selected>All Doctors</option>
-                <option value="DR101">Dr. Sarah Johnson - Cardiology</option>
-                <option value="DR102">Dr. Michael Chen - Neurology</option>
-                <option value="DR103">Dr. Anita Patel - Pediatrics</option>
-                <option value="DR104">Dr. James Williams - Orthopedics</option>
-                <option value="DR105">Dr. Emily Rodriguez - Dermatology</option>
-                <option value="DR106">Dr. Robert Kim - Oncology</option>
-                <option value="DR107">Dr. Maria Garcia - Gynecology</option>
-                <option value="DR108">Dr. David Wilson - General Surgery</option>
-                <option value="DR109">Dr. Lisa Thompson - Psychiatry</option>
-                <option value="DR110">Dr. Thomas Brown - Ophthalmology</option>
+                {% for doctor in doctors %}
+                    <option value="{{ doctor.id }}">{{ doctor.doctor__first_name }} - {{ doctor.specialization__name }}</option>
+                {% endfor %}
             </select>
         </div>
     </div>
@@ -164,32 +157,25 @@
                     <div class="col-md-3">
                         <select class="form-select form-select-sm" id="departmentFilter">
                             <option value="">All Departments</option>
-                            <option value="cardiology">Cardiology</option>
-                            <option value="neurology">Neurology</option>
-                            <option value="pediatrics">Pediatrics</option>
-                            <option value="orthopedics">Orthopedics</option>
-                            <option value="dermatology">Dermatology</option>
-                            <option value="oncology">Oncology</option>
+                            {% for department in departments %}
+                                <option value="{{ department.id }}">{{ department.name }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                     <div class="col-md-3">
                         <select class="form-select form-select-sm" id="appointmentTypeFilter">
                             <option value="">All Appointment Types</option>
-                            <option value="checkup">Regular Checkup</option>
-                            <option value="followup">Follow-up</option>
-                            <option value="emergency">Emergency</option>
-                            <option value="consultation">Consultation</option>
-                            <option value="procedure">Procedure</option>
+                            {% for type in appointment_types %}
+                                <option value="{{ type.value }}">{{ type.name }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                     <div class="col-md-3">
                         <select class="form-select form-select-sm" id="statusFilter">
                             <option value="">All Status</option>
-                            <option value="scheduled">Scheduled</option>
-                            <option value="confirmed">Confirmed</option>
-                            <option value="completed">Completed</option>
-                            <option value="cancelled">Cancelled</option>
-                            <option value="noshow">No Show</option>
+                            {% for status in appointment_status %}
+                                <option value="{{ status.value }}">{{ status.name }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                     <div class="col-md-3">
