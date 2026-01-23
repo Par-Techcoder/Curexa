@@ -3,6 +3,9 @@ from apps.core.constants.default_values import Role
 import secrets
 from django.core.mail import send_mail
 from django.conf import settings
+from django.db import transaction
+from apps.accounts.models.patientprofile_model import PatientProfile
+from apps.doctors.models.doctorprofile_model import DoctorProfile
 
 OTP_EXPIRY_SECONDS = 300  # 5 minutes
 OTP_ATTEMPT_LIMIT = 5
@@ -23,6 +26,30 @@ def user_create_or_check(email):
 
     return user
 
+def create_patient_user(first_name, middle_name, last_name, email):
+    """
+    Create a user with patient role.
+    """
+    user = User(
+        first_name=first_name,
+        middle_name=middle_name,
+        last_name=last_name,
+        email=email,        
+        role=Role.PATIENT.value,
+    )
+    temp_password = secrets.token_urlsafe(12)
+    user.set_password(temp_password)
+    ensure_user_profile(user)
+    send_mail(
+        subject="Your Password for Patient Account",
+        message=f"Your temporary password is {temp_password}. Please log in and change your password.",
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[email],
+        fail_silently=False,
+    )
+    user.save()
+    return user
+
 def create_doctor_user(first_name, middle_name, last_name, email):
     """
     Create a user with doctor role.
@@ -36,6 +63,7 @@ def create_doctor_user(first_name, middle_name, last_name, email):
     )
     temp_password = secrets.token_urlsafe(12)
     user.set_password(temp_password)
+    ensure_user_profile(user)
     send_mail(
         subject="Your Password for Doctor Account",
         message=f"Your temporary password is {temp_password}. Please log in and change your password.",
@@ -45,3 +73,24 @@ def create_doctor_user(first_name, middle_name, last_name, email):
     )
     user.save()
     return user
+
+
+@transaction.atomic
+def ensure_user_profile(user):
+    """
+    Ensure a profile exists for the given user based on role.
+    """
+    if user.role == Role.PATIENT.value:
+        profile, _ = PatientProfile.objects.get_or_create(
+            patient=user
+        )
+        return profile
+
+    if user.role == Role.DOCTOR.value:
+        profile, _ = DoctorProfile.objects.get_or_create(
+            doctor=user,
+            experience_years=3
+        )
+        return profile
+
+    raise ValueError(f"Unsupported user role: {user.role}")

@@ -18,6 +18,7 @@ class DoctorsSchedulesView(View):
         start_date, end_date = availability_services.get_current_week_range()
         
         doctors_appointments_today = appointment_services.doctors_appointments_today()
+        print("Doctors Appointments Today:", doctors_appointments_today)
         doctors_appointments_by_week = appointment_services.doctors_appointments_in_current_week(start_date=start_date, end_date=end_date)
         
         doctors = doctor_services.get_all_doctors()

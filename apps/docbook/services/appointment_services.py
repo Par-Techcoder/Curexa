@@ -37,38 +37,48 @@ def todays_emergency_appointments_count():
     ).count()
     
 
-
 def _base_doctor_appointment_qs():
     return (
         Appointment.objects
         .filter(is_active=True)
-        .select_related('doctor', 'patient', 'availability')
+        .select_related(
+            'doctor__doctor',
+            'patient__user',
+            'availability'
+        )
         .values(
+            # Doctor
             'doctor__id',
             'doctor__doctor__first_name',
             'doctor__doctor__middle_name',
             'doctor__doctor__last_name',
 
+            # Patient
             'patient__id',
             'patient__patient__first_name',
             'patient__patient__middle_name',
             'patient__patient__last_name',
             'patient__dob',
             'patient__gender',
-            'patient__email',
+            'patient__patient__email',
             'patient__phone_number',
-            'patient_chronic_conditions',
-            'patient_allergies',
+            'patient__chronic_conditions',
+            'patient__allergies',
 
+            # Appointment
             'appointment_type',
-            'appointment_status',   
+            'appointment_status',
             'notes',
 
+            # Availability
             'availability__date',
             'availability__start_time',
             'availability__end_time',
-            
-        ).order_by('availability__start_time').distinct('doctor')
+        )
+        .order_by(
+            'availability__date',
+            'availability__start_time'
+        )
     )
 
 

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from apps.accounts.models import User
 from apps.core.constants.default_values import Role
+from apps.accounts.services import user_services
 
 class AdminUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,6 +25,10 @@ class AdminUserSerializer(serializers.ModelSerializer):
             password=password,
             role=role
         )
+        if role == Role.PATIENT.value:
+            user_services.ensure_user_profile(user)
+        elif role == Role.DOCTOR.value:
+            user_services.ensure_user_profile(user)
 
         # Optional: audit logging
         request_user = self.context['request'].user
