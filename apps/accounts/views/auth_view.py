@@ -38,10 +38,12 @@ def verify_otp_view(request):
         if verify_otp_code(contact, otp_code, purpose="login"):
             
              # Create or fetch user
-            user= user_services.user_create_or_check(contact)
+            user = user_services.user_create_or_check(contact)
+            
+            patient_profile = user_services.ensure_user_profile(user)        
 
             # Log the user in (sets session cookie)
-            login(request, user)
+            login(request, patient_profile.user)
             
             # OTP verified successfully
             return JsonResponse({"status": "success", "message": "OTP verified"})            

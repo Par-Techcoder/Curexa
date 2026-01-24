@@ -5,6 +5,8 @@ from apps.doctors.services import department_services
 from apps.doctors.services import doctor_services
 from apps.core.utilities.decorators import admin_required
 
+from pprint import pprint
+
 @admin_required(login_url="/admin/login/")
 class DoctorsSchedulesView(View):
     def get(self, request):
@@ -18,7 +20,6 @@ class DoctorsSchedulesView(View):
         start_date, end_date = availability_services.get_current_week_range()
         
         doctors_appointments_today = appointment_services.doctors_appointments_today()
-        print("Doctors Appointments Today:", doctors_appointments_today)
         doctors_appointments_by_week = appointment_services.doctors_appointments_in_current_week(start_date=start_date, end_date=end_date)
         
         doctors = doctor_services.get_all_doctors()
@@ -35,6 +36,11 @@ class DoctorsSchedulesView(View):
             "appointment_types": appointment_types_status['types'],
             "appointment_status": appointment_types_status['statuses'],
         }
+        
+
+        pprint(context)
+
+
         return render(request, "admin/doctors/doctor_schedules.html", context)
     
      

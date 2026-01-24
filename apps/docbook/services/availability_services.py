@@ -1,5 +1,7 @@
 from apps.docbook.models.availability_model import Availability
 from django.utils import timezone
+from datetime import timedelta
+
 
 def check_doctor_availability(doctor, date, start_time):
     return Availability.objects.filter(
@@ -20,6 +22,7 @@ def today_doctor_availabilities(doctor):
 def today_active_doctors_count():
     return Availability.objects.filter(
         is_available=True,
+        is_active=True,
         date=timezone.localdate()
     ).values('doctor').distinct().count()
 
@@ -27,8 +30,9 @@ def today_active_doctors_count():
 def today_doctor_available_slots():
     today = timezone.localdate()
     return Availability.objects.filter(
-        date=today,    
-        is_available=True
+        date=today,
+        is_available=True,
+        is_active=True
     ).count()
     
     
@@ -64,7 +68,6 @@ def create_availability(*, doctor, date, start_time, end_time):
     )
     
 
-from datetime import timedelta
 def get_current_week_range():
     today = timezone.localdate()  # timezone-safe
     start_of_week = today - timedelta(days=today.weekday())  # Monday
