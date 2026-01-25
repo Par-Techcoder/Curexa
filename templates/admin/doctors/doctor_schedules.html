@@ -1,5 +1,7 @@
 {% extends 'admin/base.html' %}
 {% load static %}
+{% load static dict_extras %}
+
 
 {% block title %}Doctor Schedules - Curexa Admin{% endblock %}
 
@@ -134,13 +136,14 @@
             <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
                 <i class="fas fa-download"></i> Export
             </button>
-            <ul class="dropdown-menu">
-                <li><a class="dropdown-item export-btn" href="#" data-format="pdf"><i class="fas fa-file-pdf me-2"></i>PDF</a></li>
-                <li><a class="dropdown-item export-btn" href="#" data-format="excel"><i class="fas fa-file-excel me-2"></i>Excel</a></li>
-                <li><a class="dropdown-item export-btn" href="#" data-format="csv"><i class="fas fa-file-csv me-2"></i>CSV</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#" id="importSchedule"><i class="fas fa-file-import me-2"></i>Import</a></li>
-            </ul>
+<!-- Import & Export Dropdown -->
+<ul class="dropdown-menu">
+    <li><a class="dropdown-item export-btn" href="#" data-format="pdf"><i class="fas fa-file-pdf me-2"></i>PDF</a></li>
+    <li><a class="dropdown-item export-btn" href="#" data-format="excel"><i class="fas fa-file-excel me-2"></i>Excel</a></li>
+    <li><a class="dropdown-item export-btn" href="#" data-format="csv"><i class="fas fa-file-csv me-2"></i>CSV</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="#" id="importSchedule"><i class="fas fa-file-import me-2"></i>Import</a></li>
+</ul>
         </div>
         <button class="btn btn-outline-light ms-2" id="printSchedule">
             <i class="fas fa-print"></i>
@@ -223,438 +226,75 @@
                         <div class="table-responsive">
                             <div class="doctor-scroll-container">
                                 <table class="table table-hover" id="dailySchedule">
-                                    <thead>
-                                        <tr>
-                                            <th class="time-column">Time</th>
-                                            <!-- Doctor 1 -->
-                                            <th class="doctor-column">
-                                                <div class="doctor-header">
-                                                    <img src="{% static 'images/doctors/doctor1.jpg' %}" alt="Dr. Sarah Johnson" class="rounded-circle me-2" width="24" height="24">
-                                                    <div>
-                                                        <div class="fw-bold">Dr. S. Johnson</div>
-                                                        <small class="text-muted">Cardiology</small>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <!-- Doctor 2 -->
-                                            <th class="doctor-column">
-                                                <div class="doctor-header">
-                                                    <img src="{% static 'images/doctors/doctor2.jpg' %}" alt="Dr. Michael Chen" class="rounded-circle me-2" width="24" height="24">
-                                                    <div>
-                                                        <div class="fw-bold">Dr. M. Chen</div>
-                                                        <small class="text-muted">Neurology</small>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <!-- Doctor 3 -->
-                                            <th class="doctor-column">
-                                                <div class="doctor-header">
-                                                    <img src="{% static 'images/doctors/doctor3.jpg' %}" alt="Dr. Anita Patel" class="rounded-circle me-2" width="24" height="24">
-                                                    <div>
-                                                        <div class="fw-bold">Dr. A. Patel</div>
-                                                        <small class="text-muted">Pediatrics</small>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <!-- Doctor 4 -->
-                                            <th class="doctor-column">
-                                                <div class="doctor-header">
-                                                    <img src="{% static 'images/doctors/doctor4.jpg' %}" alt="Dr. James Williams" class="rounded-circle me-2" width="24" height="24">
-                                                    <div>
-                                                        <div class="fw-bold">Dr. J. Williams</div>
-                                                        <small class="text-muted">Orthopedics</small>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <!-- Doctor 5 -->
-                                            <th class="doctor-column">
-                                                <div class="doctor-header">
-                                                    <img src="{% static 'images/doctors/doctor5.jpg' %}" alt="Dr. Emily Rodriguez" class="rounded-circle me-2" width="24" height="24">
-                                                    <div>
-                                                        <div class="fw-bold">Dr. E. Rodriguez</div>
-                                                        <small class="text-muted">Dermatology</small>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <!-- Doctor 6 -->
-                                            <th class="doctor-column">
-                                                <div class="doctor-header">
-                                                    <img src="{% static 'images/doctors/doctor6.jpg' %}" alt="Dr. Robert Kim" class="rounded-circle me-2" width="24" height="24">
-                                                    <div>
-                                                        <div class="fw-bold">Dr. R. Kim</div>
-                                                        <small class="text-muted">Oncology</small>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <!-- Morning Schedule -->
-                                        <tr>
-                                            <td class="fw-bold time-column">8:00 AM</td>
-                                            <td class="schedule-cell" data-time="08:00" data-doctor="DR101" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT001">
-                                                    <small class="d-block">John Smith</small>
-                                                    <small class="badge badge-sm type-badge checkup">Checkup</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="08:00" data-doctor="DR102" data-date="2024-01-21">
-                                                <div class="appointment available" data-bs-toggle="tooltip" title="Click to book appointment">
-                                                    <small>Available</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="08:00" data-doctor="DR103" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT002">
-                                                    <small class="d-block">Emma Wilson</small>
-                                                    <small class="badge badge-sm type-badge followup">Follow-up</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="08:00" data-doctor="DR104" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT003">
-                                                    <small class="d-block">Mike Johnson</small>
-                                                    <small class="badge badge-sm type-badge procedure">Procedure</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="08:00" data-doctor="DR105" data-date="2024-01-21">
-                                                <div class="appointment available" data-bs-toggle="tooltip" title="Click to book appointment">
-                                                    <small>Available</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="08:00" data-doctor="DR106" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT004">
-                                                    <small class="d-block">Sarah Connor</small>
-                                                    <small class="badge badge-sm type-badge consultation">Consultation</small>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="fw-bold time-column">8:30 AM</td>
-                                            <td class="schedule-cell" data-time="08:30" data-doctor="DR101" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT005">
-                                                    <small class="d-block">John Smith</small>
-                                                    <small class="badge badge-sm type-badge checkup">Checkup</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="08:30" data-doctor="DR102" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT006">
-                                                    <small class="d-block">Robert Davis</small>
-                                                    <small class="badge badge-sm type-badge emergency">Emergency</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="08:30" data-doctor="DR103" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT007">
-                                                    <small class="d-block">Emma Wilson</small>
-                                                    <small class="badge badge-sm type-badge followup">Follow-up</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="08:30" data-doctor="DR104" data-date="2024-01-21">
-                                                <div class="appointment available" data-bs-toggle="tooltip" title="Click to book appointment">
-                                                    <small>Available</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="08:30" data-doctor="DR105" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT008">
-                                                    <small class="d-block">Sophia Brown</small>
-                                                    <small class="badge badge-sm type-badge checkup">Checkup</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="08:30" data-doctor="DR106" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT009">
-                                                    <small class="d-block">Sarah Connor</small>
-                                                    <small class="badge badge-sm type-badge consultation">Consultation</small>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="fw-bold time-column">9:00 AM</td>
-                                            <td class="schedule-cell" data-time="09:00" data-doctor="DR101" data-date="2024-01-21">
-                                                <div class="appointment available" data-bs-toggle="tooltip" title="Click to book appointment">
-                                                    <small>Available</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="09:00" data-doctor="DR102" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT010">
-                                                    <small class="d-block">Robert Davis</small>
-                                                    <small class="badge badge-sm type-badge emergency">Emergency</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="09:00" data-doctor="DR103" data-date="2024-01-21">
-                                                <div class="appointment available" data-bs-toggle="tooltip" title="Click to book appointment">
-                                                    <small>Available</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="09:00" data-doctor="DR104" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT011">
-                                                    <small class="d-block">Michael Taylor</small>
-                                                    <small class="badge badge-sm type-badge checkup">Checkup</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="09:00" data-doctor="DR105" data-date="2024-01-21">
-                                                <div class="appointment available" data-bs-toggle="tooltip" title="Click to book appointment">
-                                                    <small>Available</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="09:00" data-doctor="DR106" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT012">
-                                                    <small class="d-block">David Miller</small>
-                                                    <small class="badge badge-sm type-badge followup">Follow-up</small>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="fw-bold time-column">9:30 AM</td>
-                                            <td class="schedule-cell" data-time="09:30" data-doctor="DR101" data-date="2024-01-21">
-                                                <div class="appointment available" data-bs-toggle="tooltip" title="Click to book appointment">
-                                                    <small>Available</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="09:30" data-doctor="DR102" data-date="2024-01-21">
-                                                <div class="appointment available" data-bs-toggle="tooltip" title="Click to book appointment">
-                                                    <small>Available</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="09:30" data-doctor="DR103" data-date="2024-01-21">
-                                                <div class="appointment break">
-                                                    <small><i class="fas fa-coffee"></i> Break</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="09:30" data-doctor="DR104" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT013">
-                                                    <small class="d-block">Michael Taylor</small>
-                                                    <small class="badge badge-sm type-badge checkup">Checkup</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="09:30" data-doctor="DR105" data-date="2024-01-21">
-                                                <div class="appointment available" data-bs-toggle="tooltip" title="Click to book appointment">
-                                                    <small>Available</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="09:30" data-doctor="DR106" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT014">
-                                                    <small class="d-block">David Miller</small>
-                                                    <small class="badge badge-sm type-badge followup">Follow-up</small>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="fw-bold time-column">10:00 AM</td>
-                                            <td class="schedule-cell" data-time="10:00" data-doctor="DR101" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT015">
-                                                    <small class="d-block">Jennifer Lee</small>
-                                                    <small class="badge badge-sm type-badge consultation">Consultation</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="10:00" data-doctor="DR102" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT016">
-                                                    <small class="d-block">William Brown</small>
-                                                    <small class="badge badge-sm type-badge checkup">Checkup</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="10:00" data-doctor="DR103" data-date="2024-01-21">
-                                                <div class="appointment break">
-                                                    <small><i class="fas fa-coffee"></i> Break</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="10:00" data-doctor="DR104" data-date="2024-01-21">
-                                                <div class="appointment available" data-bs-toggle="tooltip" title="Click to book appointment">
-                                                    <small>Available</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="10:00" data-doctor="DR105" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT017">
-                                                    <small class="d-block">Olivia Martinez</small>
-                                                    <small class="badge badge-sm type-badge emergency">Emergency</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="10:00" data-doctor="DR106" data-date="2024-01-21">
-                                                <div class="appointment available" data-bs-toggle="tooltip" title="Click to book appointment">
-                                                    <small>Available</small>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <!-- Lunch Time -->
-                                        <tr>
-                                            <td class="fw-bold time-column">12:00 PM</td>
-                                            <td class="schedule-cell" data-time="12:00" data-doctor="DR101" data-date="2024-01-21">
-                                                <div class="appointment break">
-                                                    <small><i class="fas fa-utensils"></i> Lunch</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="12:00" data-doctor="DR102" data-date="2024-01-21">
-                                                <div class="appointment break">
-                                                    <small><i class="fas fa-utensils"></i> Lunch</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="12:00" data-doctor="DR103" data-date="2024-01-21">
-                                                <div class="appointment break">
-                                                    <small><i class="fas fa-utensils"></i> Lunch</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="12:00" data-doctor="DR104" data-date="2024-01-21">
-                                                <div class="appointment break">
-                                                    <small><i class="fas fa-utensils"></i> Lunch</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="12:00" data-doctor="DR105" data-date="2024-01-21">
-                                                <div class="appointment break">
-                                                    <small><i class="fas fa-utensils"></i> Lunch</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="12:00" data-doctor="DR106" data-date="2024-01-21">
-                                                <div class="appointment break">
-                                                    <small><i class="fas fa-utensils"></i> Lunch</small>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <!-- Afternoon Schedule -->
-                                        <tr>
-                                            <td class="fw-bold time-column">1:00 PM</td>
-                                            <td class="schedule-cell" data-time="13:00" data-doctor="DR101" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT018">
-                                                    <small class="d-block">Thomas Anderson</small>
-                                                    <small class="badge badge-sm type-badge followup">Follow-up</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="13:00" data-doctor="DR102" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT019">
-                                                    <small class="d-block">Amanda Clark</small>
-                                                    <small class="badge badge-sm type-badge checkup">Checkup</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="13:00" data-doctor="DR103" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT020">
-                                                    <small class="d-block">Noah Rodriguez</small>
-                                                    <small class="badge badge-sm type-badge emergency">Emergency</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="13:00" data-doctor="DR104" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT021">
-                                                    <small class="d-block">Sophia Garcia</small>
-                                                    <small class="badge badge-sm type-badge procedure">Procedure</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="13:00" data-doctor="DR105" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT022">
-                                                    <small class="d-block">Liam Wilson</small>
-                                                    <small class="badge badge-sm type-badge consultation">Consultation</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="13:00" data-doctor="DR106" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT023">
-                                                    <small class="d-block">Emma Thompson</small>
-                                                    <small class="badge badge-sm type-badge checkup">Checkup</small>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="fw-bold time-column">2:00 PM</td>
-                                            <td class="schedule-cell" data-time="14:00" data-doctor="DR101" data-date="2024-01-21">
-                                                <div class="appointment available" data-bs-toggle="tooltip" title="Click to book appointment">
-                                                    <small>Available</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="14:00" data-doctor="DR102" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT024">
-                                                    <small class="d-block">James Miller</small>
-                                                    <small class="badge badge-sm type-badge followup">Follow-up</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="14:00" data-doctor="DR103" data-date="2024-01-21">
-                                                <div class="appointment available" data-bs-toggle="tooltip" title="Click to book appointment">
-                                                    <small>Available</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="14:00" data-doctor="DR104" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT025">
-                                                    <small class="d-block">Ava Davis</small>
-                                                    <small class="badge badge-sm type-badge checkup">Checkup</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="14:00" data-doctor="DR105" data-date="2024-01-21">
-                                                <div class="appointment cancelled">
-                                                    <small class="d-block">John Carter</small>
-                                                    <small class="badge badge-sm type-badge cancelled">Cancelled</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="14:00" data-doctor="DR106" data-date="2024-01-21">
-                                                <div class="appointment available" data-bs-toggle="tooltip" title="Click to book appointment">
-                                                    <small>Available</small>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="fw-bold time-column">3:00 PM</td>
-                                            <td class="schedule-cell" data-time="15:00" data-doctor="DR101" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT026">
-                                                    <small class="d-block">Robert Johnson</small>
-                                                    <small class="badge badge-sm type-badge checkup">Checkup</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="15:00" data-doctor="DR102" data-date="2024-01-21">
-                                                <div class="appointment available" data-bs-toggle="tooltip" title="Click to book appointment">
-                                                    <small>Available</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="15:00" data-doctor="DR103" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT027">
-                                                    <small class="d-block">Charlotte White</small>
-                                                    <small class="badge badge-sm type-badge followup">Follow-up</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="15:00" data-doctor="DR104" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT028">
-                                                    <small class="d-block">Lucas Brown</small>
-                                                    <small class="badge badge-sm type-badge emergency">Emergency</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="15:00" data-doctor="DR105" data-date="2024-01-21">
-                                                <div class="appointment available" data-bs-toggle="tooltip" title="Click to book appointment">
-                                                    <small>Available</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="15:00" data-doctor="DR106" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT029">
-                                                    <small class="d-block">Mia Anderson</small>
-                                                    <small class="badge badge-sm type-badge consultation">Consultation</small>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="fw-bold time-column">4:00 PM</td>
-                                            <td class="schedule-cell" data-time="16:00" data-doctor="DR101" data-date="2024-01-21">
-                                                <div class="appointment available" data-bs-toggle="tooltip" title="Click to book appointment">
-                                                    <small>Available</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="16:00" data-doctor="DR102" data-date="2024-01-21">
-                                                <div class="appointment break">
-                                                    <small><i class="fas fa-coffee"></i> Break</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="16:00" data-doctor="DR103" data-date="2024-01-21">
-                                                <div class="appointment available" data-bs-toggle="tooltip" title="Click to book appointment">
-                                                    <small>Available</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="16:00" data-doctor="DR104" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT030">
-                                                    <small class="d-block">Ethan Taylor</small>
-                                                    <small class="badge badge-sm type-badge checkup">Checkup</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="16:00" data-doctor="DR105" data-date="2024-01-21">
-                                                <div class="appointment booked" data-appointment="APT031">
-                                                    <small class="d-block">Harper Martin</small>
-                                                    <small class="badge badge-sm type-badge followup">Follow-up</small>
-                                                </div>
-                                            </td>
-                                            <td class="schedule-cell" data-time="16:00" data-doctor="DR106" data-date="2024-01-21">
-                                                <div class="appointment available" data-bs-toggle="tooltip" title="Click to book appointment">
-                                                    <small>Available</small>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
+<thead>
+<tr>
+    <th class="time-column">Time</th>
+
+    {% for doctor in doctors %}
+        <th class="doctor-column">
+            <div class="doctor-header">
+                {% if doctor.profile_picture %}
+                    <img src="{{ doctor.profile_picture }}"
+                         class="rounded-circle me-2" width="24" height="24">
+                {% else %}
+                    <img src="{% static 'images/doctor_profiles/default-doctor.jpg' %}"
+                         class="rounded-circle me-2" width="24" height="24">
+                {% endif %}
+
+                <div>
+                    <div class="fw-bold">
+                        Dr. {{ doctor.doctor__first_name }} {{ doctor.doctor__last_name }}
+                    </div>
+                    <small class="text-muted">
+                        {{ doctor.specialization__name|default:"Department" }}
+                    </small>
+                </div>
+            </div>
+        </th>
+    {% endfor %}
+</tr>
+</thead>
+
+<tbody>
+{% for time in all_times %}
+    <tr>
+        <!-- Time column -->
+        <td class="fw-bold time-column">
+            {{ time|time:"h:i A" }}
+        </td>
+
+        <!-- Doctor columns -->
+        {% for doctor in doctors %}
+            {% with appt=schedule_lookup|get_item:doctor.id|get_item:time %}
+                <td class="schedule-cell"
+                    data-time="{{ time }}"
+                    data-doctor="{{ doctor.id }}">
+
+                    {% if appt %}
+                        <div class="appointment booked">
+                            <small class="d-block">{{ appt.patient_name }}</small>
+
+                            <small class="badge badge-sm type-badge">
+                                {% for t in appointment_types %}
+                                    {% if t.value == appt.appt_type %}
+                                        {{ t.name }}
+                                    {% endif %}
+                                {% endfor %}
+                            </small>
+                        </div>
+                    {% else %}
+                        <div class="appointment available">
+                            <small>Available</small>
+                        </div>
+                    {% endif %}
+                </td>
+            {% endwith %}
+        {% endfor %}
+    </tr>
+{% endfor %}
+</tbody>
+
+
                                 </table>
                             </div>
                         </div>
@@ -677,316 +317,51 @@
                     <div class="tab-pane fade" id="weekly" role="tabpanel" aria-labelledby="weekly-tab">
                         <div class="table-responsive">
                             <table class="table table-bordered table text-center">
-                                <thead>
-                                    <tr>
-                                        <th class="time-column">Time / Day</th>
-                                        <th>
-                                            <div>Mon</div>
-                                            <div class="small">Jan 15</div>
-                                        </th>
-                                        <th>
-                                            <div>Tue</div>
-                                            <div class="small">Jan 16</div>
-                                        </th>
-                                        <th>
-                                            <div>Wed</div>
-                                            <div class="small">Jan 17</div>
-                                        </th>
-                                        <th>
-                                            <div>Thu</div>
-                                            <div class="small">Jan 18</div>
-                                        </th>
-                                        <th>
-                                            <div>Fri</div>
-                                            <div class="small">Jan 19</div>
-                                        </th>
-                                        <th>
-                                            <div>Sat</div>
-                                            <div class="small">Jan 20</div>
-                                            <span class="badge bg-warning badge-sm">Weekend</span>
-                                        </th>
-                                        <th>
-                                            <div>Sun</div>
-                                            <div class="small">Jan 21</div>
-                                            <span class="badge bg-primary badge-sm">Today</span>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="fw-bold time-column">8:00 AM</td>
-                                        <td class="weekly-cell" data-date="2024-01-15" data-time="08:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="3 appointment(s)">
-                                                <span class="badge bg-primary">3</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-16" data-time="08:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="4 appointment(s)">
-                                                <span class="badge bg-primary">4</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-17" data-time="08:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="2 appointment(s)">
-                                                <span class="badge bg-primary">2</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-18" data-time="08:00">
-                                            <span class="badge bg-success">Free</span>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-19" data-time="08:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="5 appointment(s)">
-                                                <span class="badge bg-primary">5</span>
-                                                <i class="fas fa-ambulance text-danger ms-1"></i>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-20" data-time="08:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="1 appointment(s)">
-                                                <span class="badge bg-primary">1</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-21" data-time="08:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="4 appointment(s)">
-                                                <span class="badge bg-primary">4</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-bold time-column">9:00 AM</td>
-                                        <td class="weekly-cell" data-date="2024-01-15" data-time="09:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="6 appointment(s)">
-                                                <span class="badge bg-primary">6</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-16" data-time="09:00">
-                                            <span class="badge bg-success">Free</span>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-17" data-time="09:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="3 appointment(s)">
-                                                <span class="badge bg-primary">3</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-18" data-time="09:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="4 appointment(s)">
-                                                <span class="badge bg-primary">4</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-19" data-time="09:00">
-                                            <span class="badge bg-success">Free</span>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-20" data-time="09:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="2 appointment(s)">
-                                                <span class="badge bg-primary">2</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-21" data-time="09:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="3 appointment(s)">
-                                                <span class="badge bg-primary">3</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-bold time-column">10:00 AM</td>
-                                        <td class="weekly-cell" data-date="2024-01-15" data-time="10:00">
-                                            <span class="badge bg-success">Free</span>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-16" data-time="10:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="5 appointment(s)">
-                                                <span class="badge bg-primary">5</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-17" data-time="10:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="4 appointment(s)">
-                                                <span class="badge bg-primary">4</span>
-                                                <i class="fas fa-ambulance text-danger ms-1"></i>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-18" data-time="10:00">
-                                            <span class="badge bg-success">Free</span>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-19" data-time="10:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="6 appointment(s)">
-                                                <span class="badge bg-primary">6</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-20" data-time="10:00">
-                                            <span class="badge bg-warning">Break</span>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-21" data-time="10:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="4 appointment(s)">
-                                                <span class="badge bg-primary">4</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-bold time-column">11:00 AM</td>
-                                        <td class="weekly-cell" data-date="2024-01-15" data-time="11:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="7 appointment(s)">
-                                                <span class="badge bg-primary">7</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-16" data-time="11:00">
-                                            <span class="badge bg-success">Free</span>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-17" data-time="11:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="5 appointment(s)">
-                                                <span class="badge bg-primary">5</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-18" data-time="11:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="6 appointment(s)">
-                                                <span class="badge bg-primary">6</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-19" data-time="11:00">
-                                            <span class="badge bg-warning">Break</span>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-20" data-time="11:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="3 appointment(s)">
-                                                <span class="badge bg-primary">3</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-21" data-time="11:00">
-                                            <span class="badge bg-success">Free</span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-bold time-column">1:00 PM</td>
-                                        <td class="weekly-cell" data-date="2024-01-15" data-time="13:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="8 appointment(s)">
-                                                <span class="badge bg-primary">8</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-16" data-time="13:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="6 appointment(s)">
-                                                <span class="badge bg-primary">6</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-17" data-time="13:00">
-                                            <span class="badge bg-warning">Break</span>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-18" data-time="13:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="7 appointment(s)">
-                                                <span class="badge bg-primary">7</span>
-                                                <i class="fas fa-ambulance text-danger ms-1"></i>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-19" data-time="13:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="5 appointment(s)">
-                                                <span class="badge bg-primary">5</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-20" data-time="13:00">
-                                            <span class="badge bg-success">Free</span>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-21" data-time="13:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="6 appointment(s)">
-                                                <span class="badge bg-primary">6</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-bold time-column">2:00 PM</td>
-                                        <td class="weekly-cell" data-date="2024-01-15" data-time="14:00">
-                                            <span class="badge bg-success">Free</span>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-16" data-time="14:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="4 appointment(s)">
-                                                <span class="badge bg-primary">4</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-17" data-time="14:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="5 appointment(s)">
-                                                <span class="badge bg-primary">5</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-18" data-time="14:00">
-                                            <span class="badge bg-success">Free</span>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-19" data-time="14:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="6 appointment(s)">
-                                                <span class="badge bg-primary">6</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-20" data-time="14:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="3 appointment(s)">
-                                                <span class="badge bg-primary">3</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-21" data-time="14:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="4 appointment(s)">
-                                                <span class="badge bg-primary">4</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-bold time-column">3:00 PM</td>
-                                        <td class="weekly-cell" data-date="2024-01-15" data-time="15:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="5 appointment(s)">
-                                                <span class="badge bg-primary">5</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-16" data-time="15:00">
-                                            <span class="badge bg-success">Free</span>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-17" data-time="15:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="4 appointment(s)">
-                                                <span class="badge bg-primary">4</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-18" data-time="15:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="7 appointment(s)">
-                                                <span class="badge bg-primary">7</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-19" data-time="15:00">
-                                            <span class="badge bg-success">Free</span>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-20" data-time="15:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="2 appointment(s)">
-                                                <span class="badge bg-primary">2</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-21" data-time="15:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="5 appointment(s)">
-                                                <span class="badge bg-primary">5</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-bold time-column">4:00 PM</td>
-                                        <td class="weekly-cell" data-date="2024-01-15" data-time="16:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="3 appointment(s)">
-                                                <span class="badge bg-primary">3</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-16" data-time="16:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="4 appointment(s)">
-                                                <span class="badge bg-primary">4</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-17" data-time="16:00">
-                                            <span class="badge bg-success">Free</span>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-18" data-time="16:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="5 appointment(s)">
-                                                <span class="badge bg-primary">5</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-19" data-time="16:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="6 appointment(s)">
-                                                <span class="badge bg-primary">6</span>
-                                            </div>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-20" data-time="16:00">
-                                            <span class="badge bg-warning">Break</span>
-                                        </td>
-                                        <td class="weekly-cell" data-date="2024-01-21" data-time="16:00">
-                                            <div class="weekly-appointment" data-bs-toggle="tooltip" title="4 appointment(s)">
-                                                <span class="badge bg-primary">4</span>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
+<thead>
+<tr>
+    <th class="time-column">Time / Day</th>
+    {% for day in week_days %}
+        <th>
+            <div>{{ day|date:"D" }}</div>
+            <div class="small">{{ day|date:"M d" }}</div>
+            {% if day == today %}
+                <span class="badge bg-primary badge-sm">Today</span>
+            {% endif %}
+        </th>
+    {% endfor %}
+</tr>
+</thead>
+
+<tbody>
+{% for t in all_times %}
+<tr>
+    <td class="fw-bold time-column">
+        {{ t|time:"g:i A" }}
+    </td>
+
+    {% for day in week_days %}
+        {% with cell=weekly_schedule|get_item:day|get_item:t %}
+        <td class="weekly-cell"
+            data-date="{{ day }}"
+            data-time="{{ t|time:'H:i' }}">
+
+            {% if cell.count > 0 %}
+                <div class="weekly-appointment"
+                     data-bs-toggle="tooltip"
+                     title="{{ cell.count }} appointment(s)">
+                    <span class="badge bg-primary">{{ cell.count }}</span>
+                </div>
+            {% else %}
+                <span class="badge bg-success">Free</span>
+            {% endif %}
+
+        </td>
+        {% endwith %}
+    {% endfor %}
+</tr>
+{% endfor %}
+</tbody>
+
                             </table>
                         </div>
                         <div class="row mt-3">
@@ -1072,363 +447,132 @@
                     </div>
                     
                     <!-- By Doctor View -->
-                    <div class="tab-pane fade" id="doctors" role="tabpanel" aria-labelledby="doctors-tab">
-                        <div class="row" id="doctorCardsContainer">
-                            <!-- Doctor 1 Card -->
-                            <div class="col-lg-4 col-md-6 mb-4 doctor-card" data-department="cardiology">
-                                <div class="card medical-border h-100">
-                                    <div class="card-header">
-                                        <div class="d-flex align-items-center">
-                                            <img src="{% static 'images/doctors/doctor1.jpg' %}" alt="Dr. Sarah Johnson" class="rounded-circle me-2" width="40" height="40">
-                                            <div>
-                                                <h5 class="card-title mb-0">Dr. Sarah Johnson</h5>
-                                                <small class="text-muted">Cardiology</small>
-                                            </div>
-                                            <div class="ms-auto">
-                                                <span class="badge bg-success">Available</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <h6>Today's Schedule</h6>
-                                        <div class="schedule-timeline">
-                                            <div class="schedule-item confirmed">
-                                                <span class="time">8:00 AM</span>
-                                                <span class="patient">John Smith</span>
-                                                <span class="badge badge-sm checkup">C</span>
-                                            </div>
-                                            <div class="schedule-item confirmed">
-                                                <span class="time">8:30 AM</span>
-                                                <span class="patient">John Smith</span>
-                                                <span class="badge badge-sm checkup">C</span>
-                                            </div>
-                                            <div class="schedule-item free">
-                                                <span class="time">9:00 AM</span>
-                                                <span class="patient">Available</span>
-                                            </div>
-                                            <div class="schedule-item free">
-                                                <span class="time">9:30 AM</span>
-                                                <span class="patient">Available</span>
-                                            </div>
-                                            <div class="schedule-item confirmed">
-                                                <span class="time">10:00 AM</span>
-                                                <span class="patient">Jennifer Lee</span>
-                                                <span class="badge badge-sm consultation">T</span>
-                                            </div>
-                                            <div class="schedule-item break">
-                                                <span class="time">12:00 PM</span>
-                                                <span class="patient">Lunch Break</span>
-                                            </div>
-                                            <div class="schedule-item confirmed">
-                                                <span class="time">1:00 PM</span>
-                                                <span class="patient">Thomas Anderson</span>
-                                                <span class="badge badge-sm followup">F</span>
-                                            </div>
-                                        </div>
-                                        <div class="mt-3 d-grid gap-2">
-                                            <button class="btn btn-sm btn-outline-light schedule-btn" data-doctor="DR101">
-                                                <i class="fas fa-calendar-plus me-1"></i> Schedule Appointment
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-primary view-schedule-btn" data-doctor="DR101">
-                                                <i class="fas fa-calendar-alt me-1"></i> View Full Schedule
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer bg-transparent">
-                                        <small class="text-muted">
-                                            <i class="fas fa-phone me-1"></i> (555) 123-4567 |
-                                            <i class="fas fa-envelope me-1 ms-2"></i> sjohnson@cure...
-                                        </small>
-                                    </div>
-                                </div>
+<div class="tab-pane fade" id="doctors" role="tabpanel" aria-labelledby="doctors-tab">
+    <div class="row" id="doctorCardsContainer">
+        {% for item in doctors_today %}
+            <div class="col-lg-4 col-md-6 mb-4 doctor-card" data-department="{{ item.doctor.department.slug }}">
+                <div class="card medical-border h-100">
+
+                    <!-- HEADER -->
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <img src="{{ item.doctor.avatar.url }}" alt="Dr. {{ item.doctor.full_name }}" class="rounded-circle me-2" width="40" height="40">
+                            <div>
+                                <h5 class="card-title mb-0">Dr. {{ item.doctor.full_name }}</h5>
+                                <small class="text-muted">{{ item.doctor.department.name }}</small>
                             </div>
-                            <!-- Doctor 2 Card -->
-                            <div class="col-lg-4 col-md-6 mb-4 doctor-card" data-department="neurology">
-                                <div class="card medical-border h-100">
-                                    <div class="card-header">
-                                        <div class="d-flex align-items-center">
-                                            <img src="{% static 'images/doctors/doctor2.jpg' %}" alt="Dr. Michael Chen" class="rounded-circle me-2" width="40" height="40">
-                                            <div>
-                                                <h5 class="card-title mb-0">Dr. Michael Chen</h5>
-                                                <small class="text-muted">Neurology</small>
-                                            </div>
-                                            <div class="ms-auto">
-                                                <span class="badge bg-warning">Busy</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <h6>Today's Schedule</h6>
-                                        <div class="schedule-timeline">
-                                            <div class="schedule-item free">
-                                                <span class="time">8:00 AM</span>
-                                                <span class="patient">Available</span>
-                                            </div>
-                                            <div class="schedule-item emergency">
-                                                <span class="time">8:30 AM</span>
-                                                <span class="patient">Robert Davis</span>
-                                                <span class="badge badge-sm emergency">E</span>
-                                            </div>
-                                            <div class="schedule-item emergency">
-                                                <span class="time">9:00 AM</span>
-                                                <span class="patient">Robert Davis</span>
-                                                <span class="badge badge-sm emergency">E</span>
-                                            </div>
-                                            <div class="schedule-item free">
-                                                <span class="time">9:30 AM</span>
-                                                <span class="patient">Available</span>
-                                            </div>
-                                            <div class="schedule-item confirmed">
-                                                <span class="time">10:00 AM</span>
-                                                <span class="patient">William Brown</span>
-                                                <span class="badge badge-sm checkup">C</span>
-                                            </div>
-                                            <div class="schedule-item break">
-                                                <span class="time">12:00 PM</span>
-                                                <span class="patient">Lunch Break</span>
-                                            </div>
-                                            <div class="schedule-item confirmed">
-                                                <span class="time">1:00 PM</span>
-                                                <span class="patient">Amanda Clark</span>
-                                                <span class="badge badge-sm checkup">C</span>
-                                            </div>
-                                        </div>
-                                        <div class="mt-3 d-grid gap-2">
-                                            <button class="btn btn-sm btn-outline-light schedule-btn" data-doctor="DR102">
-                                                <i class="fas fa-calendar-plus me-1"></i> Schedule Appointment
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-primary view-schedule-btn" data-doctor="DR102">
-                                                <i class="fas fa-calendar-alt me-1"></i> View Full Schedule
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer bg-transparent">
-                                        <small class="text-muted">
-                                            <i class="fas fa-phone me-1"></i> (555) 234-5678 |
-                                            <i class="fas fa-envelope me-1 ms-2"></i> mchen@cure...
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Doctor 3 Card -->
-                            <div class="col-lg-4 col-md-6 mb-4 doctor-card" data-department="pediatrics">
-                                <div class="card medical-border h-100">
-                                    <div class="card-header">
-                                        <div class="d-flex align-items-center">
-                                            <img src="{% static 'images/doctors/doctor3.jpg' %}" alt="Dr. Anita Patel" class="rounded-circle me-2" width="40" height="40">
-                                            <div>
-                                                <h5 class="card-title mb-0">Dr. Anita Patel</h5>
-                                                <small class="text-muted">Pediatrics</small>
-                                            </div>
-                                            <div class="ms-auto">
-                                                <span class="badge bg-success">Available</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <h6>Today's Schedule</h6>
-                                        <div class="schedule-timeline">
-                                            <div class="schedule-item confirmed">
-                                                <span class="time">8:00 AM</span>
-                                                <span class="patient">Emma Wilson</span>
-                                                <span class="badge badge-sm followup">F</span>
-                                            </div>
-                                            <div class="schedule-item confirmed">
-                                                <span class="time">8:30 AM</span>
-                                                <span class="patient">Emma Wilson</span>
-                                                <span class="badge badge-sm followup">F</span>
-                                            </div>
-                                            <div class="schedule-item free">
-                                                <span class="time">9:00 AM</span>
-                                                <span class="patient">Available</span>
-                                            </div>
-                                            <div class="schedule-item break">
-                                                <span class="time">9:30 AM</span>
-                                                <span class="patient">Coffee Break</span>
-                                            </div>
-                                            <div class="schedule-item break">
-                                                <span class="time">10:00 AM</span>
-                                                <span class="patient">Coffee Break</span>
-                                            </div>
-                                            <div class="schedule-item break">
-                                                <span class="time">12:00 PM</span>
-                                                <span class="patient">Lunch Break</span>
-                                            </div>
-                                            <div class="schedule-item emergency">
-                                                <span class="time">1:00 PM</span>
-                                                <span class="patient">Noah Rodriguez</span>
-                                                <span class="badge badge-sm emergency">E</span>
-                                            </div>
-                                        </div>
-                                        <div class="mt-3 d-grid gap-2">
-                                            <button class="btn btn-sm btn-outline-light schedule-btn" data-doctor="DR103">
-                                                <i class="fas fa-calendar-plus me-1"></i> Schedule Appointment
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-primary view-schedule-btn" data-doctor="DR103">
-                                                <i class="fas fa-calendar-alt me-1"></i> View Full Schedule
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer bg-transparent">
-                                        <small class="text-muted">
-                                            <i class="fas fa-phone me-1"></i> (555) 345-6789 |
-                                            <i class="fas fa-envelope me-1 ms-2"></i> apatel@cure...
-                                        </small>
-                                    </div>
-                                </div>
+                            <div class="ms-auto">
+                                <span class="badge bg-{{ item.status.css }}">{{ item.status.label }}</span>
                             </div>
                         </div>
                     </div>
+
+                    <!-- BODY -->
+                    <div class="card-body">
+                        <h6>Today's Schedule</h6>
+                        <div class="schedule-timeline">
+                            {% for slot in item.timeline %}
+                                {% if slot.type == "break" %}
+                                    <div class="schedule-item break">
+                                        <span class="time">{{ slot.time|time:"g:i A" }}</span>
+                                        <span class="patient">{{ slot.label }}</span>
+                                    </div>
+                                {% elif slot.type == "appointment" %}
+                                    <div class="schedule-item confirmed">
+                                        <span class="time">{{ slot.time|time:"g:i A" }}</span>
+                                        <span class="patient">{{ slot.patient }}</span>
+                                        <span class="badge badge-sm {{ slot.badge_class }}">{{ slot.badge }}</span>
+                                    </div>
+                                {% else %}
+                                    <div class="schedule-item free">
+                                        <span class="time">{{ slot.time|time:"g:i A" }}</span>
+                                        <span class="patient">Available</span>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <div class="mt-3 d-grid gap-2">
+                            <button class="btn btn-sm btn-outline-light schedule-btn" data-doctor="{{ item.doctor.id }}">
+                                <i class="fas fa-calendar-plus me-1"></i> Schedule Appointment
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary view-schedule-btn" data-doctor="{{ item.doctor.id }}">
+                                <i class="fas fa-calendar-alt me-1"></i> View Full Schedule
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- FOOTER -->
+                    <div class="card-footer bg-transparent">
+                        <small class="text-muted">
+                            <i class="fas fa-phone me-1"></i> {{ item.doctor.phone }} |
+                            <i class="fas fa-envelope me-1 ms-2"></i> {{ item.doctor.email|truncatechars:12 }}
+                        </small>
+                    </div>
+
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
                     
                     <!-- Grid View -->
-                    <div class="tab-pane fade" id="grid" role="tabpanel" aria-labelledby="grid-tab">
-                        <div class="row g-3">
-                            <!-- Doctor 1 Grid -->
-                            <div class="col-xl-3 col-lg-4 col-md-6">
-                                <div class="card medical-border h-100">
-                                    <div class="card-body text-center">
-                                        <img src="{% static 'images/doctors/doctor1.jpg' %}" alt="Dr. Sarah Johnson" class="rounded-circle mb-3" width="80" height="80">
-                                        <h5>Dr. Sarah Johnson</h5>
-                                        <p class="text-muted">Cardiology</p>
-                                        
-                                        <div class="doctor-stats mb-3">
-                                            <div class="row text-center">
-                                                <div class="col-4">
-                                                    <div class="stat-number">7</div>
-                                                    <small class="text-muted">Today</small>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="stat-number">42</div>
-                                                    <small class="text-muted">This Week</small>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="stat-number">85%</div>
-                                                    <small class="text-muted">Available</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="d-grid gap-2">
-                                            <button class="btn btn-sm btn-success schedule-btn" data-doctor="DR101">
-                                                <i class="fas fa-calendar-plus me-1"></i> Book Now
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-light view-schedule-btn" data-doctor="DR101">
-                                                View Schedule
-                                            </button>
-                                        </div>
+<div class="tab-pane fade" id="grid" role="tabpanel" aria-labelledby="grid-tab">
+    <div class="row g-3">
+        {% for item in doctors_today %}
+            <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="card medical-border h-100">
+                    <div class="card-body text-center">
+                        <img src="{{ item.doctor.avatar.url }}" alt="Dr. {{ item.doctor.full_name }}" class="rounded-circle mb-3" width="80" height="80">
+                        <h5>Dr. {{ item.doctor.full_name }}</h5>
+                        <p class="text-muted">{{ item.doctor.department.name }}</p>
+
+                        <div class="doctor-stats mb-3">
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <div class="stat-number">
+                                        {{ item.timeline|length }} <!-- Number of slots today -->
                                     </div>
+                                    <small class="text-muted">Today</small>
                                 </div>
-                            </div>
-                            <!-- Doctor 2 Grid -->
-                            <div class="col-xl-3 col-lg-4 col-md-6">
-                                <div class="card medical-border h-100">
-                                    <div class="card-body text-center">
-                                        <img src="{% static 'images/doctors/doctor2.jpg' %}" alt="Dr. Michael Chen" class="rounded-circle mb-3" width="80" height="80">
-                                        <h5>Dr. Michael Chen</h5>
-                                        <p class="text-muted">Neurology</p>
-                                        
-                                        <div class="doctor-stats mb-3">
-                                            <div class="row text-center">
-                                                <div class="col-4">
-                                                    <div class="stat-number">6</div>
-                                                    <small class="text-muted">Today</small>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="stat-number">38</div>
-                                                    <small class="text-muted">This Week</small>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="stat-number">78%</div>
-                                                    <small class="text-muted">Available</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="d-grid gap-2">
-                                            <button class="btn btn-sm btn-success schedule-btn" data-doctor="DR102">
-                                                <i class="fas fa-calendar-plus me-1"></i> Book Now
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-light view-schedule-btn" data-doctor="DR102">
-                                                View Schedule
-                                            </button>
-                                        </div>
+                                <div class="col-4">
+                                    <div class="stat-number">
+                                        {% with count=0 %}
+                                        {% for t in item.timeline %}
+                                            {% if t.type == "appointment" %}
+                                                {% widthratio count|add:1 1 1 %}<!-- Increment counter -->
+                                            {% endif %}
+                                        {% endfor %}
+                                        {{ count }}
+                                        {% endwith %}
                                     </div>
+                                    <small class="text-muted">This Week</small>
                                 </div>
-                            </div>
-                            <!-- Doctor 3 Grid -->
-                            <div class="col-xl-3 col-lg-4 col-md-6">
-                                <div class="card medical-border h-100">
-                                    <div class="card-body text-center">
-                                        <img src="{% static 'images/doctors/doctor3.jpg' %}" alt="Dr. Anita Patel" class="rounded-circle mb-3" width="80" height="80">
-                                        <h5>Dr. Anita Patel</h5>
-                                        <p class="text-muted">Pediatrics</p>
-                                        
-                                        <div class="doctor-stats mb-3">
-                                            <div class="row text-center">
-                                                <div class="col-4">
-                                                    <div class="stat-number">5</div>
-                                                    <small class="text-muted">Today</small>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="stat-number">32</div>
-                                                    <small class="text-muted">This Week</small>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="stat-number">65%</div>
-                                                    <small class="text-muted">Available</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="d-grid gap-2">
-                                            <button class="btn btn-sm btn-success schedule-btn" data-doctor="DR103">
-                                                <i class="fas fa-calendar-plus me-1"></i> Book Now
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-light view-schedule-btn" data-doctor="DR103">
-                                                View Schedule
-                                            </button>
-                                        </div>
+                                <div class="col-4">
+                                    <div class="stat-number">
+                                        {% if item.status.label == "Available" %}100{% else %}{{ item.timeline|length|divisibleby:2|yesno:"50,0" }}{% endif %}%
                                     </div>
-                                </div>
-                            </div>
-                            <!-- Doctor 4 Grid -->
-                            <div class="col-xl-3 col-lg-4 col-md-6">
-                                <div class="card medical-border h-100">
-                                    <div class="card-body text-center">
-                                        <img src="{% static 'images/doctors/doctor4.jpg' %}" alt="Dr. James Williams" class="rounded-circle mb-3" width="80" height="80">
-                                        <h5>Dr. James Williams</h5>
-                                        <p class="text-muted">Orthopedics</p>
-                                        
-                                        <div class="doctor-stats mb-3">
-                                            <div class="row text-center">
-                                                <div class="col-4">
-                                                    <div class="stat-number">8</div>
-                                                    <small class="text-muted">Today</small>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="stat-number">45</div>
-                                                    <small class="text-muted">This Week</small>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="stat-number">82%</div>
-                                                    <small class="text-muted">Available</small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="d-grid gap-2">
-                                            <button class="btn btn-sm btn-success schedule-btn" data-doctor="DR104">
-                                                <i class="fas fa-calendar-plus me-1"></i> Book Now
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-light view-schedule-btn" data-doctor="DR104">
-                                                View Schedule
-                                            </button>
-                                        </div>
-                                    </div>
+                                    <small class="text-muted">Available</small>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-sm btn-success schedule-btn" data-doctor="{{ item.doctor.id }}">
+                                <i class="fas fa-calendar-plus me-1"></i> Book Now
+                            </button>
+                            <button class="btn btn-sm btn-outline-light view-schedule-btn" data-doctor="{{ item.doctor.id }}">
+                                View Schedule
+                            </button>
+                        </div>
                     </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
                 </div>
             </div>
         </div>
@@ -1458,7 +602,7 @@
 
 <!-- Import Modal -->
 <div class="modal fade" id="importModal" tabindex="-1">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Import Schedules</h5>
@@ -1490,10 +634,11 @@
                         Download the <a href="#" id="downloadTemplate">template file</a> for proper formatting
                     </div>
                 </form>
+                <!-- Preview injected here -->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="startImport">Import</button>
+                <button type="button" class="btn btn-primary" id="startImport" disabled>Import</button>
             </div>
         </div>
     </div>
@@ -1790,622 +935,7 @@
                 updateDateDisplay();
             } else {
                 Swal.fire({
-                    icon: 'warning',
-                    title: 'Date Limit Reached',
-                    text: 'You can only schedule up to 3 months in advance.',
                     confirmButtonColor: 'var(--med-primary)'
                 });
-            }
-        });
-        
-        todayBtn.addEventListener('click', function() {
-            datePicker.value = todayString;
-            updateDateDisplay();
-        });
-        
-        datePicker.addEventListener('change', updateDateDisplay);
-        
-        // Initialize date display
-        updateDateDisplay();
-        
-        // Doctor filter
-        const doctorFilter = document.getElementById('doctorFilter');
-        doctorFilter.addEventListener('change', function() {
-            const doctorId = this.value;
-            const doctorCards = document.querySelectorAll('.doctor-card');
-            
-            if (doctorId === 'all') {
-                doctorCards.forEach(card => card.style.display = 'block');
-            } else {
-                // In real app, filter based on doctor ID
-                // For demo, just show all
-                doctorCards.forEach(card => card.style.display = 'block');
-            }
-        });
-        
-        // Additional filters
-        const departmentFilter = document.getElementById('departmentFilter');
-        const appointmentTypeFilter = document.getElementById('appointmentTypeFilter');
-        const statusFilter = document.getElementById('statusFilter');
-        const searchPatient = document.getElementById('searchPatient');
-        
-        function applyFilters() {
-            const department = departmentFilter.value;
-            const appointmentType = appointmentTypeFilter.value;
-            const status = statusFilter.value;
-            const searchTerm = searchPatient.value.toLowerCase();
-            
-            // Filter doctor cards
-            document.querySelectorAll('.doctor-card').forEach(card => {
-                const cardDept = card.getAttribute('data-department');
-                const showCard = (!department || cardDept === department);
-                card.style.display = showCard ? 'block' : 'none';
-            });
-            
-            // Filter appointments in daily view
-            document.querySelectorAll('.appointment').forEach(appointment => {
-                const appointmentTypeClass = appointment.querySelector('.type-badge');
-                const appointmentType = appointmentTypeClass ? appointmentTypeClass.classList[1] : '';
-                const patientName = appointment.textContent.toLowerCase();
-                
-                let showAppointment = true;
-                
-                if (appointmentTypeFilter.value && appointmentType !== appointmentTypeFilter.value) {
-                    showAppointment = false;
-                }
-                
-                if (searchTerm && !patientName.includes(searchTerm)) {
-                    showAppointment = false;
-                }
-                
-                appointment.parentElement.style.display = showAppointment ? 'table-cell' : 'none';
-            });
-        }
-        
-        [departmentFilter, appointmentTypeFilter, statusFilter, searchPatient].forEach(filter => {
-            filter.addEventListener('change', applyFilters);
-        });
-        
-        searchPatient.addEventListener('input', applyFilters);
-        
-        // Schedule cell click handler - Show appointment details
-        document.addEventListener('click', function(e) {
-            const scheduleCell = e.target.closest('.schedule-cell');
-            if (scheduleCell) {
-                const appointmentDiv = scheduleCell.querySelector('.appointment');
-                const appointmentId = appointmentDiv?.getAttribute('data-appointment');
-                
-                if (appointmentId) {
-                    // Show appointment details
-                    showAppointmentDetails(appointmentId, scheduleCell);
-                } else if (appointmentDiv?.classList.contains('available')) {
-                    // Book new appointment
-                    bookNewAppointment(scheduleCell);
-                }
-            }
-            
-            // Weekly cell click
-            const weeklyCell = e.target.closest('.weekly-cell');
-            if (weeklyCell) {
-                const date = weeklyCell.getAttribute('data-date');
-                const time = weeklyCell.getAttribute('data-time');
-                
-                // Switch to daily view for that date
-                datePicker.value = date;
-                updateDateDisplay();
-                
-                // Switch to daily tab
-                const dailyTab = document.getElementById('daily-tab');
-                const tabInstance = new bootstrap.Tab(dailyTab);
-                tabInstance.show();
-                
-                // Scroll to time slot
-                setTimeout(() => {
-                    const timeCell = document.querySelector(`.schedule-cell[data-time="${time}"]`);
-                    if (timeCell) {
-                        timeCell.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        timeCell.classList.add('highlight-cell');
-                        setTimeout(() => timeCell.classList.remove('highlight-cell'), 2000);
-                    }
-                }, 500);
-            }
-        });
-        
-        // Show appointment details
-        function showAppointmentDetails(appointmentId, cell) {
-            const modal = new bootstrap.Modal(document.getElementById('appointmentDetailModal'));
-            const content = document.getElementById('appointmentDetailContent');
-            
-            // Get appointment data from the cell
-            const doctor = cell.getAttribute('data-doctor');
-            const time = cell.getAttribute('data-time');
-            const date = cell.getAttribute('data-date');
-            const appointmentDiv = cell.querySelector('.appointment');
-            const patientName = appointmentDiv.querySelector('small').textContent;
-            const appointmentType = appointmentDiv.querySelector('.type-badge')?.textContent || 'Checkup';
-            
-            // Create appointment details
-            content.innerHTML = `
-                <div class="row">
-                    <div class="col-md-6">
-                        <h6>Appointment Information</h6>
-                        <table class="table table-sm">
-                            <tr><th>Patient:</th><td>${patientName}</td></tr>
-                            <tr><th>Doctor:</th><td>${getDoctorName(doctor)}</td></tr>
-                            <tr><th>Date & Time:</th><td>${formatDate(date)} ${formatTime(time)}</td></tr>
-                            <tr><th>Type:</th><td><span class="badge ${getAppointmentBadgeClass(appointmentType)}">${appointmentType}</span></td></tr>
-                            <tr><th>Status:</th><td><span class="badge bg-success">Confirmed</span></td></tr>
-                            <tr><th>Duration:</th><td>30 minutes</td></tr>
-                        </table>
-                    </div>
-                    <div class="col-md-6">
-                        <h6>Patient Information</h6>
-                        <table class="table table-sm">
-                            <tr><th>Age:</th><td>${getRandomAge()}</td></tr>
-                            <tr><th>Gender:</th><td>${getRandomGender()}</td></tr>
-                            <tr><th>Phone:</th><td>${getRandomPhone()}</td></tr>
-                            <tr><th>Email:</th><td>${patientName.toLowerCase().replace(' ', '.')}@example.com</td></tr>
-                            <tr><th>Insurance:</th><td>${getRandomInsurance()}</td></tr>
-                            <tr><th>Last Visit:</th><td>${getRandomLastVisit()}</td></tr>
-                        </table>
-                    </div>
-                </div>
-                <div class="mt-3">
-                    <h6>Notes</h6>
-                    <p class="bg-light p-3 rounded">${getAppointmentNotes(appointmentType)}</p>
-                </div>
-            `;
-            
-            modal.show();
-        }
-        
-        // Helper functions for appointment details
-        function getDoctorName(doctorId) {
-            const doctors = {
-                'DR101': 'Dr. Sarah Johnson',
-                'DR102': 'Dr. Michael Chen',
-                'DR103': 'Dr. Anita Patel',
-                'DR104': 'Dr. James Williams',
-                'DR105': 'Dr. Emily Rodriguez',
-                'DR106': 'Dr. Robert Kim'
-            };
-            return doctors[doctorId] || 'Doctor';
-        }
-        
-        function formatDate(dateStr) {
-            const date = new Date(dateStr);
-            return date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        }
-        
-        function formatTime(timeStr) {
-            const [hours, minutes] = timeStr.split(':');
-            const hour = parseInt(hours);
-            const ampm = hour >= 12 ? 'PM' : 'AM';
-            const hour12 = hour % 12 || 12;
-            return `${hour12}:${minutes} ${ampm}`;
-        }
-        
-        function getAppointmentBadgeClass(type) {
-            const classes = {
-                'Checkup': 'bg-primary',
-                'Follow-up': 'bg-info',
-                'Emergency': 'bg-danger',
-                'Consultation': 'bg-success',
-                'Procedure': 'bg-warning',
-                'Cancelled': 'bg-secondary'
-            };
-            return classes[type] || 'bg-primary';
-        }
-        
-        function getRandomAge() {
-            return Math.floor(Math.random() * 50) + 20;
-        }
-        
-        function getRandomGender() {
-            return Math.random() > 0.5 ? 'Male' : 'Female';
-        }
-        
-        function getRandomPhone() {
-            return `(${Math.floor(Math.random() * 900) + 100}) ${Math.floor(Math.random() * 900) + 100}-${Math.floor(Math.random() * 9000) + 1000}`;
-        }
-        
-        function getRandomInsurance() {
-            const insurances = ['Blue Cross', 'Aetna', 'UnitedHealth', 'Cigna', 'Humana'];
-            return insurances[Math.floor(Math.random() * insurances.length)];
-        }
-        
-        function getRandomLastVisit() {
-            const daysAgo = Math.floor(Math.random() * 90) + 1;
-            const date = new Date();
-            date.setDate(date.getDate() - daysAgo);
-            return date.toISOString().split('T')[0];
-        }
-        
-        function getAppointmentNotes(type) {
-            const notes = {
-                'Checkup': 'Regular health checkup. Patient reports feeling well. Blood pressure and heart rate within normal ranges.',
-                'Follow-up': 'Follow-up appointment to monitor progress after previous treatment. Patient reports improvement in symptoms.',
-                'Emergency': 'Emergency consultation. Patient presenting with acute symptoms requiring immediate attention.',
-                'Consultation': 'Initial consultation to discuss treatment options and develop care plan.',
-                'Procedure': 'Scheduled procedure. Pre-op instructions provided. Patient confirmed understanding of procedure risks and benefits.'
-            };
-            return notes[type] || 'Regular appointment.';
-        }
-        
-        // Book new appointment
-        function bookNewAppointment(cell) {
-            const doctorId = cell.getAttribute('data-doctor');
-            const time = cell.getAttribute('data-time');
-            const date = cell.getAttribute('data-date');
-            const doctorName = getDoctorName(doctorId);
-            const formattedTime = formatTime(time);
-            const formattedDate = formatDate(date);
-            
             Swal.fire({
-                title: 'Schedule New Appointment',
-                html: `
-                    <form id="newAppointmentForm">
-                        <div class="mb-3">
-                            <label class="form-label">Doctor</label>
-                            <input type="text" class="form-control" value="${doctorName}" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Date & Time</label>
-                            <input type="text" class="form-control" value="${formattedDate} at ${formattedTime}" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label for="patientSelect" class="form-label">Patient</label>
-                            <select class="form-select" id="patientSelect" required>
-                                <option value="">Select Patient</option>
-                                <option value="1">John Smith (ID: PT001)</option>
-                                <option value="2">Emma Wilson (ID: PT002)</option>
-                                <option value="3">Michael Taylor (ID: PT003)</option>
-                                <option value="4">Jennifer Lee (ID: PT004)</option>
-                                <option value="5">Robert Davis (ID: PT005)</option>
-                                <option value="new">+ Add New Patient</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="appointmentType" class="form-label">Appointment Type</label>
-                            <select class="form-select" id="appointmentType" required>
-                                <option value="checkup">Regular Checkup</option>
-                                <option value="followup">Follow-up</option>
-                                <option value="emergency">Emergency</option>
-                                <option value="consultation">Consultation</option>
-                                <option value="procedure">Procedure</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="appointmentNotes" class="form-label">Notes</label>
-                            <textarea class="form-control" id="appointmentNotes" rows="2" placeholder="Additional notes..."></textarea>
-                        </div>
-                        <div class="form-check mb-3">
-                            <input type="checkbox" class="form-check-input" id="sendReminder" checked>
-                            <label class="form-check-label" for="sendReminder">Send reminder to patient</label>
-                        </div>
-                    </form>
-                `,
-                showCancelButton: true,
-                confirmButtonText: 'Schedule Appointment',
-                cancelButtonText: 'Cancel',
-                confirmButtonColor: 'var(--med-primary)',
-                preConfirm: () => {
-                    const patient = document.getElementById('patientSelect').value;
-                    if (!patient) {
-                        Swal.showValidationMessage('Please select a patient');
-                        return false;
-                    }
-                    return {
-                        patient: document.getElementById('patientSelect').selectedOptions[0].text,
-                        type: document.getElementById('appointmentType').value,
-                        notes: document.getElementById('appointmentNotes').value,
-                        reminder: document.getElementById('sendReminder').checked
-                    };
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Show success message
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Appointment Scheduled!',
-                        html: `
-                            <p>Appointment booked successfully!</p>
-                            <div class="text-start">
-                                <p><strong>Doctor:</strong> ${doctorName}</p>
-                                <p><strong>Time:</strong> ${formattedDate} at ${formattedTime}</p>
-                                <p><strong>Patient:</strong> ${result.value.patient}</p>
-                                <p><strong>Type:</strong> ${result.value.type}</p>
-                            </div>
-                        `,
-                        confirmButtonColor: 'var(--med-primary)'
-                    }).then(() => {
-                        // Update the cell to show booked appointment
-                        const appointmentDiv = cell.querySelector('.appointment');
-                        appointmentDiv.className = 'appointment booked';
-                        appointmentDiv.innerHTML = `
-                            <small class="d-block">${result.value.patient.split(' (')[0]}</small>
-                            <small class="badge badge-sm type-badge ${result.value.type}">${result.value.type.charAt(0).toUpperCase() + result.value.type.slice(1)}</small>
-                        `;
-                        appointmentDiv.setAttribute('data-appointment', 'APT' + Math.floor(Math.random() * 1000));
-                    });
-                }
-            });
-        }
-        
-        // Export functionality
-        document.querySelectorAll('.export-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const format = this.getAttribute('data-format');
-                const date = datePicker.value;
-                const doctorId = doctorFilter.value;
-                
-                Swal.fire({
-                    title: 'Exporting...',
-                    html: 'Please wait while we generate your file.',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                        
-                        // Simulate export process
-                        setTimeout(() => {
-                            Swal.close();
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Export Complete!',
-                                text: `Schedule exported as ${format.toUpperCase()}`,
-                                confirmButtonColor: 'var(--med-primary)'
-                            }).then(() => {
-                                // Create and trigger download
-                                const blob = new Blob(['Sample exported data'], { type: 'text/plain' });
-                                const url = window.URL.createObjectURL(blob);
-                                const a = document.createElement('a');
-                                a.href = url;
-                                a.download = `doctor-schedule-${date}.${format}`;
-                                document.body.appendChild(a);
-                                a.click();
-                                document.body.removeChild(a);
-                                window.URL.revokeObjectURL(url);
-                            });
-                        }, 1500);
-                    }
-                });
-            });
-        });
-        
-        // Import functionality
-        document.getElementById('importSchedule').addEventListener('click', function(e) {
-            e.preventDefault();
-            const importModal = new bootstrap.Modal(document.getElementById('importModal'));
-            importModal.show();
-        });
-        
-        document.getElementById('startImport').addEventListener('click', function() {
-            const fileInput = document.getElementById('importFile');
-            const importType = document.getElementById('importType').value;
-            const overwrite = document.getElementById('overwriteExisting').checked;
-            
-            if (!fileInput.files.length) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'No File Selected',
-                    text: 'Please select a file to import.',
-                    confirmButtonColor: 'var(--med-primary)'
-                });
-                return;
-            }
-            
-            Swal.fire({
-                title: 'Importing...',
-                html: 'Please wait while we process your file.',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                    
-                    // Simulate import process
-                    setTimeout(() => {
-                        Swal.close();
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Import Complete!',
-                            text: '12 appointments imported successfully.',
-                            confirmButtonColor: 'var(--med-primary)'
-                        }).then(() => {
-                            bootstrap.Modal.getInstance(document.getElementById('importModal')).hide();
-                        });
-                    }, 2000);
-                }
-            });
-        });
-        
-        // Download template
-        document.getElementById('downloadTemplate').addEventListener('click', function(e) {
-            e.preventDefault();
-            // Create template content
-            const templateContent = `Doctor ID,Patient Name,Date,Time,Appointment Type,Notes\nDR101,John Doe,2024-01-22,09:00,checkup,Regular checkup\nDR102,Jane Smith,2024-01-22,10:30,followup,Follow-up appointment`;
-            const blob = new Blob([templateContent], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'schedule-import-template.csv';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-        });
-        
-        // Print schedule
-        document.getElementById('printSchedule').addEventListener('click', function() {
-            const printContent = document.querySelector('.card.medical-border').innerHTML;
-            const originalContent = document.body.innerHTML;
-            
-            document.body.innerHTML = `
-                <div class="container mt-4">
-                    <h2 class="mb-3">Doctor Schedule - ${datePicker.value}</h2>
-                    ${printContent}
-                </div>
-            `;
-            
-            window.print();
-            document.body.innerHTML = originalContent;
-            location.reload();
-        });
-        
-        // Schedule buttons
-        document.querySelectorAll('.schedule-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const doctorId = this.getAttribute('data-doctor');
-                // Find an available time slot for this doctor
-                const availableCell = document.querySelector(`.schedule-cell[data-doctor="${doctorId}"] .appointment.available`);
-                if (availableCell) {
-                    const cell = availableCell.closest('.schedule-cell');
-                    bookNewAppointment(cell);
-                } else {
-                    Swal.fire({
-                        icon: 'info',
-                        title: 'No Available Slots',
-                        text: 'This doctor has no available time slots today.',
-                        confirmButtonColor: 'var(--med-primary)'
-                    });
-                }
-            });
-        });
-        
-        // New schedule button
-        document.getElementById('newScheduleBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            Swal.fire({
-                title: 'Create New Schedule',
-                html: `
-                    <form id="newScheduleForm">
-                        <div class="mb-3">
-                            <label for="scheduleDoctor" class="form-label">Select Doctor</label>
-                            <select class="form-select" id="scheduleDoctor" required>
-                                <option value="">Choose doctor...</option>
-                                <option value="DR101">Dr. Sarah Johnson - Cardiology</option>
-                                <option value="DR102">Dr. Michael Chen - Neurology</option>
-                                <option value="DR103">Dr. Anita Patel - Pediatrics</option>
-                                <option value="DR104">Dr. James Williams - Orthopedics</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="scheduleDateRange" class="form-label">Date Range</label>
-                            <input type="text" class="form-control" id="scheduleDateRange" placeholder="Select date range" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label for="schedulePattern" class="form-label">Schedule Pattern</label>
-                            <select class="form-select" id="schedulePattern" required>
-                                <option value="daily">Daily (Monday-Friday)</option>
-                                <option value="weekly">Weekly (Specific days)</option>
-                                <option value="custom">Custom Pattern</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="workingHours" class="form-label">Working Hours</label>
-                            <div class="row">
-                                <div class="col-6">
-                                    <input type="time" class="form-control" id="startTime" value="08:00" required>
-                                </div>
-                                <div class="col-6">
-                                    <input type="time" class="form-control" id="endTime" value="17:00" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="appointmentDuration" class="form-label">Appointment Duration</label>
-                            <select class="form-select" id="appointmentDuration">
-                                <option value="15">15 minutes</option>
-                                <option value="30" selected>30 minutes</option>
-                                <option value="45">45 minutes</option>
-                                <option value="60">60 minutes</option>
-                            </select>
-                        </div>
-                    </form>
-                `,
-                showCancelButton: true,
-                confirmButtonText: 'Create Schedule',
-                cancelButtonText: 'Cancel',
-                confirmButtonColor: 'var(--med-primary)',
-                width: 600,
-                preConfirm: () => {
-                    const doctor = document.getElementById('scheduleDoctor').value;
-                    if (!doctor) {
-                        Swal.showValidationMessage('Please select a doctor');
-                        return false;
-                    }
-                    return {
-                        doctor: doctor,
-                        startTime: document.getElementById('startTime').value,
-                        endTime: document.getElementById('endTime').value,
-                        duration: document.getElementById('appointmentDuration').value
-                    };
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Schedule Created!',
-                        text: 'New schedule has been created successfully.',
-                        confirmButtonColor: 'var(--med-primary)'
-                    });
-                }
-            });
-        });
-        
-        // View type switching
-        document.querySelectorAll('[data-view]').forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-                const viewType = this.getAttribute('data-view');
-                
-                // Update active state
-                document.querySelectorAll('[data-view]').forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Update view type dropdown text
-                document.getElementById('viewTypeDropdown').innerHTML = 
-                    `<i class="fas fa-eye me-1"></i> ${this.textContent}`;
-                
-                // Handle view switching
-                switch(viewType) {
-                    case 'weekly':
-                        // Switch to weekly tab
-                        const weeklyTab = document.getElementById('weekly-tab');
-                        const weeklyTabInstance = new bootstrap.Tab(weeklyTab);
-                        weeklyTabInstance.show();
-                        break;
-                    case 'monthly':
-                        // Not implemented yet
-                        Swal.fire({
-                            icon: 'info',
-                            title: 'Monthly View',
-                            text: 'Monthly view will be available in the next update.',
-                            confirmButtonColor: 'var(--med-primary)'
-                        });
-                        break;
-                    default:
-                        // Switch to daily tab
-                        const dailyTab = document.getElementById('daily-tab');
-                        const dailyTabInstance = new bootstrap.Tab(dailyTab);
-                        dailyTabInstance.show();
-                }
-            });
-        });
-        
-        // Add highlight animation style
-        const style = document.createElement('style');
-        style.textContent = `
-            .highlight-cell {
-                animation: highlight 2s ease;
-                background-color: rgba(var(--med-primary-rgb), 0.1) !important;
-            }
-            
-            @keyframes highlight {
-                0% { background-color: rgba(var(--med-primary-rgb), 0.3); }
-                100% { background-color: rgba(var(--med-primary-rgb), 0.1); }
-            }
-        `;
-        document.head.appendChild(style);
-    });
-</script>
 {% endblock %}

@@ -76,6 +76,8 @@ def _base_doctor_appointment_qs(date=None, start_date=None, end_date=None):
         'doctor__doctor__first_name',
         'doctor__doctor__middle_name',
         'doctor__doctor__last_name',
+        'doctor__profile_picture',
+        'doctor__specialization__department__name',
 
         # Patient
         'patient__id',
@@ -117,6 +119,8 @@ def _base_doctor_appointment_qs(date=None, start_date=None, end_date=None):
             a.pop('doctor__doctor__middle_name', ''),
             a.pop('doctor__doctor__last_name', '')
         )
+        a['doctor_profile_picture'] = a.pop('doctor__doctor__profile_picture', None)
+        a['doctor_department'] = a.pop('doctor__specialization__department__name', None)
         
         # Patient
         a['patient_id'] = a.pop('patient__id'),
@@ -158,7 +162,7 @@ def _base_doctor_appointment_qs(date=None, start_date=None, end_date=None):
 
 
 def doctors_appointments_today():
-    return _base_doctor_appointment_qs(date=timezone.now().date())
+    return _base_doctor_appointment_qs(date=timezone.localdate())
 
 def doctors_appointments_by_date(date):
     return _base_doctor_appointment_qs(date=date)

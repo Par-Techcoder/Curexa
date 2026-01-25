@@ -70,6 +70,7 @@ def create_availability(*, doctor, date, start_time, end_time):
 
 def get_current_week_range():
     today = timezone.localdate()  # timezone-safe
+    print(today)
     start_of_week = today - timedelta(days=today.weekday())  # Monday
     end_of_week = start_of_week + timedelta(days=6)          # Sunday
     return start_of_week, end_of_week
