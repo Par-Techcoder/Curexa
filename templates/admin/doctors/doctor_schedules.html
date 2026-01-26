@@ -2,18 +2,24 @@
 {% load static %}
 {% load static dict_extras %}
 
-
 {% block title %}Doctor Schedules - Curexa Admin{% endblock %}
 
-{% block navbar_extra %}
-<!-- Breadcrumb navigation -->
-<nav aria-label="breadcrumb" class="ms-3">
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/doctor_schedules.css' %}" />
+{% endblock %}
+
+
+{% block page_header %}
+<!-- Breadcrumb above title -->
+<div class="breadcrumb-above-title">
+  <nav aria-label="breadcrumb">
     <ol class="breadcrumb mb-0">
-        <li class="breadcrumb-item"><a href="#" class="text-white">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="#" class="text-white">Doctors</a></li>
-        <li class="breadcrumb-item active text-light" aria-current="page">Schedules</li>
+      <li class="breadcrumb-item"> <a href="{% url 'admin_dashboard' %}">Dashboard</a> </li>
+      <li class="breadcrumb-item"> <a href="{% url 'doctor_list' %}" >Doctors </a> </li>
+      <li class="breadcrumb-item active" aria-current="page">Schedules</li>
     </ol>
-</nav>
+  </nav>
+</div>
 {% endblock %}
 
 {% block content %}
@@ -25,6 +31,8 @@
         </div>
     </div>
 </div>
+
+
 
 <!-- Quick Stats Row -->
 <div class="row mt-4">
@@ -136,14 +144,14 @@
             <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
                 <i class="fas fa-download"></i> Export
             </button>
-<!-- Import & Export Dropdown -->
-<ul class="dropdown-menu">
-    <li><a class="dropdown-item export-btn" href="#" data-format="pdf"><i class="fas fa-file-pdf me-2"></i>PDF</a></li>
-    <li><a class="dropdown-item export-btn" href="#" data-format="excel"><i class="fas fa-file-excel me-2"></i>Excel</a></li>
-    <li><a class="dropdown-item export-btn" href="#" data-format="csv"><i class="fas fa-file-csv me-2"></i>CSV</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="#" id="importSchedule"><i class="fas fa-file-import me-2"></i>Import</a></li>
-</ul>
+            <!-- Import & Export Dropdown -->
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item export-btn" href="#" data-format="pdf"><i class="fas fa-file-pdf me-2"></i>PDF</a></li>
+                <li><a class="dropdown-item export-btn" href="#" data-format="excel"><i class="fas fa-file-excel me-2"></i>Excel</a></li>
+                <li><a class="dropdown-item export-btn" href="#" data-format="csv"><i class="fas fa-file-csv me-2"></i>CSV</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#" id="importSchedule"><i class="fas fa-file-import me-2"></i>Import</a></li>
+            </ul>
         </div>
         <button class="btn btn-outline-light ms-2" id="printSchedule">
             <i class="fas fa-print"></i>
@@ -194,8 +202,7 @@
     <div class="col-12">
         <div class="card medical-border">
             <div class="card-body">
-                <h4 class="mb-3" id="scheduleDate">Sunday, January 21, 2024</h4>
-                
+                <h4 class="mb-3" id="scheduleDate"></h4>
                 <!-- Schedule View Tabs -->
                 <ul class="nav nav-tabs" id="scheduleTabs" role="tablist">
                     <li class="nav-item" role="presentation">
@@ -226,75 +233,73 @@
                         <div class="table-responsive">
                             <div class="doctor-scroll-container">
                                 <table class="table table-hover" id="dailySchedule">
-<thead>
-<tr>
-    <th class="time-column">Time</th>
+                                    <thead>
+                                    <tr>
+                                        <th class="time-column">Time</th>
 
-    {% for doctor in doctors %}
-        <th class="doctor-column">
-            <div class="doctor-header">
-                {% if doctor.profile_picture %}
-                    <img src="{{ doctor.profile_picture }}"
-                         class="rounded-circle me-2" width="24" height="24">
-                {% else %}
-                    <img src="{% static 'images/doctor_profiles/default-doctor.jpg' %}"
-                         class="rounded-circle me-2" width="24" height="24">
-                {% endif %}
+                                        {% for doctor in doctors %}
+                                            <th class="doctor-column">
+                                                <div class="doctor-header">
+                                                    {% if doctor.profile_picture %}
+                                                        <img src="{{ doctor.profile_picture }}"
+                                                            class="rounded-circle me-2" width="24" height="24">
+                                                    {% else %}
+                                                        <img src="{% static 'images/doctor_profiles/default-doctor.jpg' %}"
+                                                            class="rounded-circle me-2" width="24" height="24">
+                                                    {% endif %}
 
-                <div>
-                    <div class="fw-bold">
-                        Dr. {{ doctor.doctor__first_name }} {{ doctor.doctor__last_name }}
-                    </div>
-                    <small class="text-muted">
-                        {{ doctor.specialization__name|default:"Department" }}
-                    </small>
-                </div>
-            </div>
-        </th>
-    {% endfor %}
-</tr>
-</thead>
+                                                    <div>
+                                                        <div class="fw-bold">
+                                                            Dr. {{ doctor.doctor__first_name }} {{ doctor.doctor__last_name }}
+                                                        </div>
+                                                        <small class="text-muted">
+                                                            {{ doctor.specialization__name|default:"Department" }}
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                        {% endfor %}
+                                    </tr>
+                                    </thead>
 
-<tbody>
-{% for time in all_times %}
-    <tr>
-        <!-- Time column -->
-        <td class="fw-bold time-column">
-            {{ time|time:"h:i A" }}
-        </td>
+                                    <tbody>
+                                    {% for time in time_slots %}
+                                        <tr>
+                                            <!-- Time column -->
+                                            <td class="fw-bold time-column">
+                                                {{ time|time:"h:i A" }}
+                                            </td>
 
-        <!-- Doctor columns -->
-        {% for doctor in doctors %}
-            {% with appt=schedule_lookup|get_item:doctor.id|get_item:time %}
-                <td class="schedule-cell"
-                    data-time="{{ time }}"
-                    data-doctor="{{ doctor.id }}">
+                                            <!-- Doctor columns -->
+                                            {% for doctor in doctors %}
+                                                {% with appt=schedule_lookup|get_item:doctor.id|get_item:time %}
+                                                    <td class="schedule-cell"
+                                                        data-time="{{ time }}"
+                                                        data-doctor="{{ doctor.id }}">
 
-                    {% if appt %}
-                        <div class="appointment booked">
-                            <small class="d-block">{{ appt.patient_name }}</small>
+                                                        {% if appt %}
+                                                            <div class="appointment booked">
+                                                                <small class="d-block">{{ appt.patient_name }}</small>
 
-                            <small class="badge badge-sm type-badge">
-                                {% for t in appointment_types %}
-                                    {% if t.value == appt.appt_type %}
-                                        {{ t.name }}
-                                    {% endif %}
-                                {% endfor %}
-                            </small>
-                        </div>
-                    {% else %}
-                        <div class="appointment available">
-                            <small>Available</small>
-                        </div>
-                    {% endif %}
-                </td>
-            {% endwith %}
-        {% endfor %}
-    </tr>
-{% endfor %}
-</tbody>
-
-
+                                                                <small class="badge badge-sm type-badge">
+                                                                    {% for t in appointment_types %}
+                                                                        {% if t.value == appt.appt_type %}
+                                                                            {{ t.name }}
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                </small>
+                                                            </div>
+                                                        {% else %}
+                                                            <div class="appointment available">
+                                                                <small>Available</small>
+                                                            </div>
+                                                        {% endif %}
+                                                    </td>
+                                                {% endwith %}
+                                            {% endfor %}
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
@@ -317,51 +322,49 @@
                     <div class="tab-pane fade" id="weekly" role="tabpanel" aria-labelledby="weekly-tab">
                         <div class="table-responsive">
                             <table class="table table-bordered table text-center">
-<thead>
-<tr>
-    <th class="time-column">Time / Day</th>
-    {% for day in week_days %}
-        <th>
-            <div>{{ day|date:"D" }}</div>
-            <div class="small">{{ day|date:"M d" }}</div>
-            {% if day == today %}
-                <span class="badge bg-primary badge-sm">Today</span>
-            {% endif %}
-        </th>
-    {% endfor %}
-</tr>
-</thead>
+                                <thead>
+                                <tr>
+                                    <th class="time-column">Time / Day</th>
+                                    {% for day in week_days %}
+                                        <th>
+                                            <div>{{ day|date:"D" }}</div>
+                                            <div class="small">{{ day|date:"M d" }}</div>
+                                            {% if day == today %}
+                                                <span class="badge bg-primary badge-sm">Today</span>
+                                            {% endif %}
+                                        </th>
+                                    {% endfor %}
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for t in all_times %}
+                                <tr>
+                                    <td class="fw-bold time-column">
+                                        {{ t|time:"g:i A" }}
+                                    </td>
 
-<tbody>
-{% for t in all_times %}
-<tr>
-    <td class="fw-bold time-column">
-        {{ t|time:"g:i A" }}
-    </td>
+                                    {% for day in week_days %}
+                                        {% with cell=weekly_schedule|get_item:day|get_item:t %}
+                                        <td class="weekly-cell"
+                                            data-date="{{ day }}"
+                                            data-time="{{ t|time:'H:i' }}">
 
-    {% for day in week_days %}
-        {% with cell=weekly_schedule|get_item:day|get_item:t %}
-        <td class="weekly-cell"
-            data-date="{{ day }}"
-            data-time="{{ t|time:'H:i' }}">
+                                            {% if cell.count > 0 %}
+                                                <div class="weekly-appointment"
+                                                    data-bs-toggle="tooltip"
+                                                    title="{{ cell.count }} appointment(s)">
+                                                    <span class="badge bg-primary">{{ cell.count }}</span>
+                                                </div>
+                                            {% else %}
+                                                <span class="badge bg-success">Free</span>
+                                            {% endif %}
 
-            {% if cell.count > 0 %}
-                <div class="weekly-appointment"
-                     data-bs-toggle="tooltip"
-                     title="{{ cell.count }} appointment(s)">
-                    <span class="badge bg-primary">{{ cell.count }}</span>
-                </div>
-            {% else %}
-                <span class="badge bg-success">Free</span>
-            {% endif %}
-
-        </td>
-        {% endwith %}
-    {% endfor %}
-</tr>
-{% endfor %}
-</tbody>
-
+                                        </td>
+                                        {% endwith %}
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                                </tbody>
                             </table>
                         </div>
                         <div class="row mt-3">
@@ -447,131 +450,130 @@
                     </div>
                     
                     <!-- By Doctor View -->
-<div class="tab-pane fade" id="doctors" role="tabpanel" aria-labelledby="doctors-tab">
-    <div class="row" id="doctorCardsContainer">
-        {% for item in doctors_today %}
-            <div class="col-lg-4 col-md-6 mb-4 doctor-card" data-department="{{ item.doctor.department.slug }}">
-                <div class="card medical-border h-100">
+                    <div class="tab-pane fade" id="doctors" role="tabpanel" aria-labelledby="doctors-tab">
+                        <div class="row" id="doctorCardsContainer">
+                            {% for item in doctors_today %}
+                                <div class="col-lg-4 col-md-6 mb-4 doctor-card" data-department="{{ item.doctor.department.slug }}">
+                                    <div class="card medical-border h-100">
 
-                    <!-- HEADER -->
-                    <div class="card-header">
-                        <div class="d-flex align-items-center">
-                            <img src="{{ item.doctor.avatar.url }}" alt="Dr. {{ item.doctor.full_name }}" class="rounded-circle me-2" width="40" height="40">
-                            <div>
-                                <h5 class="card-title mb-0">Dr. {{ item.doctor.full_name }}</h5>
-                                <small class="text-muted">{{ item.doctor.department.name }}</small>
-                            </div>
-                            <div class="ms-auto">
-                                <span class="badge bg-{{ item.status.css }}">{{ item.status.label }}</span>
-                            </div>
-                        </div>
-                    </div>
+                                        <!-- HEADER -->
+                                        <div class="card-header">
+                                            <div class="d-flex align-items-center">
+                                                <img src="{{ item.doctor.avatar.url }}" alt="Dr. {{ item.doctor.full_name }}" class="rounded-circle me-2" width="40" height="40">
+                                                <div>
+                                                    <h5 class="card-title mb-0">Dr. {{ item.doctor.full_name }}</h5>
+                                                    <small class="text-muted">{{ item.doctor.department.name }}</small>
+                                                </div>
+                                                <div class="ms-auto">
+                                                    <span class="badge bg-{{ item.status.css }}">{{ item.status.label }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                    <!-- BODY -->
-                    <div class="card-body">
-                        <h6>Today's Schedule</h6>
-                        <div class="schedule-timeline">
-                            {% for slot in item.timeline %}
-                                {% if slot.type == "break" %}
-                                    <div class="schedule-item break">
-                                        <span class="time">{{ slot.time|time:"g:i A" }}</span>
-                                        <span class="patient">{{ slot.label }}</span>
+                                        <!-- BODY -->
+                                        <div class="card-body">
+                                            <h6>Today's Schedule</h6>
+                                            <div class="schedule-timeline">
+                                                {% for slot in item.timeline %}
+                                                    {% if slot.type == "break" %}
+                                                        <div class="schedule-item break">
+                                                            <span class="time">{{ slot.time|time:"g:i A" }}</span>
+                                                            <span class="patient">{{ slot.label }}</span>
+                                                        </div>
+                                                    {% elif slot.type == "appointment" %}
+                                                        <div class="schedule-item confirmed">
+                                                            <span class="time">{{ slot.time|time:"g:i A" }}</span>
+                                                            <span class="patient">{{ slot.patient }}</span>
+                                                            <span class="badge badge-sm {{ slot.badge_class }}">{{ slot.badge }}</span>
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="schedule-item free">
+                                                            <span class="time">{{ slot.time|time:"g:i A" }}</span>
+                                                            <span class="patient">Available</span>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+
+                                            <div class="mt-3 d-grid gap-2">
+                                                <button class="btn btn-sm btn-outline-light schedule-btn" data-doctor="{{ item.doctor.id }}">
+                                                    <i class="fas fa-calendar-plus me-1"></i> Schedule Appointment
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-primary view-schedule-btn" data-doctor="{{ item.doctor.id }}">
+                                                    <i class="fas fa-calendar-alt me-1"></i> View Full Schedule
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- FOOTER -->
+                                        <div class="card-footer bg-transparent">
+                                            <small class="text-muted">
+                                                <i class="fas fa-phone me-1"></i> {{ item.doctor.phone }} |
+                                                <i class="fas fa-envelope me-1 ms-2"></i> {{ item.doctor.email|truncatechars:12 }}
+                                            </small>
+                                        </div>
+
                                     </div>
-                                {% elif slot.type == "appointment" %}
-                                    <div class="schedule-item confirmed">
-                                        <span class="time">{{ slot.time|time:"g:i A" }}</span>
-                                        <span class="patient">{{ slot.patient }}</span>
-                                        <span class="badge badge-sm {{ slot.badge_class }}">{{ slot.badge }}</span>
-                                    </div>
-                                {% else %}
-                                    <div class="schedule-item free">
-                                        <span class="time">{{ slot.time|time:"g:i A" }}</span>
-                                        <span class="patient">Available</span>
-                                    </div>
-                                {% endif %}
+                                </div>
                             {% endfor %}
                         </div>
-
-                        <div class="mt-3 d-grid gap-2">
-                            <button class="btn btn-sm btn-outline-light schedule-btn" data-doctor="{{ item.doctor.id }}">
-                                <i class="fas fa-calendar-plus me-1"></i> Schedule Appointment
-                            </button>
-                            <button class="btn btn-sm btn-outline-primary view-schedule-btn" data-doctor="{{ item.doctor.id }}">
-                                <i class="fas fa-calendar-alt me-1"></i> View Full Schedule
-                            </button>
-                        </div>
                     </div>
-
-                    <!-- FOOTER -->
-                    <div class="card-footer bg-transparent">
-                        <small class="text-muted">
-                            <i class="fas fa-phone me-1"></i> {{ item.doctor.phone }} |
-                            <i class="fas fa-envelope me-1 ms-2"></i> {{ item.doctor.email|truncatechars:12 }}
-                        </small>
-                    </div>
-
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-</div>
-
                     
                     <!-- Grid View -->
-<div class="tab-pane fade" id="grid" role="tabpanel" aria-labelledby="grid-tab">
-    <div class="row g-3">
-        {% for item in doctors_today %}
-            <div class="col-xl-3 col-lg-4 col-md-6">
-                <div class="card medical-border h-100">
-                    <div class="card-body text-center">
-                        <img src="{{ item.doctor.avatar.url }}" alt="Dr. {{ item.doctor.full_name }}" class="rounded-circle mb-3" width="80" height="80">
-                        <h5>Dr. {{ item.doctor.full_name }}</h5>
-                        <p class="text-muted">{{ item.doctor.department.name }}</p>
+                    <div class="tab-pane fade" id="grid" role="tabpanel" aria-labelledby="grid-tab">
+                        <div class="row g-3">
+                            {% for item in doctors_today %}
+                                <div class="col-xl-3 col-lg-4 col-md-6">
+                                    <div class="card medical-border h-100">
+                                        <div class="card-body text-center">
+                                            <img src="{{ item.doctor.avatar.url }}" alt="Dr. {{ item.doctor.full_name }}" class="rounded-circle mb-3" width="80" height="80">
+                                            <h5>Dr. {{ item.doctor.full_name }}</h5>
+                                            <p class="text-muted">{{ item.doctor.department.name }}</p>
 
-                        <div class="doctor-stats mb-3">
-                            <div class="row text-center">
-                                <div class="col-4">
-                                    <div class="stat-number">
-                                        {{ item.timeline|length }} <!-- Number of slots today -->
-                                    </div>
-                                    <small class="text-muted">Today</small>
-                                </div>
-                                <div class="col-4">
-                                    <div class="stat-number">
-                                        {% with count=0 %}
-                                        {% for t in item.timeline %}
-                                            {% if t.type == "appointment" %}
-                                                {% widthratio count|add:1 1 1 %}<!-- Increment counter -->
-                                            {% endif %}
-                                        {% endfor %}
-                                        {{ count }}
-                                        {% endwith %}
-                                    </div>
-                                    <small class="text-muted">This Week</small>
-                                </div>
-                                <div class="col-4">
-                                    <div class="stat-number">
-                                        {% if item.status.label == "Available" %}100{% else %}{{ item.timeline|length|divisibleby:2|yesno:"50,0" }}{% endif %}%
-                                    </div>
-                                    <small class="text-muted">Available</small>
-                                </div>
-                            </div>
-                        </div>
+                                            <div class="doctor-stats mb-3">
+                                                <div class="row text-center">
+                                                    <div class="col-4">
+                                                        <div class="stat-number">
+                                                            {{ item.timeline|length }} <!-- Number of slots today -->
+                                                        </div>
+                                                        <small class="text-muted">Today</small>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="stat-number">
+                                                            {% with count=0 %}
+                                                            {% for t in item.timeline %}
+                                                                {% if t.type == "appointment" %}
+                                                                    {% widthratio count|add:1 1 1 %}<!-- Increment counter -->
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                            {{ count }}
+                                                            {% endwith %}
+                                                        </div>
+                                                        <small class="text-muted">This Week</small>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class="stat-number">
+                                                            {% if item.status.label == "Available" %}100{% else %}{{ item.timeline|length|divisibleby:2|yesno:"50,0" }}{% endif %}%
+                                                        </div>
+                                                        <small class="text-muted">Available</small>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-sm btn-success schedule-btn" data-doctor="{{ item.doctor.id }}">
-                                <i class="fas fa-calendar-plus me-1"></i> Book Now
-                            </button>
-                            <button class="btn btn-sm btn-outline-light view-schedule-btn" data-doctor="{{ item.doctor.id }}">
-                                View Schedule
-                            </button>
+                                            <div class="d-grid gap-2">
+                                                <button class="btn btn-sm btn-success schedule-btn" data-doctor="{{ item.doctor.id }}">
+                                                    <i class="fas fa-calendar-plus me-1"></i> Book Now
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-light view-schedule-btn" data-doctor="{{ item.doctor.id }}">
+                                                    View Schedule
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-</div>
 
                 </div>
             </div>
@@ -644,298 +646,28 @@
     </div>
 </div>
 
-<style>
-    /* Custom Styles */
-    .table th {
-        border-top: none;
-        border-bottom: 2px solid var(--med-primary);
-        font-weight: 600;
-        background-color: rgba(var(--med-primary-rgb), 0.05);
-    }
-    
-    /* Daily View with Scroll */
-    .doctor-scroll-container {
-        overflow-x: auto;
-        max-width: 100%;
-        border: 1px solid #dee2e6;
-        border-radius: 4px;
-    }
-    
-    .doctor-column {
-        min-width: 180px;
-    }
-    
-    .time-column {
-        min-width: 100px;
-        position: sticky;
-        left: 0;
-        background: white;
-        z-index: 1;
-    }
-    
-    .doctor-header {
-        display: flex;
-        align-items: center;
-        padding: 5px;
-    }
-    
-    /* Appointment Styles */
-    .schedule-cell {
-        cursor: pointer;
-        position: relative;
-        height: 60px;
-        vertical-align: middle;
-        transition: all 0.2s;
-    }
-    
-    .schedule-cell:hover {
-        background-color: rgba(var(--med-primary-rgb), 0.05);
-    }
-    
-    .appointment {
-        padding: 6px;
-        border-radius: 4px;
-        text-align: center;
-        font-size: 0.85rem;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        border-left: 4px solid;
-        transition: transform 0.2s;
-    }
-    
-    .appointment:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    /* Appointment Type Colors */
-    .appointment.available {
-        background-color: rgba(46, 204, 113, 0.15);
-        border-left-color: #2ecc71;
-        color: #27ae60;
-    }
-    
-    .appointment.booked {
-        background-color: rgba(52, 152, 219, 0.15);
-        border-left-color: #3498db;
-        color: #2980b9;
-    }
-    
-    .appointment.emergency {
-        background-color: rgba(231, 76, 60, 0.2);
-        border-left-color: #e74c3c;
-        color: #c0392b;
-        font-weight: bold;
-    }
-    
-    .appointment.cancelled {
-        background-color: rgba(149, 165, 166, 0.2);
-        border-left-color: #95a5a6;
-        color: #7f8c8d;
-        text-decoration: line-through;
-    }
-    
-    .appointment.break {
-        background-color: rgba(243, 156, 18, 0.15);
-        border-left-color: #f39c12;
-        color: #d35400;
-    }
-    
-    .appointment.followup {
-        background-color: rgba(155, 89, 182, 0.15);
-        border-left-color: #9b59b6;
-        color: #8e44ad;
-    }
-    
-    .appointment.procedure {
-        background-color: rgba(230, 126, 34, 0.15);
-        border-left-color: #e67e22;
-        color: #d35400;
-    }
-    
-    /* Type badges */
-    .type-badge {
-        font-size: 0.7rem;
-        padding: 2px 5px;
-        margin-top: 2px;
-        display: inline-block;
-        color: white;
-        border-radius: 3px;
-    }
-    
-    .type-badge.checkup { background-color: #3498db; }
-    .type-badge.followup { background-color: #9b59b6; }
-    .type-badge.emergency { background-color: #e74c3c; }
-    .type-badge.consultation { background-color: #1abc9c; }
-    .type-badge.procedure { background-color: #e67e22; }
-    .type-badge.cancelled { background-color: #95a5a6; }
-    
-    /* Schedule Timeline */
-    .schedule-timeline {
-        border-left: 3px solid var(--med-primary);
-        padding-left: 15px;
-        max-height: 300px;
-        overflow-y: auto;
-    }
-    
-    .schedule-item {
-        padding: 8px 0;
-        margin-bottom: 5px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid #eee;
-    }
-    
-    .schedule-item:last-child {
-        border-bottom: none;
-    }
-    
-    .schedule-item .time {
-        font-weight: bold;
-        width: 80px;
-        color: #666;
-    }
-    
-    .schedule-item .patient {
-        flex-grow: 1;
-        margin: 0 10px;
-    }
-    
-    .schedule-item.confirmed { color: #3498db; }
-    .schedule-item.emergency { color: #e74c3c; }
-    .schedule-item.free { color: #2ecc71; }
-    .schedule-item.break { color: #f39c12; }
-    
-    /* Weekly View */
-    .weekly-cell {
-        cursor: pointer;
-        height: 50px;
-        vertical-align: middle;
-    }
-    
-    .weekly-appointment {
-        display: inline-block;
-        padding: 4px 8px;
-        border-radius: 4px;
-        background-color: rgba(52, 152, 219, 0.1);
-        border: 1px solid rgba(52, 152, 219, 0.3);
-    }
-    
-    /* Progress bars */
-    .doctor-availability .progress {
-        background-color: #ecf0f1;
-    }
-    
-    /* Stats */
-    .stat-number {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: var(--med-primary);
-    }
-    
-    /* Nav Tabs */
-    .nav-tabs .nav-link {
-        color: #666;
-        border: none;
-        padding: 10px 20px;
-    }
-    
-    .nav-tabs .nav-link:hover {
-        color: var(--med-primary);
-    }
-    
-    .nav-tabs .nav-link.active {
-        color: var(--med-primary);
-        background: transparent;
-        border-bottom: 3px solid var(--med-primary);
-        font-weight: 600;
-    }
-    
-    /* Responsive */
-    @media (max-width: 768px) {
-        .doctor-column {
-            min-width: 150px;
-        }
-        
-        .time-column {
-            min-width: 80px;
-        }
-        
-        .nav-tabs .nav-link {
-            padding: 8px 12px;
-            font-size: 0.9rem;
-        }
-    }
-</style>
+
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize tooltips
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-        
-        // Date navigation (Only forward)
-        const datePicker = document.getElementById('datePicker');
-        const nextDayBtn = document.getElementById('nextDay');
-        const nextWeekBtn = document.getElementById('nextWeek');
-        const todayBtn = document.getElementById('todayBtn');
-        const scheduleDate = document.getElementById('scheduleDate');
-        
-        // Set min date to today
-        const today = new Date();
-        const todayString = today.toISOString().split('T')[0];
-        datePicker.min = todayString;
-        
-        // Set max date (3 months from now)
-        const maxDate = new Date();
-        maxDate.setMonth(maxDate.getMonth() + 3);
-        datePicker.max = maxDate.toISOString().split('T')[0];
-        
-        function updateDateDisplay() {
-            const selectedDate = new Date(datePicker.value);
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            scheduleDate.textContent = selectedDate.toLocaleDateString('en-US', options);
-        }
-        
-        function addDays(date, days) {
-            const result = new Date(date);
-            result.setDate(result.getDate() + days);
-            return result;
-        }
-        
-        nextDayBtn.addEventListener('click', function() {
-            const currentDate = new Date(datePicker.value);
-            const nextDate = addDays(currentDate, 1);
-            
-            // Check if next date is within max range
-            if (nextDate <= new Date(datePicker.max)) {
-                datePicker.value = nextDate.toISOString().split('T')[0];
-                updateDateDisplay();
-            } else {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Date Limit Reached',
-                    text: 'You can only schedule up to 3 months in advance.',
-                    confirmButtonColor: 'var(--med-primary)'
-                });
-            }
-        });
-        
-        nextWeekBtn.addEventListener('click', function() {
-            const currentDate = new Date(datePicker.value);
-            const nextWeekDate = addDays(currentDate, 7);
-            
-            if (nextWeekDate <= new Date(datePicker.max)) {
-                datePicker.value = nextWeekDate.toISOString().split('T')[0];
-                updateDateDisplay();
-            } else {
-                Swal.fire({
-                    confirmButtonColor: 'var(--med-primary)'
-                });
-            Swal.fire({
+  const scheduleDate = document.getElementById("scheduleDate");
+
+  const today = new Date();
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  };
+
+  scheduleDate.textContent = today.toLocaleDateString("en-US", options);
+</script>
+
+<script>
+
+
+
+</script>
+
+
+
 {% endblock %}

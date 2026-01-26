@@ -68,9 +68,38 @@ def age_from_dob(dob, on_date=None):
     return years
 
 
-def _base_doctor_appointment_qs(date=None, start_date=None, end_date=None):
-    # Base queryset
-    qs = Appointment.objects.filter(is_active=True).values(
+def get_doctor_grouped_appointments(
+    date=None,
+    start_date=None,
+    end_date=None,
+    doctor_id=None,
+    status=None,
+    sort_by="start_time",
+    order="asc",
+):
+    qs = Appointment.objects.filter(is_active=True)
+
+    # ----------------------------
+    # DB LEVEL FILTERS
+    # ----------------------------
+    if doctor_id:
+        qs = qs.filter(doctor_id=doctor_id)
+
+    if status:
+        qs = qs.filter(appointment_status=status)
+
+    if date:
+        qs = qs.filter(
+            availability__date=date,
+            availability__is_active=True
+        )
+    elif start_date and end_date:
+        qs = qs.filter(
+            availability__is_active=True,
+            availability__date__range=(start_date, end_date)
+        )
+
+    qs = qs.values(
         # Doctor
         'doctor__id',
         'doctor__doctor__first_name',
@@ -102,74 +131,62 @@ def _base_doctor_appointment_qs(date=None, start_date=None, end_date=None):
         'availability__end_time',
     )
 
-    # Apply date filters
-    if date:
-        qs = qs.filter(availability__date=date, availability__is_active=True)
-    elif start_date and end_date:
-        qs = qs.filter(availability__is_active=True, availability__date__range=(start_date, end_date))
+    appointments = list(qs)
 
-    # Convert to list for Python-level processing
-    appointments = list(qs.order_by('availability__date', 'availability__start_time'))
-
+    # ----------------------------
+    # DATA TRANSFORMATION
+    # ----------------------------
     for a in appointments:
-        # Doctor
-        a['doctor_id'] = a.pop('doctor__id')        
+        a['doctor_id'] = a.pop('doctor__id')
         a['doctor_name'] = full_name(
             a.pop('doctor__doctor__first_name', ''),
             a.pop('doctor__doctor__middle_name', ''),
             a.pop('doctor__doctor__last_name', '')
         )
-        a['doctor_profile_picture'] = a.pop('doctor__doctor__profile_picture', None)
-        a['doctor_department'] = a.pop('doctor__specialization__department__name', None)
-        
-        # Patient
-        a['patient_id'] = a.pop('patient__id'),
+        a['doctor_profile_picture'] = a.pop('doctor__profile_picture')
+        a['doctor_department'] = a.pop('doctor__specialization__department__name')
+
+        a['patient_id'] = a.pop('patient__id')
         a['patient_name'] = full_name(
             a.pop('patient__patient__first_name', ''),
             a.pop('patient__patient__middle_name', ''),
             a.pop('patient__patient__last_name', '')
         )
-        a['patient_email'] = a.pop('patient__patient__email', '')
-        a['chronic'] = a.pop('patient__chronic_conditions', None)
-        a['patient_age'] = age_from_dob(
-            a.pop('patient__dob', None)
-        )        
-        a['patient_gender'] = enum_name(Gender, a.pop('patient__gender', '') )
-        a['patient_mobile'] = a.pop('patient__phone_number', '')
-        a['patient_allergies'] = a.pop('patient__allergies', None)
-        
-        a['appt_type'] = a.pop('appointment_type')
-        a['appt_status'] = a.pop('appointment_status')   
+        a['patient_email'] = a.pop('patient__patient__email')
+        a['patient_age'] = age_from_dob(a.pop('patient__dob'))
+        a['patient_gender'] = enum_name(Gender, a.pop('patient__gender'))
+        a['patient_mobile'] = a.pop('patient__phone_number')
+        a['patient_allergies'] = a.pop('patient__allergies')
+        a['chronic'] = a.pop('patient__chronic_conditions')
+
+        a['appt_type'] = enum_name(AppointmentType, a.pop('appointment_type'))
+        a['appt_status'] = enum_name(AppointmentStatus, a.pop('appointment_status'))
         a['appt_notes'] = a.pop('notes')
-        
+
         a['date'] = a.pop('availability__date')
         a['start_time'] = a.pop('availability__start_time')
         a['end_time'] = a.pop('availability__end_time')
 
-    # Sort first by doctor, then by start time
-    appointments.sort(key=itemgetter('doctor_id', 'start_time'))
+    # ----------------------------
+    # SORTING (Python level)
+    # ----------------------------
+    reverse = order == "desc"
+    appointments.sort(key=itemgetter(sort_by), reverse=reverse)
 
-    # Group by doctor ID
+    # ----------------------------
+    # GROUP BY DOCTOR
+    # ----------------------------
+    appointments.sort(key=itemgetter('doctor_id'))
     grouped = {}
+
     for doctor_id, appts in groupby(appointments, key=itemgetter('doctor_id')):
         appts = list(appts)
         grouped[doctor_id] = {
-            'doctor_name': appts[0]['doctor_name'],
-            'appointments': appts,
+            "doctor_name": appts[0]['doctor_name'],
+            "appointments": appts
         }
 
     return grouped
-
-
-def doctors_appointments_today():
-    return _base_doctor_appointment_qs(date=timezone.localdate())
-
-def doctors_appointments_by_date(date):
-    return _base_doctor_appointment_qs(date=date)
-
-def doctors_appointments_in_current_week(start_date, end_date):
-    return _base_doctor_appointment_qs(start_date=start_date, end_date=end_date)
-    
 
 def get_all_appointment_types_status():
     types = [
@@ -184,4 +201,3 @@ def get_all_appointment_types_status():
         'types': types,
         'statuses': statuses
     }
-

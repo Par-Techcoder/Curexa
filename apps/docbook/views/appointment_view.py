@@ -2,7 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from apps.docbook.serializers.appointment_serializer import AppointmentCreateSerializer
+from apps.docbook.serializers.appointment_serializer import AppointmentCreateSerializer, AppointmentReadSerializer
+from apps.docbook.services import appointment_services
 
 
 class AppointmentBookAPIView(APIView):
@@ -20,3 +21,22 @@ class AppointmentBookAPIView(APIView):
             },
             status=status.HTTP_201_CREATED
         )
+
+
+class AppointmentsByDoctorAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        data = request.data
+
+        result = appointment_services.get_doctor_grouped_appointments(
+            date=data.get("date"),
+            start_date=data.get("date_from"),
+            end_date=data.get("date_to"),
+            doctor_id=data.get("doctor_id"),
+            status=data.get("status"),
+            sort_by=data.get("sort_by", "start_time"),
+            order=data.get("order", "asc"),
+        )
+
+        return Response(result, status=status.HTTP_200_OK)

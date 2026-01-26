@@ -1,4 +1,5 @@
 from enum import Enum
+from datetime import time
 
 class Gender(Enum):
     MALE = 1
@@ -85,3 +86,5 @@ TEST_CATEGORY = [
     ('imaging', 'Imaging'),
     ('other', 'Other'),
 ]
+
+DOCTOR_TIME_SLOTS = [time(h, m) for h in range(9, 18) for m in (0, 30)]

@@ -1,0 +1,224 @@
+/* Custom Styles */
+.table th {
+    border-top: none;
+    border-bottom: 2px solid var(--med-primary);
+    font-weight: 600;
+    background-color: rgba(var(--med-primary-rgb), 0.05);
+}
+
+/* Daily View with Scroll */
+.doctor-scroll-container {
+    overflow-x: auto;
+    max-width: 100%;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+}
+
+.doctor-column {
+    min-width: 180px;
+}
+
+.time-column {
+    min-width: 100px;
+    position: sticky;
+    left: 0;
+    background: white;
+    z-index: 1;
+}
+
+.doctor-header {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+
+/* Appointment Styles */
+.schedule-cell {
+    cursor: pointer;
+    position: relative;
+    height: 60px;
+    vertical-align: middle;
+    transition: all 0.2s;
+}
+
+.schedule-cell:hover {
+    background-color: rgba(var(--med-primary-rgb), 0.05);
+}
+
+.appointment {
+    padding: 6px;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 0.85rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-left: 4px solid;
+    transition: transform 0.2s;
+}
+
+.appointment:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Appointment Type Colors */
+.appointment.available {
+    background-color: rgba(46, 204, 113, 0.15);
+    border-left-color: #2ecc71;
+    color: #27ae60;
+}
+
+.appointment.booked {
+    background-color: rgba(52, 152, 219, 0.15);
+    border-left-color: #3498db;
+    color: #2980b9;
+}
+
+.appointment.emergency {
+    background-color: rgba(231, 76, 60, 0.2);
+    border-left-color: #e74c3c;
+    color: #c0392b;
+    font-weight: bold;
+}
+
+.appointment.cancelled {
+    background-color: rgba(149, 165, 166, 0.2);
+    border-left-color: #95a5a6;
+    color: #7f8c8d;
+    text-decoration: line-through;
+}
+
+.appointment.break {
+    background-color: rgba(243, 156, 18, 0.15);
+    border-left-color: #f39c12;
+    color: #d35400;
+}
+
+.appointment.followup {
+    background-color: rgba(155, 89, 182, 0.15);
+    border-left-color: #9b59b6;
+    color: #8e44ad;
+}
+
+.appointment.procedure {
+    background-color: rgba(230, 126, 34, 0.15);
+    border-left-color: #e67e22;
+    color: #d35400;
+}
+
+/* Type badges */
+.type-badge {
+    font-size: 0.7rem;
+    padding: 2px 5px;
+    margin-top: 2px;
+    display: inline-block;
+    color: white;
+    border-radius: 3px;
+}
+
+.type-badge.checkup { background-color: #3498db; }
+.type-badge.followup { background-color: #9b59b6; }
+.type-badge.emergency { background-color: #e74c3c; }
+.type-badge.consultation { background-color: #1abc9c; }
+.type-badge.procedure { background-color: #e67e22; }
+.type-badge.cancelled { background-color: #95a5a6; }
+
+/* Schedule Timeline */
+.schedule-timeline {
+    border-left: 3px solid var(--med-primary);
+    padding-left: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.schedule-item {
+    padding: 8px 0;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.schedule-item:last-child {
+    border-bottom: none;
+}
+
+.schedule-item .time {
+    font-weight: bold;
+    width: 80px;
+    color: #666;
+}
+
+.schedule-item .patient {
+    flex-grow: 1;
+    margin: 0 10px;
+}
+
+.schedule-item.confirmed { color: #3498db; }
+.schedule-item.emergency { color: #e74c3c; }
+.schedule-item.free { color: #2ecc71; }
+.schedule-item.break { color: #f39c12; }
+
+/* Weekly View */
+.weekly-cell {
+    cursor: pointer;
+    height: 50px;
+    vertical-align: middle;
+}
+
+.weekly-appointment {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: rgba(52, 152, 219, 0.1);
+    border: 1px solid rgba(52, 152, 219, 0.3);
+}
+
+/* Progress bars */
+.doctor-availability .progress {
+    background-color: #ecf0f1;
+}
+
+/* Stats */
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--med-primary);
+}
+
+/* Nav Tabs */
+.nav-tabs .nav-link {
+    color: #666;
+    border: none;
+    padding: 10px 20px;
+}
+
+.nav-tabs .nav-link:hover {
+    color: var(--med-primary);
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--med-primary);
+    background: transparent;
+    border-bottom: 3px solid var(--med-primary);
+    font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .doctor-column {
+        min-width: 150px;
+    }
+    
+    .time-column {
+        min-width: 80px;
+    }
+    
+    .nav-tabs .nav-link {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+}
