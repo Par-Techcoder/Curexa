@@ -3,15 +3,17 @@
 
 {% block title %}Add Patient - Curexa Admin{% endblock %}
 
-{% block navbar_extra %}
-<!-- Breadcrumb navigation -->
-<nav aria-label="breadcrumb" class="ms-3">
+{% block page_header %}
+<div class="breadcrumb-above-title">
+  <nav aria-label="breadcrumb">
     <ol class="breadcrumb mb-0">
-        <li class="breadcrumb-item"><a href="#" class="text-white">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="#" class="text-white">Patients</a></li>
-        <li class="breadcrumb-item active text-light" aria-current="page">Add Patient</li>
+      <li class="breadcrumb-item">
+        <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Add New Patient</li>
     </ol>
-</nav>
+  </nav>
+</div>
 {% endblock %}
 
 {% block content %}

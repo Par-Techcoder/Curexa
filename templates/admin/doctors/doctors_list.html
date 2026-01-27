@@ -106,48 +106,31 @@
     <a href="{% url 'doctor_add' %}" class="btn btn-success">
       <i class="fas fa-user-plus me-1"></i> Add New Doctor
     </a>
-    <div class="btn-group ms-2">
-      <button
-        type="button"
-        class="btn btn-outline-light dropdown-toggle"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-      >
-        <i class="fas fa-filter me-1"></i> Filter
-      </button>
-      <ul class="dropdown-menu dropdown-menu-end">
-        <li>
-          <a class="dropdown-item" href="#" data-filter="all">All Doctors</a>
-        </li>
-        <li>
-          <a class="dropdown-item" href="#" data-filter="active">Active</a>
-        </li>
-        <li>
-          <a class="dropdown-item" href="#" data-filter="on_leave">On Leave</a>
-        </li>
-        <li><hr class="dropdown-divider" /></li>
-        <li>
-          <a class="dropdown-item" href="#" data-filter="cardiology"
-            >Cardiology</a
-          >
-        </li>
-        <li>
-          <a class="dropdown-item" href="#" data-filter="neurology"
-            >Neurology</a
-          >
-        </li>
-        <li>
-          <a class="dropdown-item" href="#" data-filter="orthopedics"
-            >Orthopedics</a
-          >
-        </li>
-        <li>
-          <a class="dropdown-item" href="#" data-filter="pediatrics"
-            >Pediatrics</a
-          >
-        </li>
-      </ul>
-    </div>
+<div class="btn-group ms-2">
+  <button
+    type="button"
+    class="btn dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+    id="filterDropdownButton"
+  >
+    <i class="fas fa-filter me-1"></i> Filter
+  </button>
+  <div class="dropdown-menu dropdown-menu-end p-2" style="min-width: 200px; max-height: 250px; overflow-y: auto;">
+    <!-- Search inside dropdown -->
+    <input type="text" class="form-control mb-2" id="specializationSearch" placeholder="Search specialization">
+    <a class="dropdown-item" data-filter="active">Active</a>
+    <a class="dropdown-item" data-filter="on_leave">On Leave</a>
+    <hr class="dropdown-divider">
+
+    {% for specialization in specializations %}
+      <a class="dropdown-item" data-filter="{{ specialization.name }}">
+        {{ specialization.name }}
+      </a>
+    {% endfor %}
+  </div>
+</div>
+
   </div>
 </div>
 
@@ -168,7 +151,7 @@
                 <th>Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="doctorsTableBody">
               {% for doctor in doctors %}
               <tr>
                 <td>DR{{ doctor.id }}</td>
@@ -260,21 +243,11 @@
         </div>
 
         <!-- Pagination -->
-        <nav aria-label="Doctor pagination">
-          <ul class="pagination justify-content-center">
-            <li class="page-item disabled">
-              <a class="page-link" href="#" tabindex="-1">Previous</a>
-            </li>
-            <li class="page-item active">
-              <a class="page-link" href="#">1</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item">
-              <a class="page-link" href="#">Next</a>
-            </li>
-          </ul>
-        </nav>
+<nav>
+  <ul class="pagination justify-content-center" id="pagination"></ul>
+</nav>
+
+
       </div>
     </div>
   </div>
@@ -304,93 +277,176 @@
 </style>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    // Search functionality
-    const searchInput = document.getElementById("searchInput");
-    const searchButton = document.getElementById("searchButton");
-    const table = document.getElementById("doctorsTable");
-    const rows = table.getElementsByTagName("tr");
+const searchInput = document.getElementById("searchInput");
+const tableBody = document.getElementById("doctorsTableBody");
+const pagination = document.getElementById("pagination");
 
-    function performSearch() {
-      const searchText = searchInput.value.toLowerCase();
+let state = {
+  search: "",
+  status: "",
+  specialization: "",
+  page: 1
+};
 
-      for (let i = 1; i < rows.length; i++) {
-        const row = rows[i];
-        let found = false;
+function renderRows(doctors) {
+  if (!doctors.length) {
+    return `<tr>
+      <td colspan="7" class="text-center text-muted">No doctors found</td>
+    </tr>`;
+  }
 
-        for (let j = 0; j < row.cells.length; j++) {
-          const cellText = row.cells[j].textContent.toLowerCase();
-          if (cellText.includes(searchText)) {
-            found = true;
-            break;
-          }
-        }
+  return doctors.map(d => `
+    <tr>
+      <td>DR${d.id}</td>
 
-        if (found) {
-          row.style.display = "";
-        } else {
-          row.style.display = "none";
-        }
-      }
+      <td>
+        <div class="d-flex align-items-center">
+          <img src="${d.profile_picture}" class="rounded-circle me-2" width="40" height="40">
+          <div>
+            <div>${d.name}</div>
+            <small class="text-muted">${(d.qualifications || []).join(", ")}</small>
+          </div>
+        </div>
+      </td>
+
+      <td>${d.specialization}</td>
+
+      <td>
+        ${d.email}<br>
+        <small>${d.contact_number}</small>
+      </td>
+
+      <td>
+        <span class="badge ${d.available ? "bg-success" : "bg-danger"}">
+          ${d.available ? "Active" : "On Leave"}
+        </span>
+      </td>
+
+      <td>
+        <small>${d.active_appointments_count || 0} today</small>
+      </td>
+
+      <td>
+        <div class="btn-group">
+          <a href="/admin/doctors/${d.id}/" class="btn btn-sm btn-outline-info" title="View">
+            <i class="bi bi-eye"></i>
+          </a>
+
+          <a href="/admin/doctors/${d.id}/edit/" class="btn btn-sm btn-outline-warning" title="Edit">
+            <i class="bi bi-pencil"></i>
+          </a>
+
+          <a href="/admin/doctors/${d.id}/schedules/" class="btn btn-sm btn-outline-dark" title="Schedule">
+            <i class="bi bi-calendar"></i>
+          </a>
+          <a href="/admin/doctors/${d.id}/remove/" class="btn btn-sm btn-outline-danger" title="Delete">
+            <i class="bi bi-trash"></i>
+          </a>
+        </div>
+      </td>
+    </tr>
+  `).join("");
+}
+
+
+function renderPagination(page, pages) {
+  let html = "";
+
+  if (page > 1) {
+    html += `<li class="page-item">
+      <a class="page-link" href="#" data-page="${page - 1}">Previous</a>
+    </li>`;
+  }
+
+  for (let i = 1; i <= pages; i++) {
+    html += `<li class="page-item ${i === page ? "active" : ""}">
+      <a class="page-link" href="#" data-page="${i}">${i}</a>
+    </li>`;
+  }
+
+  if (page < pages) {
+    html += `<li class="page-item">
+      <a class="page-link" href="#" data-page="${page + 1}">Next</a>
+    </li>`;
+  }
+
+  pagination.innerHTML = html;
+}
+
+function fetchDoctors() {
+  const params = new URLSearchParams(state);
+
+  fetch(`/admin/api/doctors/?${params}`)
+    .then(res => res.json())
+    .then(data => {
+      tableBody.innerHTML = renderRows(data.results);
+      renderPagination(data.page, data.pages);
+    });
+}
+
+// 🔍 REALTIME SEARCH
+searchInput.addEventListener("input", e => {
+  state.search = e.target.value;
+  state.page = 1;
+  fetchDoctors();
+});
+
+// 🎯 FILTERS
+document.querySelectorAll("[data-filter]").forEach(item => {
+  item.addEventListener("click", e => {
+    e.preventDefault();
+
+    const filter = item.dataset.filter;
+
+    state.status = "";
+    state.specialization = "";
+    state.page = 1;
+
+    if (filter === "active" || filter === "on_leave") {
+      state.status = filter;
+    } else if (filter !== "all") {
+      state.specialization = filter;
     }
 
-    searchButton.addEventListener("click", performSearch);
-    searchInput.addEventListener("keyup", performSearch);
-
-    // Filter functionality
-    const filterItems = document.querySelectorAll(
-      ".dropdown-item[data-filter]"
-    );
-
-    filterItems.forEach((item) => {
-      item.addEventListener("click", function (e) {
-        e.preventDefault();
-        const filterValue = this.getAttribute("data-filter");
-
-        for (let i = 1; i < rows.length; i++) {
-          const row = rows[i];
-
-          if (filterValue === "all") {
-            row.style.display = "";
-          } else if (filterValue === "active" || filterValue === "on_leave") {
-            const statusCell = row.cells[4];
-            if (statusCell.textContent.toLowerCase().includes(filterValue)) {
-              row.style.display = "";
-            } else {
-              row.style.display = "none";
-            }
-          } else {
-            // Specialization filter
-            const specializationCell = row.cells[2];
-            if (
-              specializationCell.textContent.toLowerCase().includes(filterValue)
-            ) {
-              row.style.display = "";
-            } else {
-              row.style.display = "none";
-            }
-          }
-        }
-
-        // Update dropdown text
-        document.querySelector(".dropdown-toggle").textContent =
-          "Filter: " + this.textContent;
-      });
-    });
-
-    // Row click to view doctor details
-    const tableRows = table.querySelectorAll("tbody tr");
-    tableRows.forEach((row) => {
-      row.addEventListener("click", (e) => {
-        // Don't trigger if clicking on action buttons
-        if (!e.target.closest(".btn-group")) {
-          const doctorId = row.cells[0].textContent;
-          // In a real application, this would redirect to doctor details
-          console.log(`Viewing doctor: ${doctorId}`);
-          // window.location.href = `/doctor-details/${doctorId}/`;
-        }
-      });
-    });
+    fetchDoctors();
   });
+});
+
+// 📄 PAGINATION CLICK
+pagination.addEventListener("click", e => {
+  if (e.target.dataset.page) {
+    e.preventDefault();
+    state.page = parseInt(e.target.dataset.page);
+    fetchDoctors();
+  }
+});
+document.addEventListener("DOMContentLoaded", () => {
+  fetchDoctors();
+});
+
+
 </script>
+
+<script>
+const specializationSearch = document.getElementById("specializationSearch");
+
+specializationSearch.addEventListener("input", (e) => {
+  const filter = e.target.value.toLowerCase();
+  const items = document.querySelectorAll("#filterDropdownButton + .dropdown-menu .dropdown-item");
+
+  items.forEach(item => {
+    // Ignore All/Active/On Leave items (optional)
+    if (["all", "active", "on_leave"].includes(item.dataset.filter)) return;
+
+    const text = item.textContent.toLowerCase();
+    if (text.includes(filter)) {
+      item.style.display = "";
+    } else {
+      item.style.display = "none";
+    }
+  });
+});
+</script>
+
+
 {% endblock %}

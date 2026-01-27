@@ -88,3 +88,14 @@ TEST_CATEGORY = [
 ]
 
 DOCTOR_TIME_SLOTS = [time(h, m) for h in range(9, 18) for m in (0, 30)]
+
+BLOOD_GROUP_CHOICES = [
+    ("A+",  "A+"),
+    ("A-",  "A-"),
+    ("B+",  "B+"),
+    ("B-",  "B-"),
+    ("AB+", "AB+"),
+    ("AB-", "AB-"),
+    ("O+",  "O+"),
+    ("O-",  "O-"),
+]

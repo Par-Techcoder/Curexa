@@ -1,6 +1,6 @@
 from django.db import models
 from apps.core.models.address_model import AddressModel
-from apps.core.constants.default_values import Gender
+from apps.core.constants.default_values import Gender, BLOOD_GROUP_CHOICES
 
 class PatientProfile(AddressModel):
     patient = models.OneToOneField(
@@ -8,7 +8,13 @@ class PatientProfile(AddressModel):
         on_delete=models.CASCADE,
         related_name='patient_profile'
     )
-    allergies=models.TextField(blank=True, null=True)
+    blood_group = models.CharField(
+        max_length=3,
+        choices=BLOOD_GROUP_CHOICES,
+        null=True,
+        blank=True
+    )
+    allergies = models.TextField(blank=True, null=True)
     chronic_conditions=models.TextField(blank=True, null=True)
     dob = models.DateField(blank=True, null=True)
     gender = models.IntegerField(
