@@ -17,6 +17,7 @@ urlpatterns = [
     path("admin/doctors/add/", views.DoctorAddView.as_view(), name="doctor_add"),
     path("admin/doctors/<int:pk>/detail/", views.DoctorDetailView.as_view(), name="doctor_detail"),
     path("admin/doctors/<int:pk>/edit/", views.DoctorEditView.as_view(), name="doctor_edit"),
+    path("admin/doctors/<int:pk>/delete/", views.DoctorDeleteView.as_view(), name="doctor_delete"),
     path("admin/doctors/schedules/", views.DoctorsSchedulesView.as_view(), name="doctors_schedules"),
     path("admin/doctor/<int:pk>/schedules/", views.DoctorSchedulesView.as_view(), name="doctor_schedules"),
     

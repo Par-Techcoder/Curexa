@@ -6,6 +6,7 @@ from django.conf import settings
 from django.db import transaction
 from apps.accounts.models.patientprofile_model import PatientProfile
 from apps.doctors.models.doctorprofile_model import DoctorProfile
+from django.shortcuts import get_object_or_404
 
 OTP_EXPIRY_SECONDS = 300  # 5 minutes
 OTP_ATTEMPT_LIMIT = 5
@@ -94,3 +95,15 @@ def ensure_user_profile(user):
         return profile
 
     raise ValueError(f"Unsupported user role: {user.role}")
+
+
+def delete_doctor(user_id: int):
+    user = get_object_or_404(User, id=user_id, role=Role.DOCTOR.value)
+
+    user.is_active = False
+    user.save(update_fields=["is_active"])
+
+    DoctorProfile.objects.filter(doctor=user).delete()
+
+    
+    

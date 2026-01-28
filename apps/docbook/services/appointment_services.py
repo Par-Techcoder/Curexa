@@ -173,3 +173,35 @@ def get_all_appointment_types_status():
         'types': types,
         'statuses': statuses
     }
+
+
+from django.db.models import OuterRef, Subquery, Count, IntegerField
+from django.db.models.functions import Coalesce
+from django.utils.timezone import localdate
+
+
+def todays_appointments_count_by_doctor_ref(doctor_ref):
+    return Subquery(
+        Appointment.objects.filter(
+            doctor=doctor_ref,
+            availability__date=localdate()
+        )
+        .values("doctor")
+        .annotate(c=Count("id"))
+        .values("c"),
+        output_field=IntegerField()
+    )
+
+
+def active_appointments_count_by_doctor_ref(doctor_ref):
+    return Subquery(
+        Appointment.objects.filter(
+            doctor=doctor_ref,
+            availability__date=localdate(),
+            appointment_status=AppointmentStatus.SCHEDULED.value
+        )
+        .values("doctor")
+        .annotate(c=Count("id"))
+        .values("c"),
+        output_field=IntegerField()
+    )

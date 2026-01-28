@@ -5,6 +5,7 @@ from apps.docbook.services import availability_services
 from django.db.models import Exists, OuterRef
 from apps.docbook.models.availability_model import Availability
 from django.utils.timezone import now
+from django.utils.timezone import localdate
 
 
 
@@ -17,10 +18,12 @@ def doctor_queryset():
         is_available_today=Exists(
             Availability.objects.filter(
                 doctor=OuterRef("pk"),
-                date=now().date(),
+                date=localdate(),
                 is_active=True
             )
-        )
+        ),
+        appointment_today=appointment_services.todays_appointments_count_by_doctor_ref(OuterRef("pk")),
+        active_appointment_today=appointment_services.active_appointments_count_by_doctor_ref(OuterRef("pk")),
     )
 
 
@@ -35,7 +38,9 @@ def doctor_list_data(qs):
             "specialization": obj.specialization.name if obj.specialization else "",
             "contact_number": obj.contact_number,
             "profile_picture": obj.profile_picture.url if obj.profile_picture else "",
-            # "available": obj.is_available,  # annotate later if needed
+            "is_available_today":obj.is_available_today,
+            "appointment_today": obj.appointment_today or 0,
+            "active_appointment_today": obj.active_appointment_today or 0,
         })
 
     return result

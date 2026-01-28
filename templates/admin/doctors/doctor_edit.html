@@ -1,0 +1,231 @@
+{% extends 'admin/base.html' %} {% load static %} 
+{% block title %} Doctor Edit | Curexa Admin{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/doctor_edit.css' %}" />
+{% endblock %}
+
+{% block page_header %}
+<!-- Breadcrumb above title -->
+<div class="breadcrumb-above-title">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+      <li class="breadcrumb-item">
+        <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href={% url 'doctor_list' %}>Doctors</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{doctor.name}}</li>
+    </ol>
+  </nav>
+</div>
+
+<!-- Page Header -->
+<div class="page-title-section">
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <h2><i class="fas fa-user-md me-2"></i>Edit Doctor Profile</h2>
+            <p class="mb-0">Update doctor information and settings</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <div class="d-flex gap-2 justify-content-end">
+                <button class="btn btn-med-outline" onclick="window.history.back()">
+                    <i class="fas fa-times me-1"></i> Cancel
+                </button>
+                <button id="saveDoctorBtn" type="button" class="btn btn-med-primary">
+                    <i class="fas fa-check me-1"></i> Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+        
+
+{% endblock %}
+
+{% block content %}
+
+        <!-- Main Form -->
+    <div class="row">
+        <!-- Left Column: User & Basic Info -->
+        <div class="col-lg-6">
+            <!-- Profile Picture -->
+            <div class="form-card mb-4">
+                <div class="section-title">Profile Picture</div>
+                
+                <div class="profile-picture-wrapper">
+                    <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" 
+                            alt="Doctor Profile" class="profile-picture" id="profilePicture">
+                    
+                    <div class="d-flex justify-content-center gap-2">
+                        <label for="profilePictureInput" class="btn btn-med-outline btn-sm">
+                            <i class="fas fa-upload me-1"></i> Upload Photo
+                        </label>
+                        <input type="file" id="profilePictureInput" class="d-none" accept="image/*" onchange="updateProfilePicture(event)">
+                        <button class="btn btn-med-outline btn-sm" onclick="resetProfilePicture()">
+                            <i class="fas fa-trash me-1"></i> Remove
+                        </button>
+                    </div>
+                    <p class="text-muted mt-2 small">Max file size: 2MB. JPG, PNG formats only.</p>
+                </div>
+            </div>
+            
+            <!-- User Account Information -->
+            <div class="form-card mb-4">
+                <div class="section-title">User Account Information</div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="firstName" class="form-label required">First Name</label>
+                        <input type="text" class="form-control" id="firstName" value="John" required>
+                        <div class="error-message">First name is required</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="middleName" class="form-label">Middle Name</label>
+                        <input type="text" class="form-control" id="middleName" value="Robert">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="lastName" class="form-label required">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" value="Smith" required>
+                        <div class="error-message">Last name is required</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="email" class="form-label required">Email</label>
+                        <input type="email" class="form-control" id="email" value="john.smith@curexa.com" required>
+                        <div class="error-message">Valid email is required</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Column: Doctor Profile Info -->
+        <div class="col-lg-6">
+            <!-- Professional Details -->
+            <div class="form-card mb-4">
+                <div class="section-title">Professional Details</div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="specialization" class="form-label required">Specialization</label>
+                        <select class="form-select" id="specialization" required>
+                            <option value="">Select Specialization</option>
+                            <option value="1" selected>Cardiology</option>
+                            <option value="2">Neurology</option>
+                            <option value="3">Orthopedics</option>
+                            <option value="4">Pediatrics</option>
+                            <option value="5">Dermatology</option>
+                        </select>
+                        <div class="error-message">Specialization is required</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="experienceYears" class="form-label required">Experience (Years)</label>
+                        <input type="number" class="form-control" id="experienceYears" min="0" max="50" value="12" required>
+                        <div class="error-message">Experience is required</div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="licenseNumber" class="form-label required">License Number</label>
+                        <input type="text" class="form-control" id="licenseNumber" value="MD-12345678" required>
+                        <div class="error-message">License number is required</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="licenseExpiry" class="form-label required">License Expiry Date</label>
+                        <input type="date" class="form-control" id="licenseExpiry" value="2023-12-31" required>
+                        <div class="license-warning" id="licenseWarning">License has expired!</div>
+                        <div class="error-message">License expiry date is required</div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="consultationFee" class="form-label required">Consultation Fee ($)</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" class="form-control" id="consultationFee" step="0.01" min="0" value="150.00" required>
+                        </div>
+                        <div class="error-message">Consultation fee is required</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="dob" class="form-label">Date of Birth</label>
+                        <input type="date" class="form-control" id="dob" value="1978-03-15">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Information -->
+            <div class="form-card mb-4">
+                <div class="section-title">Contact Information</div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="contactNumber" class="form-label">Contact Number</label>
+                        <input type="text" class="form-control" id="contactNumber" value="+1 (555) 123-4567">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="clinicAddress" class="form-label">Clinic Address</label>
+                        <input type="text" class="form-control" id="clinicAddress" value="123 Medical Center Dr, Suite 405">
+                    </div>
+                </div>
+                
+                <!-- Address Fields (from AddressModel) -->
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="city" class="form-label">City</label>
+                        <input type="text" class="form-control" id="city" value="San Francisco">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="state" class="form-label">State</label>
+                        <input type="text" class="form-control" id="state" value="California">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="zipCode" class="form-label">ZIP Code</label>
+                        <input type="text" class="form-control" id="zipCode" value="94107">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="country" class="form-label">Country</label>
+                        <input type="text" class="form-control" id="country" value="United States">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="addressLine" class="form-label">Address Line</label>
+                        <input type="text" class="form-control" id="addressLine" value="123 Medical Center Dr">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bottom Action Buttons -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card medical-border">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <button class="btn btn-med-outline" onclick="resetForm()">
+                                <i class="fas fa-redo me-1"></i> Reset Form
+                            </button>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-med-outline" onclick="window.history.back()">
+                                <i class="fas fa-times me-1"></i> Cancel
+                            </button>
+                            <button class="btn btn-med-primary" onclick="saveDoctor()">
+                                <i class="fas fa-check me-1"></i> Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

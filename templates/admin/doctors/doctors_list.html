@@ -119,6 +119,7 @@
   <div class="dropdown-menu dropdown-menu-end p-2" style="min-width: 200px; max-height: 250px; overflow-y: auto;">
     <!-- Search inside dropdown -->
     <input type="text" class="form-control mb-2" id="specializationSearch" placeholder="Search specialization">
+    <a class="dropdown-item" data-filter="all">All</a>
     <a class="dropdown-item" data-filter="active">Active</a>
     <a class="dropdown-item" data-filter="on_leave">On Leave</a>
     <hr class="dropdown-divider">
@@ -194,40 +195,26 @@
                     <div
                       class="progress-bar bg-success"
                       role="progressbar"
-                      style="width: {{ doctor.todays_appointments_count|default:0 }}%"
-                      aria-valuenow="{{ doctor.todays_appointments_count }}"
+                      style="width: {{ doctor.appointment_today|default:0 }}%"
+                      aria-valuenow="{{ doctor.appointment_today }}"
                       aria-valuemin="0"
                       aria-valuemax="100"
                     ></div>
                   </div>
-                  <small> {{ doctor.active_appointments_count }} today </small>
+                  <small> {{ doctor.active_appointment_today }} today </small>
                 </td>
 
                 <td>
                   <div class="btn-group">
-                    <a
-                      href="{% url 'doctor_detail' doctor.id %}"
-                      class="btn btn-sm btn-outline-info"
-                      title="View Profile"
-                    >
-                      <i class="bi bi-eye"></i>
-                    </a>
+                    <a href="{% url 'doctor_detail' doctor.id %}" class="btn btn-sm btn-outline-info" title="View Profile" > <i class="bi bi-eye"></i> </a>
+                    <a href="{% url 'doctor_edit' doctor.id %}" class="btn btn-sm btn-outline-warning" title="Edit"><i class="bi bi-pencil"></i></a>
+                    <a href="{% url 'doctor_schedules' doctor.id %}" class="btn btn-sm btn-outline-light" title="Schedule"><i class="bi bi-calendar"></i></a>
+                    <a href="#"
+   class="btn btn-sm btn-outline-danger delete-btn"
+   data-id="{{ doctor.id }}">
+  <i class="bi bi-trash"></i>
+</a>
 
-                    <a
-                      href="{% url 'doctor_edit' doctor.id %}"
-                      class="btn btn-sm btn-outline-warning"
-                      title="Edit"
-                    >
-                      <i class="bi bi-pencil"></i>
-                    </a>
-
-                    <a
-                      href="{% url 'doctor_schedules' doctor.id %}"
-                      class="btn btn-sm btn-outline-light"
-                      title="Schedule"
-                    >
-                      <i class="bi bi-calendar"></i>
-                    </a>
                   </div>
                 </td>
               </tr>
@@ -246,6 +233,39 @@
 <nav>
   <ul class="pagination justify-content-center" id="pagination"></ul>
 </nav>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteDoctorModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          Confirm Delete
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <p class="mb-0">
+          Are you sure you want to delete this doctor?
+        </p>
+        <small class="text-muted">
+          This action cannot be undone.
+        </small>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancel
+        </button>
+        <button class="btn btn-danger" id="confirmDeleteBtn">
+          Yes, Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
       </div>
@@ -271,7 +291,6 @@
   }
 
   .progress {
-    background-color: rgba(255, 255, 255, 0.1);
     width: 100px;
   }
 </style>
@@ -289,63 +308,73 @@ let state = {
 };
 
 function renderRows(doctors) {
-  if (!doctors.length) {
-    return `<tr>
-      <td colspan="7" class="text-center text-muted">No doctors found</td>
-    </tr>`;
-  }
+  return doctors.map(d => {
+    const total = d.appointment_today || 0;              // total appointments today
+    const completed = d.active_appointment_today || 0;   // completed appointments
+    const remaining = Math.max(total - completed, 0);   // remaining appointments
 
-  return doctors.map(d => `
-    <tr>
-      <td>DR${d.id}</td>
+    let progressHtml = "";
+    let text = "";
 
-      <td>
-        <div class="d-flex align-items-center">
-          <img src="${d.profile_picture}" class="rounded-circle me-2" width="40" height="40">
-          <div>
+    if (total === 0) {
+      // No appointments today
+      progressHtml = `<div class="progress" style="height: 12px;">
+                        <div class="progress-bar bg-secondary" style="width: 100%;"></div>
+                      </div>`;
+      text = "No appointments today";
+    } else {
+      const percentCompleted = (completed / total) * 100;
+      const percentRemaining = (remaining / total) * 100;
+
+      progressHtml = `
+        <div class="progress" style="height: 12px; position: relative;">
+          <!-- Gray total bar -->
+          <div class="progress-bar bg-secondary" style="width: 100%; position: absolute;"></div>
+          <!-- Green remaining appointments -->
+          <div class="progress-bar bg-success" role="progressbar" style="width: ${percentRemaining}%;"></div>
+          <!-- Optional red completed bar on top -->
+          <div class="progress-bar bg-danger" role="progressbar" style="width: ${percentCompleted}%;"></div>
+        </div>
+      `;
+      text = `${remaining} / ${total} remaining`;
+    }
+
+    return `
+      <tr>
+        <td>DR${d.id}</td>
+        <td>
+          <div class="d-flex align-items-center">
+            <img src="${d.profile_picture || '/static/images/doctor_profiles/default-doctor.jpg'}" class="rounded-circle me-2" width="40" height="40">
             <div>${d.name}</div>
-            <small class="text-muted">${(d.qualifications || []).join(", ")}</small>
           </div>
-        </div>
-      </td>
+        </td>
+        <td>${d.specialization || ""}</td>
+        <td>${d.email || ""}<br><small>${d.contact_number || ""}</small></td>
+        <td>
+          <span class="badge ${d.is_available_today ? "bg-success" : "bg-danger"}">
+            ${d.is_available_today ? "Active" : "On Leave"}
+          </span>
+        </td>
+        <td>
+          ${progressHtml}
+          <small>${text}</small>
+        </td>
+        <td>
+          <div class="btn-group">
+            <a href="/admin/doctors/${d.id}/detail/" class="btn btn-sm btn-outline-info"><i class="bi bi-eye"></i></a>
+            <a href="/admin/doctors/${d.id}/edit/" class="btn btn-sm btn-outline-warning"><i class="bi bi-pencil"></i></a>
+            <a href="/admin/doctors/${d.id}/schedules/" class="btn btn-sm btn-outline-dark"><i class="bi bi-calendar"></i></a>
+            <a href="#"
+   class="btn btn-sm btn-outline-danger delete-btn"
+   data-id="${d.id}">
+   <i class="bi bi-trash"></i>
+</a>
 
-      <td>${d.specialization}</td>
-
-      <td>
-        ${d.email}<br>
-        <small>${d.contact_number}</small>
-      </td>
-
-      <td>
-        <span class="badge ${d.available ? "bg-success" : "bg-danger"}">
-          ${d.available ? "Active" : "On Leave"}
-        </span>
-      </td>
-
-      <td>
-        <small>${d.active_appointments_count || 0} today</small>
-      </td>
-
-      <td>
-        <div class="btn-group">
-          <a href="/admin/doctors/${d.id}/" class="btn btn-sm btn-outline-info" title="View">
-            <i class="bi bi-eye"></i>
-          </a>
-
-          <a href="/admin/doctors/${d.id}/edit/" class="btn btn-sm btn-outline-warning" title="Edit">
-            <i class="bi bi-pencil"></i>
-          </a>
-
-          <a href="/admin/doctors/${d.id}/schedules/" class="btn btn-sm btn-outline-dark" title="Schedule">
-            <i class="bi bi-calendar"></i>
-          </a>
-          <a href="/admin/doctors/${d.id}/remove/" class="btn btn-sm btn-outline-danger" title="Delete">
-            <i class="bi bi-trash"></i>
-          </a>
-        </div>
-      </td>
-    </tr>
-  `).join("");
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join("");
 }
 
 
@@ -445,6 +474,45 @@ specializationSearch.addEventListener("input", (e) => {
       item.style.display = "none";
     }
   });
+});
+</script>
+
+<script>
+let doctorToDelete = null;
+const deleteModal = new bootstrap.Modal(
+  document.getElementById("deleteDoctorModal")
+);
+
+// Open modal
+document.addEventListener("click", function (e) {
+  const btn = e.target.closest(".delete-btn");
+  if (!btn) return;
+
+  e.preventDefault();
+  doctorToDelete = btn.dataset.id;
+  deleteModal.show();
+});
+
+// Confirm delete
+document.getElementById("confirmDeleteBtn").addEventListener("click", function () {
+  if (!doctorToDelete) return;
+
+  fetch(`/admin/doctors/${doctorToDelete}/delete/`, {
+    method: "POST",
+    headers: {
+      "X-CSRFToken": "{{ csrf_token }}",
+    }
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      deleteModal.hide();
+      fetchDoctors(); // refresh table
+    } else {
+      alert("Failed to delete doctor");
+    }
+  })
+  .catch(() => alert("Something went wrong"));
 });
 </script>
 

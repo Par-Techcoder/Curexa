@@ -12,16 +12,17 @@ class DoctorListView(View):
         doctors = doctor_services.doctor_list_data(
             doctor_services.doctor_queryset()[:5]
         )
+        total_doctors=doctor_services.total_doctors_count()
+        active_doctors=availability_services.today_active_doctors_count()
+        specialized_doctors=doctor_services.specialized_doctors_count()
 
         context = {
             "doctors": doctors,
             "specializations": specializations,
-            "total_doctors": doctor_services.total_doctors_count(),
-            "specialized_doctors": doctor_services.specialized_doctors_count(),
-            "active_doctors": availability_services.today_active_doctors_count(),
-            "inactive_doctors_today":
-                doctor_services.total_doctors_count()
-                - availability_services.today_active_doctors_count(),
+            "total_doctors": total_doctors,
+            "specialized_doctors": specialized_doctors,
+            "active_doctors": active_doctors,
+            "inactive_doctors_today": total_doctors - active_doctors,
         }
 
         return render(request, "admin/doctors/doctors_list.html", context)
@@ -39,7 +40,6 @@ def doctor_list_api(request):
     search = request.GET.get("search", "").strip()
     status = request.GET.get("status", "")
     specialization = request.GET.get("specialization", "")
-    print(request.GET)
 
     if search:
         qs = qs.filter(
@@ -141,3 +141,12 @@ class DoctorDetailView(View):
 class DoctorEditView(View):
     def get(self, request, pk):
         return render(request, "admin/doctors/doctor_edit.html")    
+    
+@admin_required(login_url="/admin/login/")
+class DoctorDeleteView(View):
+    def post(self, request, pk):
+        user_services.delete_doctor(pk)
+        return JsonResponse({
+            "success": True,
+            "message": "Doctor deleted successfully"
+        })

@@ -1,0 +1,225 @@
+:root {
+    --med-primary: #2a6b9c;
+    --med-secondary: #3498db;
+    --med-success: #27ae60;
+    --med-warning: #f39c12;
+    --med-danger: #e74c3c;
+}
+
+body {
+    background-color: #f5f7fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.medical-border {
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+.page-title-section {
+    background: linear-gradient(135deg, var(--med-primary) 0%, #1a4a6e 100%);
+    color: white;
+    padding: 25px 30px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+.page-title-section h2 {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.form-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--med-primary);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(42, 107, 156, 0.1);
+}
+
+.form-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 8px;
+}
+
+.required::after {
+    content: " *";
+    color: var(--med-danger);
+}
+
+.form-control, .form-select {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--med-primary);
+    box-shadow: 0 0 0 0.25rem rgba(42, 107, 156, 0.15);
+}
+
+.profile-picture-wrapper {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.profile-picture {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom: 15px;
+}
+
+.btn-med-primary {
+    background-color: var(--med-primary);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-med-primary:hover {
+    background-color: #1a4a6e;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(42, 107, 156, 0.2);
+}
+
+.btn-med-outline {
+    background-color: transparent;
+    color: var(--med-primary);
+    border: 2px solid var(--med-primary);
+    padding: 10px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-med-outline:hover {
+    background-color: rgba(42, 107, 156, 0.1);
+    color: var(--med-primary);
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+    background-color: var(--med-success);
+}
+
+input:checked + .toggle-slider:before {
+    transform: translateX(26px);
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.status-badge.active {
+    background-color: rgba(39, 174, 96, 0.1);
+    color: var(--med-success);
+}
+
+.status-badge.inactive {
+    background-color: rgba(231, 76, 60, 0.1);
+    color: var(--med-danger);
+}
+
+.error-message {
+    color: var(--med-danger);
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: none;
+}
+
+.has-error .form-control,
+.has-error .form-select {
+    border-color: var(--med-danger);
+}
+
+.has-error .error-message {
+    display: block;
+}
+
+.license-warning {
+    color: var(--med-danger);
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: none;
+}
+
+.license-warning.show {
+    display: block;
+}
+
+.bio-counter {
+    font-size: 0.85rem;
+    color: #6c757d;
+    text-align: right;
+    margin-top: 5px;
+}
+
+.bio-counter.warning {
+    color: var(--med-warning);
+}
+
+.bio-counter.danger {
+    color: var(--med-danger);
+}
