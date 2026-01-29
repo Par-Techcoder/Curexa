@@ -6,8 +6,11 @@ from django.db.models import Exists, OuterRef
 from apps.docbook.models.availability_model import Availability
 from django.utils.timezone import now
 from django.utils.timezone import localdate
+from django.shortcuts import get_object_or_404
+from apps.core.services.util_services import *
 
-
+def get_doctor_by_id(pk):
+    return get_object_or_404(DoctorProfile, id=pk)
 
 def doctor_queryset():
     return DoctorProfile.objects.select_related(
@@ -32,7 +35,7 @@ def doctor_list_data(qs):
 
     for obj in qs:
         result.append({
-            "id": obj.doctor.id,
+            "id": obj.id,
             "name": obj.doctor.get_full_name(),
             "email": obj.doctor.email,
             "specialization": obj.specialization.name if obj.specialization else "",
@@ -79,3 +82,65 @@ def get_all_doctors():
         'profile_picture',
         'specialization__name'
     )
+
+
+def get_doctor_details(doctor):
+    data = (
+        DoctorProfile.objects
+        .select_related(
+            "doctor",
+            "specialization",
+            "specialization__department"
+        )
+        .filter(doctor=doctor.doctor.id)
+        .values(
+            "id",
+            "doctor__public_id",
+            "doctor__first_name",
+            "doctor__middle_name",
+            "doctor__last_name",
+            "doctor__email",
+            "contact_number",
+            "profile_picture",
+            "specialization__name",
+            "specialization__department__name",
+            "bio",
+            "experience_years",
+            "clinic_address",
+            "license_number",
+            "license_expiry",
+            "consultation_fee",
+            "dob",
+        )
+        .first()
+    )
+
+    if not data:
+        return None
+
+    return {
+        "id": data["id"],
+        "public_id": data["doctor__public_id"],
+        "doctor_name": full_name(
+            data["doctor__first_name"],
+            data["doctor__middle_name"],
+            data["doctor__last_name"]
+        ),
+        "email": data["doctor__email"],
+        "contact_number": data["contact_number"],
+        "profile_picture": data["profile_picture"],
+        "specialization": data["specialization__name"],
+        "department": data["specialization__department__name"],
+        "bio": data["bio"],
+        "experience_years": data["experience_years"],
+        "clinic_address": data["clinic_address"],
+        "license_number": data["license_number"],
+        "license_expiry": data["license_expiry"],
+        "consultation_fee": data["consultation_fee"],
+        "dob": data["dob"],
+        "age":age_from_dob(data["dob"]),
+        "is_available_today": not appointment_services.is_doctor_on_leave(doctor, timezone.localdate())
+    }
+
+
+

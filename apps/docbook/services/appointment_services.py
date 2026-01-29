@@ -4,6 +4,10 @@ from django.utils import timezone
 from itertools import groupby
 from operator import itemgetter
 from apps.core.services.util_services import *
+from apps.docbook.services.availability_services import *
+from django.db.models import OuterRef, Subquery, Count, IntegerField, Q
+from django.db.models.functions import Coalesce
+from django.utils.timezone import localdate
 
 def active_appointments_count(doctor):
     return Appointment.objects.filter(
@@ -17,7 +21,7 @@ def todays_appointments_count_by_doctor(doctor):
     return Appointment.objects.filter(
         doctor=doctor,
         availability__is_available=True,
-        availability__date=timezone.now().date(),
+        availability__date=timezone.localdate(),
         is_active=True
     ).exclude(
         appointment_status=AppointmentStatus.CANCELLED.value
@@ -175,11 +179,6 @@ def get_all_appointment_types_status():
     }
 
 
-from django.db.models import OuterRef, Subquery, Count, IntegerField
-from django.db.models.functions import Coalesce
-from django.utils.timezone import localdate
-
-
 def todays_appointments_count_by_doctor_ref(doctor_ref):
     return Subquery(
         Appointment.objects.filter(
@@ -205,3 +204,169 @@ def active_appointments_count_by_doctor_ref(doctor_ref):
         .values("c"),
         output_field=IntegerField()
     )
+
+
+def get_doctor_today_appointments(doctor_id):
+    qs = Appointment.objects.filter(doctor_id=doctor_id, is_active=True, availability__date=localdate())
+
+    qs = qs.values(
+        # Patient
+        'patient__id',
+        'patient__patient__first_name',
+        'patient__patient__middle_name',
+        'patient__patient__last_name',
+        'patient__dob',
+        'patient__gender',
+        'patient__patient__email',
+        'patient__phone_number',
+        'patient__chronic_conditions',
+        'patient__allergies',
+
+        # Appointment
+        'appointment_type',
+        'appointment_status',
+        'notes',
+
+        # Availability
+        'availability__date',
+        'availability__start_time',
+        'availability__end_time',
+    )
+
+    appointments = list(qs)
+
+    # ----------------------------
+    # DATA TRANSFORMATION
+    # ----------------------------
+    for a in appointments:
+        a['patient_id'] = a.pop('patient__id')
+        a['patient_name'] = full_name(
+            a.pop('patient__patient__first_name', ''),
+            a.pop('patient__patient__middle_name', ''),
+            a.pop('patient__patient__last_name', '')
+        )
+        a['patient_email'] = a.pop('patient__patient__email')
+        a['patient_age'] = age_from_dob(a.pop('patient__dob'))
+        a['patient_gender'] = enum_name(Gender, a.pop('patient__gender'))
+        a['patient_mobile'] = a.pop('patient__phone_number')
+        a['patient_allergies'] = a.pop('patient__allergies')
+        a['chronic'] = a.pop('patient__chronic_conditions')
+
+        a['appt_type'] = enum_name(AppointmentType, a.pop('appointment_type'))
+        a['appt_status'] = enum_name(AppointmentStatus, a.pop('appointment_status'))
+        a['appt_notes'] = a.pop('notes')
+
+        a['date'] = a.pop('availability__date')
+        a['start_time'] = a.pop('availability__start_time')
+        a['end_time'] = a.pop('availability__end_time')
+        
+    return appointments
+
+
+def get_doctor_next_week_appointments(doctor=None):
+    start_date, end_date = get_current_week_range()
+    qs = Appointment.objects.filter(doctor=doctor, is_active=True, availability__is_active=True,
+            availability__date__range=(start_date, end_date) )
+    qs = qs.values(
+        # Doctor
+        'doctor__profile_picture',
+        'doctor__specialization__department__name',
+        
+        # Patient
+        'patient__id',
+        'patient__patient__first_name',
+        'patient__patient__middle_name',
+        'patient__patient__last_name',
+        'patient__dob',
+        'patient__gender',
+        'patient__patient__email',
+        'patient__phone_number',
+        'patient__chronic_conditions',
+        'patient__allergies',
+
+        # Appointment
+        'appointment_type',
+        'appointment_status',
+        'notes',
+
+        # Availability
+        'availability__date',
+        'availability__start_time',
+        'availability__end_time',
+    )
+
+    appointments = list(qs)
+
+    for a in appointments:
+        a['doctor_profile_picture'] = a.pop('doctor__profile_picture')
+        a['doctor_department'] = a.pop('doctor__specialization__department__name')
+
+        a['patient_id'] = a.pop('patient__id')
+        a['patient_name'] = full_name(
+            a.pop('patient__patient__first_name', ''),
+            a.pop('patient__patient__middle_name', ''),
+            a.pop('patient__patient__last_name', '')
+        )
+        a['patient_email'] = a.pop('patient__patient__email')
+        a['patient_age'] = age_from_dob(a.pop('patient__dob'))
+        a['patient_gender'] = enum_name(Gender, a.pop('patient__gender'))
+        a['patient_mobile'] = a.pop('patient__phone_number')
+        a['patient_allergies'] = a.pop('patient__allergies')
+        a['chronic'] = a.pop('patient__chronic_conditions')
+
+        a['appt_type'] = enum_name(AppointmentType, a.pop('appointment_type'))
+        a['appt_status'] = enum_name(AppointmentStatus, a.pop('appointment_status'))
+        a['appt_notes'] = a.pop('notes')
+
+        a['date'] = a.pop('availability__date')
+        a['start_time'] = a.pop('availability__start_time')
+        a['end_time'] = a.pop('availability__end_time')
+
+    return appointments
+
+def doctor_unique_patients_count(doctor_id):
+    qs = Appointment.objects.filter(
+        doctor_id=doctor_id,
+        is_active=True
+    )
+    return qs.values_list('patient_id', flat=True).distinct().count()
+
+
+def doctor_appointments_count_this_month(doctor_id):
+    return Appointment.objects.filter(
+        doctor_id=doctor_id,
+        is_active=True,
+        availability__date__range=get_current_month_range()
+    ).count()
+
+
+def doctor_completion_rate(doctor_id):
+    data = Appointment.objects.filter(
+        doctor_id=doctor_id,
+        is_active=True
+    ).aggregate(
+        total=Count(
+            'id',
+            filter=~Q(appointment_status=AppointmentStatus.SCHEDULED.value)
+        ),
+        completed=Count(
+            'id',
+            filter=Q(appointment_status=AppointmentStatus.COMPLETED.value)
+        )
+    )
+
+    if not data['total']:
+        return 0
+
+    return round((data['completed'] / data['total']) * 100, 2)
+
+def doctor_total_appointments_count(doctor_id):
+        return Appointment.objects.filter(
+        doctor_id=doctor_id,
+    ).count()
+        
+def doctor_total_completed_appointments_count(doctor_id):
+        return Appointment.objects.filter(
+        doctor_id=doctor_id,
+        appointment_status = AppointmentStatus.COMPLETED.value
+    ).count()

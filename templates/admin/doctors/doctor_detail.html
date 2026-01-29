@@ -15,7 +15,7 @@
       </li>
       <li class="breadcrumb-item" aria-current="page">
         <a href={% url 'doctor_list' %}>Doctors</a></li>
-      <li class="breadcrumb-item active" aria-current="page">{{doctor.name}}</li>
+      <li class="breadcrumb-item active" aria-current="page">Dr. {{doctor.doctor_name}}</li>
     </ol>
   </nav>
 </div>
@@ -52,25 +52,31 @@
                     <div class="card-body">
                         <!-- Profile Image -->
                         <div class="text-center mb-4">
-                            <div class="profile-img-container">
-                                <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" 
-                                     alt="Dr. John Smith">
-                            </div>
-                            <h3 class="mb-1">Dr. John Smith</h3>
+                        <div class="profile-img-container">
+                            <img 
+                                src="{{ doctor.profile_picture|default:'/static/images/doctor_profiles/default-doctor.jpg' }}" 
+                                alt="{{ doctor.doctor_name }}"
+                            >
+                        </div>
+
+                            <h3 class="mb-1">Dr. {{doctor.doctor_name}}</h3>
                             <p class="text-muted mb-3">
                                 <i class="fas fa-briefcase-medical me-1"></i>
-                                Cardiology Specialist
+                                {{doctor.specialization}}
                             </p>
                             
-                            <!-- Status Indicators -->
-                            <div class="d-flex justify-content-center gap-3 mb-4">
-                                <span class="badge bg-success">
-                                    <span class="status-indicator status-active"></span> Active
-                                </span>
+                        <!-- Status Indicators -->
+                        <div class="d-flex justify-content-center gap-3 mb-4">
+                            {% if doctor.is_available_today %}
                                 <span class="badge bg-info">
                                     <span class="status-indicator status-available"></span> Available Today
                                 </span>
-                            </div>
+                            {% else %}
+                                <span class="badge bg-warning">
+                                    <span class="status-indicator status-leave"></span> On Leave Today
+                                </span>
+                            {% endif %}
+                        </div>
                         </div>
                         
                         <!-- Quick Stats -->
@@ -78,7 +84,7 @@
                             <div class="col-6">
                                 <div class="card stats-card h-100">
                                     <div class="card-body">
-                                        <div class="stats-number">1,247</div>
+                                        <div class="stats-number">{{total_appointments}}</div>
                                         <div class="stats-label">Total Appointments</div>
                                     </div>
                                 </div>
@@ -86,7 +92,7 @@
                             <div class="col-6">
                                 <div class="card stats-card h-100">
                                     <div class="card-body">
-                                        <div class="stats-number">1,189</div>
+                                        <div class="stats-number">{{total_completed_appointments}}</div>
                                         <div class="stats-label">Completed</div>
                                     </div>
                                 </div>
@@ -100,28 +106,28 @@
                                 <i class="fas fa-envelope"></i>
                                 <div class="ms-3">
                                     <div class="detail-label">Email</div>
-                                    <a href="mailto:john.smith@curexa.com" class="detail-value">john.smith@curexa.com</a>
+                                    <a href="mailto:{{ doctor.email }}" class="detail-value" target="_blank">{{ doctor.email }}</a>
                                 </div>
                             </div>
                             <div class="contact-info-item">
                                 <i class="fas fa-phone"></i>
                                 <div class="ms-3">
                                     <div class="detail-label">Phone</div>
-                                    <div class="detail-value">+1 (555) 123-4567</div>
+                                    <div class="detail-value">{{doctor.contact_number}}</div>
                                 </div>
                             </div>
                             <div class="contact-info-item">
                                 <i class="fas fa-map-marker-alt"></i>
                                 <div class="ms-3">
                                     <div class="detail-label">Clinic Address</div>
-                                    <div class="detail-value">123 Medical Center Dr, Suite 405, San Francisco, CA 94107</div>
+                                    <div class="detail-value">{{doctor.clinic_address}}</div>
                                 </div>
                             </div>
                             <div class="contact-info-item">
                                 <i class="fas fa-id-badge"></i>
                                 <div class="ms-3">
                                     <div class="detail-label">Doctor ID</div>
-                                    <div class="detail-value">DR-2023-0456</div>
+                                    <div class="detail-value">{{doctor.public_id}}</div>
                                 </div>
                             </div>
                         </div>
@@ -141,30 +147,37 @@
                             <div class="col-md-6">
                                 <div class="mb-4">
                                     <div class="detail-label">License Number</div>
-                                    <div class="detail-value">MD-12345678</div>
+                                    <div class="detail-value">{{doctor.license_number}}</div>
                                 </div>
                                 <div class="mb-4">
                                     <div class="detail-label">Experience</div>
-                                    <div class="detail-value">12 years</div>
+                                    <div class="detail-value">{{doctor.experience_years}}</div>
                                 </div>
                                 <div class="mb-4">
                                     <div class="detail-label">Consultation Fee</div>
-                                    <div class="detail-value">$150 <small class="text-muted">per session</small></div>
+                                    <div class="detail-value">₹ {{doctor.consultation_fee}} <small class="text-muted">per session</small></div>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="detail-label">Department</div>
+                                    <div class="detail-value">{{doctor.department}}</div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-4">
                                     <div class="detail-label">Date of Birth</div>
-                                    <div class="detail-value">March 15, 1978 (45 years)</div>
+                                    <div class="detail-value">
+                                        {{ doctor.dob|date:"d M, Y" }}{% if doctor.age %} ({{ doctor.age }} years){% endif %}
+                                    </div>
                                 </div>
                                 <div class="mb-4">
                                     <div class="detail-label">License Expiry</div>
-                                    <div class="detail-value license-expired">December 31, 2022</div>
+                                    <div class="detail-value license-expired">{{doctor.license_expiry|date:"d M, Y"}}</div>
                                 </div>
                                 <div class="mb-4">
                                     <div class="detail-label">Qualifications</div>
-                                    <div class="detail-value">MD, PhD, FACC</div>
+                                    <div class="detail-value">{{quali}}</div>
                                 </div>
+
                             </div>
                         </div>
                         
@@ -172,10 +185,7 @@
                         <div class="bio-section mt-3">
                             <div class="detail-label mb-2"><i class="fas fa-book-medical me-2"></i> Bio</div>
                             <p class="mb-0">
-                                Dr. John Smith is a board-certified cardiologist with over 12 years of experience in cardiovascular medicine. 
-                                He completed his residency at Johns Hopkins Hospital and fellowship in interventional cardiology at Mayo Clinic. 
-                                Dr. Smith specializes in preventive cardiology, heart failure management, and interventional procedures. 
-                                He has published over 50 research papers in peer-reviewed journals and is a member of the American College of Cardiology.
+                                {{doctor.bio}}
                             </p>
                         </div>
                     </div>
@@ -185,7 +195,7 @@
                 <div class="card medical-border mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0"><i class="fas fa-calendar-day me-2"></i> Today's Appointments</h5>
-                        <span class="badge bg-primary">8 appointments</span>
+                        <span class="badge bg-primary">{{today_appointments_count}} appointments</span>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -200,75 +210,31 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {% for appt in today_appointments %}
                                     <tr>
-                                        <td><span class="time-badge">9:00 AM</span></td>
+                                        <td><span class="time-badge">{{ appt.start_time|time:"h:i A" }}</span></td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" 
-                                                     class="patient-avatar me-2">
-                                                <div>Michael Johnson</div>
-                                            </div>
-                                        </td>
-                                        <td><span class="badge bg-info">Follow-up</span></td>
-                                        <td><span class="badge bg-success">Completed</span></td>
-                                        <td>
-                                            <button class="action-btn btn-view" title="View Details">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="time-badge">10:30 AM</span></td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" 
-                                                     class="patient-avatar me-2">
-                                                <div>Sarah Williams</div>
-                                            </div>
-                                        </td>
-                                        <td><span class="badge bg-warning">New Patient</span></td>
-                                        <td><span class="badge bg-primary">In Progress</span></td>
-                                        <td>
-                                            <button class="action-btn btn-view" title="View Details">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="time-badge">11:45 AM</span></td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
+                                                {% if appt.patient_avatar %}
+                                                <img src="{{ appt.patient_avatar }}" class="patient-avatar me-2">
+                                                {% else %}
                                                 <div class="patient-avatar bg-secondary d-flex align-items-center justify-content-center me-2 text-white">
                                                     <i class="fas fa-user"></i>
                                                 </div>
-                                                <div>Robert Chen</div>
+                                                {% endif %}
+                                                <div>{{ appt.patient_name }}</div>
                                             </div>
                                         </td>
-                                        <td><span class="badge bg-info">Consultation</span></td>
-                                        <td><span class="badge bg-warning">Scheduled</span></td>
+                                        <td><span class="badge {% if appt.appt_type == 'Emergency' %}bg-danger{% elif appt.appt_type == 'New Patient' %}bg-warning{% else %}bg-info{% endif %}">{{ appt.appt_type }}</span></td>
+                                        <td><span class="badge {% if appt.appt_status == 'Completed' %}bg-success{% elif appt.appt_status == 'In Progress' %}bg-primary{% else %}bg-warning{% endif %}">{{ appt.appt_status }}</span></td>
                                         <td>
                                             <button class="action-btn btn-view" title="View Details">
                                                 <i class="fas fa-eye"></i>
                                             </button>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td><span class="time-badge">2:00 PM</span></td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" 
-                                                     class="patient-avatar me-2">
-                                                <div>David Miller</div>
-                                            </div>
-                                        </td>
-                                        <td><span class="badge bg-danger">Emergency</span></td>
-                                        <td><span class="badge bg-warning">Scheduled</span></td>
-                                        <td>
-                                            <button class="action-btn btn-view" title="View Details">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
+                                    {% endfor %}
+
                                 </tbody>
                             </table>
                         </div>
@@ -290,15 +256,27 @@
                     </div>
                     <div class="card-body">
                         <div class="list-group">
+                            {% for appt in weekly_appointments %}
                             <div class="list-group-item">
                                 <div class="d-flex w-100 justify-content-between align-items-center">
                                     <div>
-                                        <h6 class="mb-1">Maria Garcia</h6>
+                                        <!-- Patient Name -->
+                                        <h6 class="mb-1">{{ appt.patient_name }}</h6>
+
+                                        <!-- Appointment Date & Time + Type Badge -->
                                         <small class="text-muted">
-                                            <i class="fas fa-calendar me-1"></i> Tomorrow, 10:00 AM
-                                            <span class="badge bg-info ms-2">Follow-up</span>
+                                            <i class="fas fa-calendar me-1"></i>
+                                            {{ appt.date|date:"l" }}, {{ appt.start_time|time:"h:i A" }}
+                                            <span class="badge 
+                                                {% if appt.appt_type == 'Emergency' %}bg-danger
+                                                {% elif appt.appt_type == 'New Patient' %}bg-warning
+                                                {% else %}bg-info{% endif %} ms-2">
+                                                {{ appt.appt_type }}
+                                            </span>
                                         </small>
                                     </div>
+
+                                    <!-- Action Button -->
                                     <div>
                                         <button class="action-btn btn-view" title="View Details">
                                             <i class="fas fa-eye"></i>
@@ -306,54 +284,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="list-group-item">
-                                <div class="d-flex w-100 justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="mb-1">James Wilson</h6>
-                                        <small class="text-muted">
-                                            <i class="fas fa-calendar me-1"></i> Wednesday, 2:30 PM
-                                            <span class="badge bg-warning ms-2">New Patient</span>
-                                        </small>
-                                    </div>
-                                    <div>
-                                        <button class="action-btn btn-view" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </div>
-                                </div>
+                            {% empty %}
+                            <div class="list-group-item text-center text-muted">
+                                No upcoming appointments this week.
                             </div>
-                            <div class="list-group-item">
-                                <div class="d-flex w-100 justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="mb-1">Lisa Taylor</h6>
-                                        <small class="text-muted">
-                                            <i class="fas fa-calendar me-1"></i> Friday, 11:15 AM
-                                            <span class="badge bg-info ms-2">Consultation</span>
-                                        </small>
-                                    </div>
-                                    <div>
-                                        <button class="action-btn btn-view" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="list-group-item">
-                                <div class="d-flex w-100 justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="mb-1">Thomas Brown</h6>
-                                        <small class="text-muted">
-                                            <i class="fas fa-calendar me-1"></i> Saturday, 9:45 AM
-                                            <span class="badge bg-info ms-2">Follow-up</span>
-                                        </small>
-                                    </div>
-                                    <div>
-                                        <button class="action-btn btn-view" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -366,7 +301,7 @@
                 <div class="card medical-border">
                     <div class="card-body text-center">
                         <i class="fas fa-users fa-3x text-primary mb-3"></i>
-                        <h2 class="stats-number">428</h2>
+                        <h2 class="stats-number">{{unique_patients}}</h2>
                         <p class="stats-label">Unique Patients</p>
                     </div>
                 </div>
@@ -375,7 +310,7 @@
                 <div class="card medical-border">
                     <div class="card-body text-center">
                         <i class="fas fa-calendar-check fa-3x text-success mb-3"></i>
-                        <h2 class="stats-number">89</h2>
+                        <h2 class="stats-number">{{total_appointments_month}}</h2>
                         <p class="stats-label">This Month</p>
                     </div>
                 </div>
@@ -384,7 +319,7 @@
                 <div class="card medical-border">
                     <div class="card-body text-center">
                         <i class="fas fa-percentage fa-3x text-info mb-3"></i>
-                        <h2 class="stats-number">95%</h2>
+                        <h2 class="stats-number">{{completion_rate}}%</h2>
                         <p class="stats-label">Completion Rate</p>
                     </div>
                 </div>
@@ -393,7 +328,7 @@
                 <div class="card medical-border">
                     <div class="card-body text-center">
                         <i class="fas fa-money-bill-wave fa-3x text-warning mb-3"></i>
-                        <h2 class="stats-number">$150</h2>
+                        <h2 class="stats-number">₹ {{doctor.consultation_fee}}</h2>
                         <p class="stats-label">Consultation Fee</p>
                     </div>
                 </div>
@@ -441,7 +376,7 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete <strong>Dr. John Smith</strong>?</p>
+                    <p>Are you sure you want to delete <strong>Dr. {{doctor.doctor_name}}</strong>?</p>
                     <div class="alert alert-warning">
                         <i class="fas fa-exclamation-circle me-2"></i>
                         This action will:
