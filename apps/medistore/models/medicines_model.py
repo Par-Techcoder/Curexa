@@ -3,9 +3,11 @@ from apps.core.models.base_model import BaseModel
 from apps.core.constants.default_values import DosageForm, AGE_GROUP
 
 class Medicine(BaseModel):
+    SKU= models.CharField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     medicine_image = models.ImageField(upload_to='static/images/medicines/', blank=True, null=True)
+    is_prescription_required = models.BooleanField(default=False)
     category = models.ForeignKey(
         'medistore.Category',
         on_delete=models.CASCADE,
@@ -17,11 +19,18 @@ class Medicine(BaseModel):
         null=False, blank=False
     )
     age_group = models.IntegerField(
-        choices=[(group.name, group.value) for group in AGE_GROUP],
+        choices=[(group.value, group.name) for group in AGE_GROUP],
         default=AGE_GROUP.ADULT.value, 
         null=False, blank=False
     )
+    salt_composition = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True
+    )
+    dosage_strength = models.CharField(max_length=100)
     manufacturer = models.CharField(max_length=255, blank=True, null=True)
+    manufacture_date = models.DateField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     expiry_date = models.DateField(blank=True, null=True)
     

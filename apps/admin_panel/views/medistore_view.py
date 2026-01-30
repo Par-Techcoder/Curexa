@@ -3,9 +3,8 @@ from django.shortcuts import render, redirect
 
 class MedicineListView(View):
     def get(self, request):
-        # Logic for listing medications
-        return render(request, 'admin/medicens/medication_list.html')    
-    
+        return render(request, 'admin/medicens/medication_list.html')
+
 class MedicineEditView(View):
     def get(self, request, pk):
         # Logic for editing a medication

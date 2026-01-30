@@ -1,329 +1,23 @@
 {% extends "admin/base.html" %}
-{% block title %}Curexa Admin — Medicine Inventory {% endblock %}
 {% load static %}
-{% block content %}
+{% block title %}Curexa Admin — Medicine Inventory {% endblock %}
 
-<style>
-  .page-title-section {
-    background: linear-gradient(135deg, var(--medical-blue), var(--medical-teal));
-    padding: 25px 30px;
-    margin: -20px -20px 30px -20px;
-    border-radius: 0 0 15px 15px;
-    box-shadow: 0 4px 20px rgba(26, 95, 122, 0.15);
-    position: relative;
-    overflow: hidden;
-  }
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/medication_list.css' %}" />
+{% endblock %}
 
-  .page-title-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
-  }
-
-  /* Medical Card Styles */
-  .medicine-card {
-    background: white;
-    border-radius: 12px;
-    border: none;
-    transition: all 0.3s ease;
-    height: 100%;
-    overflow: hidden;
-    position: relative;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-    border-top: 4px solid var(--medical-teal);
-  }
-
-  .medicine-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  }
-
-  .medicine-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--medical-blue), var(--medical-teal));
-  }
-
-  .card-img-container {
-    height: 180px;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .card-img-container img {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.3s ease;
-  }
-
-  .medicine-card:hover .card-img-container img {
-    transform: scale(1.05);
-  }
-
-  .status-badge {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 15px;
-    z-index: 2;
-  }
-
-  .sku-badge {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: rgba(26, 95, 122, 0.9);
-    color: white;
-    font-size: 0.7rem;
-    padding: 4px 8px;
-    border-radius: 10px;
-    font-weight: 600;
-    z-index: 2;
-  }
-
-  /* Stats Cards */
-  .stats-card {
-    background: white;
-    border-radius: 12px;
-    border: none;
-    transition: all 0.3s ease;
-    height: 100%;
-    overflow: hidden;
-    position: relative;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-    border-top: 4px solid;
-  }
-
-  .stats-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-  }
-
-  .stats-card.total {
-    border-top-color: var(--medical-blue);
-  }
-
-  .stats-card.low {
-    border-top-color: var(--medical-warning);
-  }
-
-  .stats-card.active {
-    border-top-color: var(--medical-green);
-  }
-
-  .stats-card.disabled {
-    border-top-color: var(--medical-alert);
-  }
-
-  /* Medical Form Controls */
-  .medical-input-group {
-    border-radius: 8px;
-    overflow: hidden;
-    border: 2px solid #e9ecef;
-    transition: all 0.3s;
-  }
-
-  .medical-input-group:focus-within {
-    border-color: var(--medical-teal);
-    box-shadow: 0 0 0 0.25rem rgba(26, 95, 122, 0.1);
-  }
-
-  .medical-input-group .input-group-text {
-    background: linear-gradient(135deg, var(--medical-blue), var(--medical-teal));
-    color: white;
-    border: none;
-    font-weight: 600;
-  }
-
-  .medical-input-group .form-control,
-  .medical-input-group .form-select {
-    border: none;
-    padding: 10px 15px;
-  }
-
-  .medical-input-group .form-control:focus,
-  .medical-input-group .form-select:focus {
-    box-shadow: none;
-  }
-
-  /* Medical Button */
-  .medical-btn-outline {
-    border: 2px solid var(--medical-teal);
-    color: var(--medical-teal);
-    border-radius: 8px;
-    font-weight: 600;
-    transition: all 0.3s;
-  }
-
-  .medical-btn-outline:hover {
-    background: var(--medical-teal);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(26, 95, 122, 0.2);
-  }
-
-  /* Medical Badges */
-  .badge-in-stock {
-    background: rgba(87, 204, 153, 0.2);
-    color: var(--medical-green);
-    border: 1px solid rgba(87, 204, 153, 0.3);
-  }
-
-  .badge-low-stock {
-    background: rgba(255, 217, 61, 0.2);
-    color: var(--medical-warning);
-    border: 1px solid rgba(255, 217, 61, 0.3);
-  }
-
-  .badge-out-stock {
-    background: rgba(255, 107, 107, 0.2);
-    color: var(--medical-alert);
-    border: 1px solid rgba(255, 107, 107, 0.3);
-  }
-
-  .badge-disabled {
-    background: rgba(108, 117, 125, 0.2);
-    color: var(--medical-gray);
-    border: 1px solid rgba(108, 117, 125, 0.3);
-  }
-
-  /* Category Badges */
-  .badge-category {
-    font-size: 0.7rem;
-    padding: 4px 8px;
-    border-radius: 10px;
-    font-weight: 600;
-  }
-
-  .badge-medicine {
-    background: rgba(106, 103, 206, 0.2);
-    color: var(--medical-purple);
-    border: 1px solid rgba(106, 103, 206, 0.3);
-  }
-
-  .badge-supplement {
-    background: rgba(87, 204, 153, 0.2);
-    color: var(--medical-green);
-    border: 1px solid rgba(87, 204, 153, 0.3);
-  }
-
-  .badge-equipment {
-    background: rgba(26, 95, 122, 0.2);
-    color: var(--medical-blue);
-    border: 1px solid rgba(26, 95, 122, 0.3);
-  }
-
-  .badge-personal-care {
-    background: rgba(255, 107, 107, 0.2);
-    color: var(--medical-alert);
-    border: 1px solid rgba(255, 107, 107, 0.3);
-  }
-
-  /* Price Display */
-  .medicine-price {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--medical-blue);
-    background: linear-gradient(135deg, rgba(26, 95, 122, 0.1), transparent);
-    padding: 5px 10px;
-    border-radius: 6px;
-    display: inline-block;
-  }
-
-  /* Floating Add Button */
-  .floating-add-btn {
-    background: linear-gradient(135deg, var(--medical-blue), var(--medical-teal));
-    border: none;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 5px 15px rgba(26, 95, 122, 0.3);
-    transition: all 0.3s;
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    z-index: 1050;
-    color: white;
-    text-decoration: none;
-  }
-
-  .floating-add-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 8px 25px rgba(26, 95, 122, 0.4);
-    color: white;
-  }
-
-  /* Pagination */
-  .medical-pagination .btn {
-    border: 2px solid var(--medical-teal);
-    color: var(--medical-teal);
-    font-weight: 600;
-    border-radius: 8px;
-    transition: all 0.3s;
-  }
-
-  .medical-pagination .btn:hover:not(:disabled) {
-    background: var(--medical-teal);
-    color: white;
-    transform: translateY(-2px);
-  }
-
-  .medical-pagination .btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  /* Page Info */
-  .page-info {
-    color: var(--medical-gray);
-    font-size: 0.95rem;
-    font-weight: 500;
-  }
-
-  /* Empty State */
-  .empty-state {
-    text-align: center;
-    padding: 40px 20px;
-  }
-
-  .empty-state-icon {
-    font-size: 4rem;
-    color: var(--medical-gray);
-    opacity: 0.3;
-    margin-bottom: 20px;
-  }
-
-  /* Responsive Adjustments */
-  @media (max-width: 768px) {
-    .card-img-container {
-      height: 150px;
-    }
-    
-    .floating-add-btn {
-      bottom: 20px;
-      right: 20px;
-      width: 50px;
-      height: 50px;
-    }
-  }
-</style>
-
-<div class="container-fluid py-4">
+{% block page_header %}
+<!-- Breadcrumb above title -->
+<div class="breadcrumb-above-title">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+      <li class="breadcrumb-item">
+        <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Medicine</li>
+    </ol>
+  </nav>
+</div>
   <!-- Page Header -->
   <div class="page-title-section">
     <div class="d-flex justify-content-between align-items-center">
@@ -338,7 +32,9 @@
       </div>
     </div>
   </div>
+{% endblock %}
 
+{% block content %}
   <!-- Filters and Search -->
   <div class="row mb-4">
     <div class="col-md-4 mb-3">
@@ -353,7 +49,7 @@
         <select id="filterCategory" class="form-select">
           <option value="all">All Categories</option>
           <option value="medicine">Medicine</option>
-          <option value="supplement">Supplements</option>
+          <option value="supplement">Supplement</option>
           <option value="equipment">Medical Equipment</option>
           <option value="personal-care">Personal Care</option>
         </select>
@@ -448,9 +144,7 @@
   </div>
 
   <!-- Medicine Grid -->
-  <div class="row" id="medicineGrid">
-    <!-- Products will be rendered here -->
-  </div>
+  <div class="row" id="medicineGrid"></div>
 
   <!-- Empty State -->
   <div id="emptyState" class="empty-state d-none">
@@ -484,291 +178,222 @@
 </a>
 
 <script>
-  const state = {
-    page: 1,
-    perPage: 8,
-    medicines: [
-      { 
-        id: crypto.randomUUID(), 
-        name: 'Paracetamol 650mg', 
-        sku: 'MED-0001', 
-        category: 'medicine', 
-        price: 29.0, 
-        stock: 120, 
-        active: true, 
-        image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200&auto=format&fit=crop', 
-        description: 'Analgesic and antipyretic for fever and pain relief.',
-        brand: 'Generic'
-      },
-      { 
-        id: crypto.randomUUID(), 
-        name: 'Digital Thermometer', 
-        sku: 'EQP-0043', 
-        category: 'equipment', 
-        price: 299.0, 
-        stock: 8, 
-        active: true, 
-        image: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=1200&auto=format&fit=crop', 
-        description: 'Fast and accurate temperature readings.',
-        brand: 'MediTech'
-      },
-      { 
-        id: crypto.randomUUID(), 
-        name: 'Vitamin C 1000mg', 
-        sku: 'SUP-0102', 
-        category: 'supplement', 
-        price: 249.0, 
-        stock: 64, 
-        active: true, 
-        image: 'https://images.unsplash.com/photo-1616410011236-7db1d1b4b2c2?q=80&w=1200&auto=format&fit=crop', 
-        description: 'Immune support tablets with antioxidants.',
-        brand: 'NatureWell'
-      },
-      { 
-        id: crypto.randomUUID(), 
-        name: 'Hand Sanitizer 500ml', 
-        sku: 'PC-0200', 
-        category: 'personal-care', 
-        price: 149.0, 
-        stock: 0, 
-        active: false, 
-        image: 'https://images.unsplash.com/photo-1584630176563-073cc05f9030?q=80&w=1200&auto=format&fit=crop', 
-        description: 'Kills 99.9% of germs without water.',
-        brand: 'SafeGuard'
-      },
-      { 
-        id: crypto.randomUUID(), 
-        name: 'Ibuprofen 400mg', 
-        sku: 'MED-0002', 
-        category: 'medicine', 
-        price: 45.0, 
-        stock: 85, 
-        active: true, 
-        image: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?q=80&w=1200&auto=format&fit=crop', 
-        description: 'Non-steroidal anti-inflammatory drug.',
-        brand: 'Generic'
-      },
-      { 
-        id: crypto.randomUUID(), 
-        name: 'Blood Pressure Monitor', 
-        sku: 'EQP-0044', 
-        category: 'equipment', 
-        price: 1299.0, 
-        stock: 5, 
-        active: true, 
-        image: 'https://images.unsplash.com/photo-1551601651-2a8555f1a136?q=80&w=1200&auto=format&fit=crop', 
-        description: 'Digital automatic blood pressure monitor.',
-        brand: 'HealthMate'
-      },
-      { 
-        id: crypto.randomUUID(), 
-        name: 'Omega-3 Fish Oil', 
-        sku: 'SUP-0103', 
-        category: 'supplement', 
-        price: 399.0, 
-        stock: 42, 
-        active: true, 
-        image: 'https://images.unsplash.com/photo-1592492159418-39f319320ae8?q=80&w=1200&auto=format&fit=crop', 
-        description: 'Supports heart and brain health.',
-        brand: 'OceanPure'
-      },
-      { 
-        id: crypto.randomUUID(), 
-        name: 'Antiseptic Cream', 
-        sku: 'PC-0201', 
-        category: 'personal-care', 
-        price: 89.0, 
-        stock: 23, 
-        active: true, 
-        image: 'https://images.unsplash.com/photo-1591085686350-798c0f9faa7f?q=80&w=1200&auto=format&fit=crop', 
-        description: 'Prevents infection in minor cuts and burns.',
-        brand: 'FirstAid'
-      }
-    ]
-  };
+const els = {
+  grid: document.getElementById('medicineGrid'),
+  emptyState: document.getElementById('emptyState'),
+  search: document.getElementById('search'),
+  filter: document.getElementById('filterCategory'),
+  sort: document.getElementById('sortBy'),
+  prev: document.getElementById('prevPage'),
+  next: document.getElementById('nextPage'),
+  pageInfo: document.getElementById('pageInfo'),
+  statTotal: document.getElementById('statTotal'),
+  statLow: document.getElementById('statLow'),
+  statActive: document.getElementById('statActive'),
+  statDisabled: document.getElementById('statDisabled'),
+  exportCsv: document.getElementById('exportCsv')
+};
 
-  const els = {
-    grid: document.getElementById('medicineGrid'),
-    emptyState: document.getElementById('emptyState'),
-    search: document.getElementById('search'),
-    filter: document.getElementById('filterCategory'),
-    sort: document.getElementById('sortBy'),
-    prev: document.getElementById('prevPage'),
-    next: document.getElementById('nextPage'),
-    pageInfo: document.getElementById('pageInfo'),
-    statTotal: document.getElementById('statTotal'),
-    statLow: document.getElementById('statLow'),
-    statActive: document.getElementById('statActive'),
-    statDisabled: document.getElementById('statDisabled'),
-    exportCsv: document.getElementById('exportCsv')
-  };
+const state = {
+  page: 1,
+  perPage: 10,
+  totalPages: 1,
+  medicines: []
+};
 
-  const currency = (n) => `₹${Number(n).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-  
-  const byQuery = (q) => (m) => {
-    const searchText = [m.name, m.sku, m.brand, m.category, m.description].join(' ').toLowerCase();
-    return searchText.includes(q);
-  };
+// Format currency
+const currency = (n) => `₹${Number(n).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
-  function computeStats(list) {
-    els.statTotal.textContent = list.length;
-    els.statLow.textContent = list.filter(m => m.stock < 10 && m.stock > 0).length;
-    els.statActive.textContent = list.filter(m => m.active).length;
-    els.statDisabled.textContent = list.filter(m => !m.active).length;
+// Compute stats cards
+function computeStats(list) {
+  els.statTotal.textContent = list.length;
+  els.statLow.textContent = list.filter(m => m.stock > 0 && m.stock < 10).length;
+  els.statActive.textContent = list.filter(m => m.active).length;
+  els.statDisabled.textContent = list.filter(m => !m.active).length;
+}
+
+// Status badges
+function getStatusBadge(m) {
+  if (!m.active) return '<span class="badge badge-disabled status-badge">Disabled</span>';
+  if (m.stock === 0) return '<span class="badge badge-out-stock status-badge">Out of stock</span>';
+  if (m.stock < 10) return '<span class="badge badge-low-stock status-badge">Low stock</span>';
+  return '<span class="badge badge-in-stock status-badge">In stock</span>';
+}
+
+// Category badges
+function getCategoryBadge(category){
+  const map = {medicine:'Medicine', supplement:'Supplement', equipment:'Equipment', 'personal-care':'Personal Care'};
+  return `<span class="badge badge-category badge-${category}">${map[category]||category}</span>`;
+}
+
+// Client-side filtering and sorting
+function getFilteredSorted(list){
+  let filtered = [...list];
+  const q = els.search.value.trim().toLowerCase();
+
+  if (q) {
+    filtered = filtered.filter(m =>
+      [m.name, m.sku, m.brand, m.category, m.description].join(' ').toLowerCase().includes(q)
+    );
   }
 
-  function getStatusBadge(medicine) {
-    if (!medicine.active) {
-      return '<span class="badge badge-disabled status-badge">Disabled</span>';
-    } else if (medicine.stock === 0) {
-      return '<span class="badge badge-out-stock status-badge">Out of stock</span>';
-    } else if (medicine.stock < 10) {
-      return '<span class="badge badge-low-stock status-badge">Low stock</span>';
-    } else {
-      return '<span class="badge badge-in-stock status-badge">In stock</span>';
-    }
+  const cat = els.filter.value;
+  if (cat !== 'all') filtered = filtered.filter(m => m.category.toLowerCase() === cat.toLowerCase());
+
+  // Sorting
+  switch(els.sort.value){
+    case 'name-asc': filtered.sort((a,b)=>a.name.localeCompare(b.name)); break;
+    case 'name-desc': filtered.sort((a,b)=>b.name.localeCompare(a.name)); break;
+    case 'price-asc': filtered.sort((a,b)=>a.price-b.price); break;
+    case 'price-desc': filtered.sort((a,b)=>b.price-a.price); break;
+    case 'stock-asc': filtered.sort((a,b)=>a.stock-b.stock); break;
+    case 'stock-desc': filtered.sort((a,b)=>b.stock-a.stock); break;
   }
 
-  function getCategoryBadge(category) {
-    switch(category) {
-      case 'medicine': return '<span class="badge badge-category badge-medicine">Medicine</span>';
-      case 'supplement': return '<span class="badge badge-category badge-supplement">Supplement</span>';
-      case 'equipment': return '<span class="badge badge-category badge-equipment">Equipment</span>';
-      case 'personal-care': return '<span class="badge badge-category badge-personal-care">Personal Care</span>';
-      default: return `<span class="badge badge-category">${category}</span>`;
-    }
+  return filtered;
+}
+
+// Pagination
+function paginate(list){
+  const start = (state.page-1)*state.perPage;
+  const totalPages = Math.max(1, Math.ceil(list.length/state.perPage));
+  state.page = Math.min(state.page,totalPages);
+  const slice = list.slice(start,start+state.perPage);
+  els.pageInfo.textContent = `Page ${state.page} of ${totalPages}`;
+  els.prev.disabled = state.page===1;
+  els.next.disabled = state.page===totalPages;
+  return slice;
+}
+
+// Render medicines grid
+function renderGrid(list){
+  const pageItems = paginate(list);
+  computeStats(list);
+
+  if(list.length === 0){
+    els.grid.classList.add('d-none');
+    els.emptyState.classList.remove('d-none');
+  } else {
+    els.grid.classList.remove('d-none');
+    els.emptyState.classList.add('d-none');
   }
 
-  function getFilteredSorted() {
-    let list = [...state.medicines];
-    const q = els.search.value.trim().toLowerCase();
-    if (q) list = list.filter(byQuery(q));
-    
-    const cat = els.filter.value;
-    if (cat !== 'all') list = list.filter(m => m.category === cat);
-    
-    switch (els.sort.value) {
-      case 'name-asc': list.sort((a,b) => a.name.localeCompare(b.name)); break;
-      case 'name-desc': list.sort((a,b) => b.name.localeCompare(a.name)); break;
-      case 'price-asc': list.sort((a,b) => a.price - b.price); break;
-      case 'price-desc': list.sort((a,b) => b.price - a.price); break;
-      case 'stock-desc': list.sort((a,b) => b.stock - a.stock); break;
-      case 'stock-asc': list.sort((a,b) => a.stock - b.stock); break;
-    }
-    
-    return list;
-  }
-
-  function paginate(list) {
-    const start = (state.page - 1) * state.perPage;
-    const end = start + state.perPage;
-    const totalPages = Math.max(1, Math.ceil(list.length / state.perPage));
-    state.page = Math.min(state.page, totalPages);
-    const slice = list.slice(start, end);
-    els.pageInfo.textContent = `Page ${state.page} of ${totalPages}`;
-    els.prev.disabled = state.page === 1;
-    els.next.disabled = state.page === totalPages;
-    return slice;
-  }
-
-  function render() {
-    const list = getFilteredSorted();
-    computeStats(list);
-    const pageItems = paginate(list);
-    
-    // Show/hide empty state
-    if (list.length === 0) {
-      els.grid.classList.add('d-none');
-      els.emptyState.classList.remove('d-none');
-    } else {
-      els.grid.classList.remove('d-none');
-      els.emptyState.classList.add('d-none');
-    }
-    
-    els.grid.innerHTML = '';
-
-    for (const m of pageItems) {
-      const col = document.createElement('div');
-      col.className = 'col-xl-3 col-lg-4 col-md-6 col-sm-6 mb-4';
-      col.innerHTML = `
-        <div class="card medicine-card h-100">
-          <div class="card-img-container position-relative">
-            <img src="${m.image}" class="card-img-top" alt="${m.name}">
-            <span class="sku-badge">${m.sku}</span>
-            ${getStatusBadge(m)}
-          </div>
-          <div class="card-body d-flex flex-column">
-            <div class="mb-2">
-              ${getCategoryBadge(m.category)}
+  els.grid.innerHTML = '';
+  for(const m of pageItems){
+    const col=document.createElement('div');
+    col.className='col-xl-3 col-lg-4 col-md-6 col-sm-6 mb-4';
+    col.innerHTML=`
+      <div class="card medicine-card h-100">
+        <div class="card-img-container position-relative">
+          <img src="${m.image}" class="card-img-top" alt="${m.name}">
+          <span class="sku-badge">${m.sku}</span>
+          ${getStatusBadge(m)}
+        </div>
+        <div class="card-body d-flex flex-column">
+          <div class="mb-2">${getCategoryBadge(m.category)}</div>
+          <h5 class="card-title mb-2">${m.name}</h5>
+          <p class="card-text text-muted small mb-3">${m.brand}</p>
+          <div class="mt-auto">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="medicine-price">${currency(m.price)}</span>
+              <span class="text-muted small"><i class="fas fa-box me-1"></i> ${m.stock} units</span>
             </div>
-            <h5 class="card-title mb-2">${m.name}</h5>
-            <p class="card-text text-muted small mb-3">${m.brand}</p>
-            <div class="mt-auto">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <span class="medicine-price">${currency(m.price)}</span>
-                <span class="text-muted small">
-                  <i class="fas fa-box me-1"></i> ${m.stock} units
-                </span>
-              </div>
-              <div class="d-grid gap-2">
-                <a href="/admin/medicines/${m.id}/edit" class="btn btn-sm btn-medical-primary">
-                  <i class="fas fa-edit me-1"></i> Edit
-                </a>
-              </div>
+            <div class="d-grid gap-2">
+              <a href="/admin/medicines/${m.id}/edit" class="btn btn-sm btn-medical-primary">
+                <i class="fas fa-edit me-1"></i> Edit
+              </a>
             </div>
           </div>
         </div>
-      `;
-      els.grid.appendChild(col);
-    }
+      </div>`;
+    els.grid.appendChild(col);
+  }
+}
+
+// Fetch medicines from API
+async function fetchMedicines(){
+  const params = new URLSearchParams();
+  params.append('page', state.page);
+  params.append('page_size', state.perPage);
+
+  const searchQuery = els.search.value.trim();
+  if(searchQuery) params.append('search', searchQuery);
+
+  const category = els.filter.value;
+  if(category && category !== 'all') params.append('category', category);
+
+  switch(els.sort.value){
+    case 'name-asc': params.append('ordering', 'name'); break;
+    case 'name-desc': params.append('ordering', '-name'); break;
+    case 'price-asc': params.append('ordering', 'price'); break;
+    case 'price-desc': params.append('ordering', '-price'); break;
   }
 
-  function exportCSV() {
-    const headers = ['SKU', 'Name', 'Brand', 'Category', 'Price (₹)', 'Stock', 'Status', 'Active'];
-    const rows = state.medicines.map(m => [
-      m.sku,
-      m.name,
-      m.brand || '',
-      m.category,
-      m.price,
-      m.stock,
-      m.stock === 0 ? 'Out of stock' : m.stock < 10 ? 'Low stock' : 'In stock',
-      m.active ? 'Yes' : 'No'
-    ]);
-    
-    const csv = [headers, ...rows].map(row => 
-      row.map(cell => `"${cell}"`).join(',')
-    ).join('\n');
-    
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `medicines-inventory-${new Date().toISOString().split('T')[0]}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+  try {
+    const res = await fetch(`/api/medicines/?${params.toString()}`, {
+      headers: { 'Accept': 'application/json' }
+    });
+    const data = await res.json();
+    state.medicines = data.results.map(m => ({
+      id: m.id,
+      name: m.name,
+      sku: m.SKU,
+      category: m.category.name || 'Other',
+      price: m.price,
+      stock: m.inventory ? m.inventory.change_quantity : 0,
+      active: m.is_active,
+      description: m.description || '',
+      brand: m.manufacturer || 'Generic',
+      image: m.medicine_image || '/static/images/placeholder.png'
+    }));
+    state.totalPages = Math.ceil(data.count / state.perPage);
+    renderGrid(getFilteredSorted(state.medicines));
+  } catch(err){
+    console.error('Error fetching medicines:', err);
   }
+}
 
-  function clearFilters() {
-    els.search.value = '';
-    els.filter.value = 'all';
-    els.sort.value = 'name-asc';
-    state.page = 1;
-    render();
-  }
+// CSV Export
+function exportCSV(){
+  const headers=['SKU','Name','Brand','Category','Price (₹)','Stock','Status','Active'];
+  const rows=state.medicines.map(m=>[
+    m.sku,m.name,m.brand||'',m.category,m.price,m.stock,
+    m.stock===0?'Out of stock':m.stock<10?'Low stock':'In stock',
+    m.active?'Yes':'No'
+  ]);
+  const csv=[headers,...rows].map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=`medicines-inventory-${new Date().toISOString().split('T')[0]}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
 
-  // Event Listeners
-  els.search.addEventListener('input', () => { state.page = 1; render(); });
-  els.filter.addEventListener('change', () => { state.page = 1; render(); });
-  els.sort.addEventListener('change', () => { state.page = 1; render(); });
-  els.prev.addEventListener('click', () => { state.page = Math.max(1, state.page - 1); render(); });
-  els.next.addEventListener('click', () => { state.page = state.page + 1; render(); });
-  els.exportCsv.addEventListener('click', exportCSV);
+// Clear filters
+function clearFilters(){
+  els.search.value='';
+  els.filter.value='all';
+  els.sort.value='name-asc';
+  state.page=1;
+  fetchMedicines();
+}
 
-  // Initial render
-  render();
+// Event listeners
+els.search.addEventListener('input',()=>{state.page=1; fetchMedicines();});
+els.filter.addEventListener('change',()=>{state.page=1; fetchMedicines();});
+els.sort.addEventListener('change',()=>{state.page=1; fetchMedicines();});
+els.prev.addEventListener('click',()=>{state.page=Math.max(1,state.page-1); fetchMedicines();});
+els.next.addEventListener('click',()=>{state.page=Math.min(state.totalPages,state.page+1); fetchMedicines();});
+els.exportCsv.addEventListener('click',exportCSV);
+
+// Initial fetch
+document.addEventListener('DOMContentLoaded', () => {
+  fetchMedicines();
+});
 </script>
 
 {% endblock %}
