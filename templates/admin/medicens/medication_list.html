@@ -295,7 +295,7 @@ function renderGrid(list){
           <p class="card-text text-muted small mb-3">${m.brand}</p>
           <div class="mt-auto">
             <div class="d-flex justify-content-between align-items-center mb-2">
-              <span class="medicine-price">${currency(m.price)}</span>
+              <span class="medicine-price">${currency(m.retail_price)}</span>
               <span class="text-muted small"><i class="fas fa-box me-1"></i> ${m.stock} units</span>
             </div>
             <div class="d-grid gap-2">
@@ -325,8 +325,9 @@ async function fetchMedicines(){
   switch(els.sort.value){
     case 'name-asc': params.append('ordering', 'name'); break;
     case 'name-desc': params.append('ordering', '-name'); break;
-    case 'price-asc': params.append('ordering', 'price'); break;
-    case 'price-desc': params.append('ordering', '-price'); break;
+    case 'price-asc': params.append('ordering', 'retail_price'); break;
+    case 'price-desc': params.append('ordering', '-retail_price'); break;
+
   }
 
   try {
@@ -338,13 +339,15 @@ async function fetchMedicines(){
       id: m.id,
       name: m.name,
       sku: m.SKU,
-      category: m.category.name || 'Other',
-      price: m.price,
+      category: m.category?.name || 'Other',
+      retail_price: m.retail_price,
       stock: m.inventory ? m.inventory.change_quantity : 0,
       active: m.is_active,
       description: m.description || '',
       brand: m.manufacturer || 'Generic',
-      image: m.medicine_image || '/static/images/placeholder.png'
+      image: (m.medicine_images && m.medicine_images.length > 0)
+        ? m.medicine_images[0]
+        : '/static/images/placeholder.png'
     }));
     state.totalPages = Math.ceil(data.count / state.perPage);
     renderGrid(getFilteredSorted(state.medicines));
@@ -357,7 +360,7 @@ async function fetchMedicines(){
 function exportCSV(){
   const headers=['SKU','Name','Brand','Category','Price (₹)','Stock','Status','Active'];
   const rows=state.medicines.map(m=>[
-    m.sku,m.name,m.brand||'',m.category,m.price,m.stock,
+    m.sku,m.name,m.brand||'',m.category,m.retail_price,m.stock,
     m.stock===0?'Out of stock':m.stock<10?'Low stock':'In stock',
     m.active?'Yes':'No'
   ]);

@@ -24,7 +24,7 @@ class MedicineListAPIView(ListAPIView):
     ]
 
     ordering_fields = [
-        "price",
+        "retail_price",
         "name",
         "created_at",
         "expiry_date",
@@ -47,10 +47,10 @@ class MedicineListAPIView(ListAPIView):
             queryset = queryset.filter(category_id=params["category"])
 
         if params.get("min_price"):
-            queryset = queryset.filter(price__gte=params["min_price"])
+            queryset = queryset.filter(retail_price__gte=params["min_price"])
 
         if params.get("max_price"):
-            queryset = queryset.filter(price__lte=params["max_price"])
+            queryset = queryset.filter(retail_price__lte=params["max_price"])
 
         if params.get("classification"):
             queryset = queryset.filter(classification=params["classification"])

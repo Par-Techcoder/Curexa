@@ -12,7 +12,8 @@ def enum_name(enum_cls, value, default=None):
         return enum_cls(value).name
     return default
 
-
+def enum_choices(enum_cls):
+    return [(e.value, e.name.replace("_", " ").title()) for e in enum_cls]
 
 def age_from_dob(dob, on_date=None):
     """Calculate age from date of birth."""

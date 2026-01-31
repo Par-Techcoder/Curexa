@@ -5,8 +5,13 @@ from apps.core.constants.default_values import DosageForm, AGE_GROUP
 class Medicine(BaseModel):
     SKU= models.CharField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    medicine_image = models.ImageField(upload_to='static/images/medicines/', blank=True, null=True)
+    cost_price = models.DecimalField(max_digits=10, decimal_places=2)
+    retail_price = models.DecimalField(max_digits=10, decimal_places=2)
+    medicine_images = models.JSONField(
+    default=list,
+    blank=True,
+    null=True    
+    )
     is_prescription_required = models.BooleanField(default=False)
     category = models.ForeignKey(
         'medistore.Category',

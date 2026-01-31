@@ -1,0 +1,302 @@
+
+    /* Enhanced glass effect card */
+    .medical-card {
+        background: rgba(115, 175, 178, 0.85);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .medical-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2) !important;
+    }
+    
+    .glass-header {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        padding: 1.5rem 1.5rem;
+    }
+    
+    .form-header-icon {
+        width: 48px;
+        height: 48px;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        font-size: 1.25rem;
+        color: #fff;
+    }
+    
+    /* Section styling */
+    .form-section {
+        position: relative;
+    }
+    
+    .section-header {
+        position: relative;
+        padding-left: 2.5rem;
+    }
+    
+    .section-header::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+    }
+    
+    .section-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #fff;
+        margin-bottom: 0.25rem;
+    }
+    
+    .section-subtitle {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 0;
+    }
+    
+    /* Floating label form controls */
+    .form-group.floating-label {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+    
+    .floating-input,
+    .floating-textarea {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 2px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 12px;
+        color: #fff !important;
+        padding: 1.5rem 1rem 0.5rem;
+        height: auto;
+        transition: all 0.3s ease;
+    }
+    
+    .floating-textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+    
+    .floating-input:focus,
+    .floating-textarea:focus {
+        background: rgba(255, 255, 255, 0.12) !important;
+        border-color: rgba(255, 255, 255, 0.3) !important;
+        box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .floating-label-text {
+        position: absolute;
+        top: 0.75rem;
+        left: 1rem;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.875rem;
+        font-weight: 500;
+        pointer-events: none;
+        transition: all 0.2s ease;
+        margin-bottom: 0;
+    }
+    
+    .floating-input:focus + .floating-label-text,
+    .floating-input:not(:placeholder-shown) + .floating-label-text,
+    .floating-textarea:focus + .floating-label-text,
+    .floating-textarea:not(:placeholder-shown) + .floating-label-text {
+        top: 0.25rem;
+        font-size: 0.75rem;
+        color: #fff;
+    }
+    
+    /* Custom select styling */
+    .form-select.floating-input {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 16px 12px;
+        padding-right: 2.5rem;
+    }
+    
+    /* Input group styling */
+    .input-group {
+        position: relative;
+    }
+    
+    .input-group-icon {
+        position: absolute;
+        left: 1rem;
+        top: 65%;
+        transform: translateY(-50%);
+        z-index: 3;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.875rem;
+    }
+    
+    .input-group .floating-input {
+        padding-left: 2.5rem;
+    }
+    
+    .input-group .floating-label-text {
+        left: 2.5rem;
+    }
+    
+    /* Image upload styling */
+    .image-upload-container {
+        position: relative;
+    }
+    
+    .image-drop-zone {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px dashed rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
+        padding: 3rem 2rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .image-drop-zone:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+    
+    .image-drop-zone.drag-over {
+        background: rgba(42, 107, 156, 0.15);
+        border-color: #2A6B9C;
+    }
+    
+    .upload-icon {
+        font-size: 3rem;
+        color: rgba(255, 255, 255, 0.3);
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .image-drop-zone:hover .upload-icon {
+        color: #2A6B9C;
+        transform: scale(1.1);
+    }
+    
+    .image-preview {
+        text-align: center;
+    }
+    
+    .image-preview img {
+        max-width: 200px;
+        max-height: 200px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease;
+    }
+    
+    .image-preview img:hover {
+        transform: scale(1.05);
+    }
+    
+    /* Button enhancements */
+    /* FIX: Make button in page header clickable */
+.page-title-section .btn-medical-primary {
+    position: relative !important;
+    z-index: 9999 !important;
+    pointer-events: auto !important;
+}
+
+.page-title-section {
+    position: relative !important;
+    z-index: auto !important;
+    overflow: visible !important;
+}
+
+.page-title-section::before {
+    z-index: 1 !important;
+}
+
+.page-title-section > * {
+    position: relative !important;
+    z-index: 2 !important;
+}
+    .btn-medical-primary {
+        background: linear-gradient(135deg, #2A6B9C 0%, #1a486e 100%);
+        border: none;
+        color: #fff;
+        padding: 0.75rem 2rem;
+        border-radius: 10px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-medical-primary:hover {
+        background: linear-gradient(135deg, #1a486e 0%, #2A6B9C 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(42, 107, 156, 0.3);
+    }
+    
+    .btn-medical-outline {
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: #fff;
+        background: transparent;
+        padding: 0.75rem 2rem;
+        border-radius: 10px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-medical-outline:hover {
+        border-color: #fff;
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+    }
+    
+    /* Form validation styles */
+    .form-control.is-invalid,
+    .form-select.is-invalid {
+        border-color: #dc3545 !important;
+        background: rgba(220, 53, 69, 0.05) !important;
+    }
+    
+    .invalid-feedback {
+        color: #ff6b6b;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+    
+    /* Form text helper */
+    .form-text {
+        margin-top: 0.25rem;
+        font-size: 0.8125rem;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .form-actions {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+        }
+        
+        .action-buttons button {
+            width: 100%;
+        }
+        
+        .medical-card {
+            margin: 0 -1rem;
+            border-radius: 0;
+        }
+    }

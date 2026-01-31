@@ -7,7 +7,8 @@ class Inventory(BaseModel):
         on_delete=models.CASCADE,
         related_name='inventory'
     )
-    change_quantity = models.PositiveIntegerField()
+    quantity = models.PositiveIntegerField()
+    stock_alert_level = models.IntegerField(default=0)
 
     class Meta:
         db_table = 'inventory'

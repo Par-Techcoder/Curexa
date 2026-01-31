@@ -2,229 +2,654 @@
 {% block title %}Curexa Admin — Medicine Add {% endblock %}
 {% load static %}
 
-{% block content %}
-<div class="container-fluid p-4">
-    <div class="page-title-section">
-        <h1 class="h2 mb-0"><i class="fas fa-pills me-2"></i>Add New Medicine</h1>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="#" class="text-white">Dashboard</a></li>
-                <li class="breadcrumb-item"><a href="{% url 'medicine_list' %}" class="text-white">Medicines</a></li>
-                <li class="breadcrumb-item active text-white-50" aria-current="page">Add New</li>
-            </ol>
-        </nav>
+{% block page_header %}
+<!-- Breadcrumb above title -->
+<div class="breadcrumb-above-title">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb mb-0">
+      <li class="breadcrumb-item">
+        <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a href="{% url 'medicine_list' %}">Medicine</a>
+      </li>
+      <li class="breadcrumb-item active text-white-50" aria-current="page">Add New</li>
+    </ol>
+  </nav>
+</div>
+  <!-- Page Header -->
+  <div class="page-title-section">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <h1 class="page-title"><i class="fas fa-pills me-2"></i>Add New Medicine</h1>
+        <p class="page-subtitle">Add pharmaceutical products to your inventory</p>
+      </div>
+      <div class="d-none d-md-block">
+        <a href="{% url 'medicine_list' %}" class="btn btn-medical-outline me-2"><i class="fas fa-times me-1"></i>Cancel</a>
+        <button type="submit" form="addProductForm" class="btn btn-medical-primary"><i class="fas fa-check me-1"></i>Save Medicine</button>
+      </div>
     </div>
+  </div>
+{% endblock %}
 
-    <div class="card medical-border shadow-sm">
-        <div class="card-header bg-transparent">
-            <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Medicine Information</h5>
-        </div>
-        <div class="card-body">
-            <form id="addProductForm" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                
-                <!-- Product Basics Section -->
-                <div class="row mb-4">
-                    <div class="col-md-6 mb-3">
-                        <label for="productName" class="form-label">
-                            Product Name <span class="text-danger">*</span>
-                        </label>
-                        <input type="text" id="productName" name="productName" class="form-control" placeholder="e.g., Amoxicillin 500mg Capsules" required />
-                        <div class="invalid-feedback">Product name is required</div>
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card medical-card glass-effect shadow-lg">
+            <div class="card-header glass-header">
+                <div class="d-flex align-items-center">
+                    <div class="form-header-icon">
+                        <i class="fas fa-info-circle"></i>
                     </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="productSku" class="form-label">
-                            SKU <span class="text-danger">*</span>
-                        </label>
-                        <input type="text" id="productSku" name="productSku" class="form-control" placeholder="e.g., MED-AMX-500" required />
-                        <div class="invalid-feedback">SKU is required</div>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="productCategory" class="form-label">
-                            Category <span class="text-danger">*</span>
-                        </label>
-                        <select id="productCategory" name="productCategory" class="form-select" required>
-                            <option value="">Select Category</option>
-                            <option value="antibiotics">Antibiotics</option>
-                            <option value="pain-relievers">Pain Relievers</option>
-                            <option value="vitamins">Vitamins & Supplements</option>
-                            <option value="chronic">Chronic Condition Medications</option>
-                            <option value="first-aid">First Aid</option>
-                            <option value="personal-care">Personal Care</option>
-                            <option value="medical-devices">Medical Devices</option>
-                        </select>
-                        <div class="invalid-feedback">Category is required</div>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="manufacturer" class="form-label">
-                            Manufacturer <span class="text-danger">*</span>
-                        </label>
-                        <input type="text" id="manufacturer" name="manufacturer" class="form-control" placeholder="e.g., Pfizer" required />
-                        <div class="invalid-feedback">Manufacturer is required</div>
-                    </div>
-                </div>
-
-                <!-- Pricing & Inventory Section -->
-                <div class="row mb-4">
-                    <div class="col-md-3 mb-3">
-                        <label for="costPrice" class="form-label">
-                            Cost Price (₹) <span class="text-danger">*</span>
-                        </label>
-                        <div class="input-group">
-                            <span class="input-group-text">₹</span>
-                            <input type="number" id="costPrice" name="costPrice" class="form-control" placeholder="0.00" step="0.01" min="0" required />
-                        </div>
-                        <div class="invalid-feedback">Cost price is required</div>
-                    </div>
-
-                    <div class="col-md-3 mb-3">
-                        <label for="retailPrice" class="form-label">
-                            Retail Price (₹) <span class="text-danger">*</span>
-                        </label>
-                        <div class="input-group">
-                            <span class="input-group-text">₹</span>
-                            <input type="number" id="retailPrice" name="retailPrice" class="form-control" placeholder="0.00" step="0.01" min="0" required />
-                        </div>
-                        <div class="invalid-feedback">Retail price is required</div>
-                    </div>
-
-                    <div class="col-md-3 mb-3">
-                        <label for="stockQuantity" class="form-label">
-                            Stock Quantity <span class="text-danger">*</span>
-                        </label>
-                        <input type="number" id="stockQuantity" name="stockQuantity" class="form-control" placeholder="0" min="0" required />
-                        <div class="invalid-feedback">Stock quantity is required</div>
-                    </div>
-
-                    <div class="col-md-3 mb-3">
-                        <label for="reorderThreshold" class="form-label">
-                            Reorder Threshold
-                        </label>
-                        <input type="number" id="reorderThreshold" name="reorderThreshold" class="form-control" placeholder="10" min="0" />
-                    </div>
-                </div>
-
-                <!-- Product Details Section -->
-                <div class="row mb-4">
-                    <div class="col-12 mb-3">
-                        <label for="description" class="form-label">
-                            Description <span class="text-danger">*</span>
-                        </label>
-                        <textarea id="description" name="description" rows="3" class="form-control" placeholder="Provide detailed product description..." required></textarea>
-                        <div class="invalid-feedback">Description is required</div>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="prescriptionRequired" class="form-label">
-                            Prescription Required
-                        </label>
-                        <select id="prescriptionRequired" name="prescriptionRequired" class="form-select">
-                            <option value="no">No</option>
-                            <option value="yes">Yes</option>
-                            <option value="otc">Over-the-Counter</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="storageConditions" class="form-label">
-                            Storage Conditions
-                        </label>
-                        <input type="text" id="storageConditions" name="storageConditions" class="form-control" placeholder="e.g., Store in a cool, dry place" />
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="expirationDate" class="form-label">
-                            Expiration Date
-                        </label>
-                        <input type="date" id="expirationDate" name="expirationDate" class="form-control" />
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        <label for="dosageInfo" class="form-label">
-                            Dosage Information
-                        </label>
-                        <input type="text" id="dosageInfo" name="dosageInfo" class="form-control" placeholder="e.g., 500mg tablets, take 1-2 tablets daily" />
-                    </div>
-                </div>
-
-                <!-- Image Upload Section -->
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <label class="form-label">Product Image</label>
-                        <div class="border rounded p-3 text-center">
-                            <div id="imageUploadArea" class="cursor-pointer">
-                                <i class="fas fa-cloud-upload-alt fa-2x text-primary mb-2"></i>
-                                <p class="mb-1">Drop image here or click to upload</p>
-                                <p class="text-muted small">PNG, JPG up to 5MB</p>
-                            </div>
-                            <input type="file" id="imageInput" name="image" accept="image/*" class="d-none" />
-                            <div id="imagePreview" class="mt-3 text-center"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="d-flex justify-content-between mt-4">
-                    <a href="{% url 'medicine_list' %}" class="btn btn-outline-secondary">
-                        <i class="fas fa-arrow-left me-1"></i> Back to List
-                    </a>
                     <div>
-                        <button type="button" id="saveDraftBtn" class="btn btn-outline-primary me-2">
-                            Save Draft
-                        </button>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save me-1"></i> Save Medicine
-                        </button>
+                        <h5 class="mb-0">Medicine Information</h5>
+                        <p class="text-sm text-white-70 mb-0">Fill in the details below to add new medicine</p>
                     </div>
                 </div>
-            </form>
+            </div>
+            <div class="card-body">
+                <form id="addProductForm" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    
+                    <!-- Section 1: Product Basics -->
+                    <div class="form-section mb-5">
+                        <div class="section-header mb-4">
+                            <h6 class="section-title"><i class="fas fa-box me-2"></i>Product Basics</h6>
+                            <p class="section-subtitle">Basic information about the medicine</p>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="form-group floating-label">
+                                    <input type="text" id="name" name="name" class="form-control floating-input" placeholder=" " required />
+                                    <label for="name" class="floating-label-text">
+                                        Product Name <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="invalid-feedback">Please enter product name</div>
+                                    <small class="form-text text-white-60">e.g., Amoxicillin 500mg Capsules</small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <div class="form-group floating-label">
+                                    <input type="text" id="SKU" name="SKU" class="form-control floating-input" placeholder=" " required />
+                                    <label for="SKU" class="floating-label-text">
+                                        SKU <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="invalid-feedback">Please enter SKU</div>
+                                    <small class="form-text text-white-60">e.g., MED-AMX-500</small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <div class="form-group floating-label">
+                                    <select id="category" name="category" class="form-select floating-input" required>
+                                        <option value="">Select a Category</option>
+                                        <!-- Categories will be populated dynamically from database -->
+                                        {% for category in categories %}
+                                        <option value="{{ category.id }}">{{ category.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label for="category" class="floating-label-text">
+                                        Category <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="invalid-feedback">Please select category</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <div class="form-group floating-label">
+                                    <input type="text" id="manufacturer" name="manufacturer" class="form-control floating-input" placeholder=" " />
+                                    <label for="manufacturer" class="floating-label-text">
+                                        Manufacturer
+                                    </label>
+                                    <div class="invalid-feedback">Please enter manufacturer</div>
+                                    <small class="form-text text-white-60">e.g., Pfizer</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Pricing & Inventory -->
+                    <div class="form-section mb-5">
+                        <div class="section-header mb-4">
+                            <h6 class="section-title"><i class="fas fa-chart-line me-2"></i>Pricing & Inventory</h6>
+                            <p class="section-subtitle">Financial and stock information</p>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-3 mb-4">
+                                <div class="form-group floating-label">
+                                    <div class="input-group">
+                                        <span class="input-group-icon">₹</span>
+                                        <input type="number" id="cost_price" name="cost_price" class="form-control floating-input" placeholder=" " step="0.01" min="0" required />
+                                    </div>
+                                    <label for="cost_price" class="floating-label-text">
+                                        Cost Price <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="invalid-feedback">Please enter cost price</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 mb-4">
+                                <div class="form-group floating-label">
+                                    <div class="input-group">
+                                        <span class="input-group-icon">₹</span>
+                                        <input type="number" id="retail_price" name="retail_price" class="form-control floating-input" placeholder=" " step="0.01" min="0" required />
+                                    </div>
+                                    <label for="retail_price" class="floating-label-text">
+                                        Retail Price <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="invalid-feedback">Please enter retail price</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 mb-4">
+                                <div class="form-group floating-label">
+                                    <input type="number" id="change_quantity" name="change_quantity" class="form-control floating-input" placeholder=" " min="0" required />
+                                    <label for="change_quantity" class="floating-label-text">
+                                        Stock Quantity <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="invalid-feedback">Please enter stock quantity</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 mb-4">
+                                <div class="form-group floating-label">
+                                    <input type="number" id="stock_alert" name="stock_alert" class="form-control floating-input" placeholder=" " min="0" />
+                                    <label for="stock_alert" class="floating-label-text">
+                                        Stock Alert Level
+                                    </label>
+                                    <small class="form-text text-white-60">Low stock alert level</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Product Details -->
+                    <div class="form-section mb-5">
+                        <div class="section-header mb-4">
+                            <h6 class="section-title"><i class="fas fa-file-alt me-2"></i>Product Details</h6>
+                            <p class="section-subtitle">Additional medicine information</p>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12 mb-4">
+                                <div class="form-group floating-label">
+                                    <textarea id="description" name="description" rows="3" class="form-control floating-textarea" placeholder=" "></textarea>
+                                    <label for="description" class="floating-label-text">
+                                        Description
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mb-4">
+                                <div class="form-group floating-label">
+                                    <select id="is_prescription_required" name="is_prescription_required" class="form-select floating-input">
+                                        <option value="false">No Prescription Required</option>
+                                        <option value="true">Prescription Required</option>
+                                    </select>
+                                    <label for="is_prescription_required" class="floating-label-text">
+                                        Prescription Required
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mb-4">
+                                <div class="form-group floating-label">
+                                    <select id="classification" name="classification" class="form-select floating-input" required>
+                                        <option value="">Select Dosage Form</option>
+                                        {% for value, name in dosage_form %}
+                                        <option value="{{ value }}">{{ name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label for="classification" class="floating-label-text">
+                                        Dosage Form <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="invalid-feedback">Please select dosage form</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mb-4">
+                                <div class="form-group floating-label">
+                                    <select id="age_group" name="age_group" class="form-select floating-input" required>
+                                        <option value="">Select Age Group</option>
+                                        {% for value, name in age_group %}
+                                        <option value="{{ value }}">{{ name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label for="age_group" class="floating-label-text">
+                                        Age Group <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="invalid-feedback">Please select age group</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <div class="form-group floating-label">
+                                    <input type="text" id="salt_composition" name="salt_composition" class="form-control floating-input" placeholder=" " />
+                                    <label for="salt_composition" class="floating-label-text">
+                                        Salt Composition
+                                    </label>
+                                    <small class="form-text text-white-60">e.g., Amoxicillin 500mg + Clavulanic Acid 125mg</small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <div class="form-group floating-label">
+                                    <input type="text" id="dosage_strength" name="dosage_strength" class="form-control floating-input" placeholder=" " required />
+                                    <label for="dosage_strength" class="floating-label-text">
+                                        Dosage Strength <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="invalid-feedback">Please enter dosage strength</div>
+                                    <small class="form-text text-white-60">e.g., 500mg</small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <div class="form-group floating-label">
+                                    <input type="date" id="manufacture_date" name="manufacture_date" class="form-control floating-input" placeholder=" " />
+                                    <label for="manufacture_date" class="floating-label-text">
+                                        Manufacture Date
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <div class="form-group floating-label">
+                                    <input type="date" id="expiry_date" name="expiry_date" class="form-control floating-input" placeholder=" " />
+                                    <label for="expiry_date" class="floating-label-text">
+                                        Expiry Date
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Image Upload -->
+                    <div class="form-section">
+                        <div class="section-header mb-4">
+                            <h6 class="section-title"><i class="fas fa-image me-2"></i>Product Images</h6>
+                            <p class="section-subtitle">Upload medicine images (Multiple images supported)</p>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="image-upload-container">
+                                    <div id="imageUploadArea" class="image-drop-zone">
+                                        <div class="upload-icon">
+                                            <i class="fas fa-cloud-upload-alt"></i>
+                                        </div>
+                                        <div class="upload-text">
+                                            <h6 class="mb-2">Drop images here or click to upload</h6>
+                                            <p class="text-sm text-white-60 mb-0">Supports PNG, JPG up to 5MB each</p>
+                                        </div>
+                                        <button type="button" class="btn btn-sm btn-outline-light mt-3">
+                                            <i class="fas fa-folder-open me-1"></i> Browse Files
+                                        </button>
+                                    </div>
+                                    <input type="file" id="medicine_images" name="medicine_images" accept="image/*" class="d-none" multiple />
+                                    <div id="imagePreview" class="image-preview mt-3"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions mt-5 pt-4 border-top border-white-10">
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'medicine_list' %}" class="btn btn-outline-light btn-lg px-4">
+                                <i class="fas fa-arrow-left me-2"></i> Back to List
+                            </a>
+                            <div class="action-buttons">
+                                <button type="button" id="resetForm" class="btn btn-outline-light btn-lg px-4 me-3">
+                                    <i class="fas fa-undo me-2"></i> Reset Form
+                                </button>
+                                <button type="submit" class="btn btn-medical-primary btn-lg px-5">
+                                    <i class="fas fa-check me-2"></i> Save Medicine
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 
 <style>
-    /* Custom styles for the medicine form */
-    .cursor-pointer {
-        cursor: pointer;
+    /* Enhanced glass effect card */
+    .medical-card {
+        background: rgba(115, 175, 178, 0.85);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     
-    #imagePreview img {
-        max-width: 200px;
-        max-height: 200px;
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    .medical-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2) !important;
     }
     
-    .card {
-        background: rgba(30, 47, 64, 0.7);
+    .glass-header {
+        background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        padding: 1.5rem 1.5rem;
+    }
+    
+    .form-header-icon {
+        width: 48px;
+        height: 48px;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        font-size: 1.25rem;
         color: #fff;
     }
     
-    .form-control, .form-select {
-        background-color: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: #fff;
+    /* Section styling */
+    .form-section {
+        position: relative;
     }
     
-    .form-control:focus, .form-select:focus {
-        background-color: rgba(255, 255, 255, 0.15);
-        border-color: #2A6B9C;
-        box-shadow: 0 0 0 0.2rem rgba(42, 107, 156, 0.25);
-        color: #fff;
+    .section-header {
+        position: relative;
+        padding-left: 2.5rem;
     }
     
-    .form-label {
-        color: #e9ecef;
+    .section-header::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+    }
+    
+    .section-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #fff;
+        margin-bottom: 0.25rem;
+    }
+    
+    .section-subtitle {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 0;
+    }
+    
+    /* Floating label form controls */
+    .form-group.floating-label {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+    
+    .floating-input,
+    .floating-textarea {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 2px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 12px;
+        padding: 1.5rem 1rem 0.5rem;
+        height: auto;
+        transition: all 0.3s ease;
+    }
+    
+    .floating-textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+    
+    .floating-input:focus,
+    .floating-textarea:focus {
+        background: rgba(255, 255, 255, 0.12) !important;
+        border-color: rgba(255, 255, 255, 0.3) !important;
+        box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .floating-label-text {
+        position: absolute;
+        top: 0.75rem;
+        left: 1rem;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.875rem;
         font-weight: 500;
+        pointer-events: none;
+        transition: all 0.2s ease;
+        margin-bottom: 0;
     }
     
-    .input-group-text {
-        background-color: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: #e9ecef;
+    .floating-input:focus + .floating-label-text,
+    .floating-input:not(:placeholder-shown) + .floating-label-text,
+    .floating-textarea:focus + .floating-label-text,
+    .floating-textarea:not(:placeholder-shown) + .floating-label-text {
+        top: 0.25rem;
+        font-size: 0.75rem;
+        color: #fff;
+    }
+    
+    /* Custom select styling */
+    .form-select.floating-input {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 16px 12px;
+        padding-right: 2.5rem;
+    }
+    
+    /* Input group styling */
+    .input-group {
+        position: relative;
+    }
+    
+    .input-group-icon {
+        position: absolute;
+        left: 1rem;
+        top: 65%;
+        transform: translateY(-50%);
+        z-index: 3;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.875rem;
+    }
+    
+    .input-group .floating-input {
+        padding-left: 2.5rem;
+    }
+    
+    .input-group .floating-label-text {
+        left: 2.5rem;
+    }
+    
+    /* Image upload styling */
+    .image-upload-container {
+        position: relative;
+    }
+    
+    .image-drop-zone {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px dashed rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
+        padding: 3rem 2rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .image-drop-zone:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+    
+    .image-drop-zone.drag-over {
+        background: rgba(42, 107, 156, 0.15);
+        border-color: #2A6B9C;
+    }
+    
+    .upload-icon {
+        font-size: 3rem;
+        color: rgba(255, 255, 255, 0.3);
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .image-drop-zone:hover .upload-icon {
+        color: #2A6B9C;
+        transform: scale(1.1);
+    }
+    
+    .image-preview {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .image-preview-item {
+        position: relative;
+        width: 150px;
+        height: 150px;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .image-preview-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .image-preview-item .remove-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        width: 25px;
+        height: 25px;
+        background: rgba(220, 53, 69, 0.9);
+        border: none;
+        border-radius: 50%;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 12px;
+    }
+    
+    .image-preview-item .remove-btn:hover {
+        background: rgba(220, 53, 69, 1);
+    }
+    
+    /* Button enhancements */
+    .page-title-section .btn-medical-primary {
+        position: relative !important;
+        z-index: 9999 !important;
+        pointer-events: auto !important;
+    }
+    
+    .page-title-section {
+        position: relative !important;
+        z-index: auto !important;
+        overflow: visible !important;
+    }
+    
+    .page-title-section::before {
+        z-index: 1 !important;
+    }
+    
+    .page-title-section > * {
+        position: relative !important;
+        z-index: 2 !important;
+    }
+    
+    .btn-medical-primary {
+        background: linear-gradient(135deg, #2A6B9C 0%, #1a486e 100%);
+        border: none;
+        color: #fff;
+        padding: 0.75rem 2rem;
+        border-radius: 10px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-medical-primary:hover {
+        background: linear-gradient(135deg, #1a486e 0%, #2A6B9C 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(42, 107, 156, 0.3);
+    }
+    
+    .btn-medical-outline {
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        color: #fff;
+        background: transparent;
+        padding: 0.75rem 2rem;
+        border-radius: 10px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-medical-outline:hover {
+        border-color: #fff;
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+    }
+    
+    /* Form validation styles */
+    .form-control.is-invalid,
+    .form-select.is-invalid {
+        border-color: #dc3545 !important;
+        background: rgba(220, 53, 69, 0.05) !important;
+    }
+    
+    .invalid-feedback {
+        color: #ff6b6b;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+    
+    /* Form text helper */
+    .form-text {
+        margin-top: 0.25rem;
+        font-size: 0.8125rem;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .form-actions {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+        }
+        
+        .action-buttons button {
+            width: 100%;
+        }
+        
+        .medical-card {
+            margin: 0 -1rem;
+            border-radius: 0;
+        }
+        
+        .image-preview-item {
+            width: 120px;
+            height: 120px;
+        }
     }
 </style>
 
@@ -237,83 +662,269 @@
             medicineMenu.classList.add('active');
         }
         
+        // Initialize floating labels
+        initFloatingLabels();
+        
         // Image upload functionality
         const imageUploadArea = document.getElementById('imageUploadArea');
-        const imageInput = document.getElementById('imageInput');
+        const imageInput = document.getElementById('medicine_images');
         const imagePreview = document.getElementById('imagePreview');
+        const browseBtn = imageUploadArea.querySelector('button');
+        let uploadedImages = [];
         
-        imageUploadArea.addEventListener('click', function() {
+        // Click handlers for image upload
+        imageUploadArea.addEventListener('click', function(e) {
+            if (e.target !== browseBtn) {
+                imageInput.click();
+            }
+        });
+        
+        browseBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
             imageInput.click();
         });
         
-        imageInput.addEventListener('change', function(e) {
-            if (e.target.files.length > 0) {
-                const file = e.target.files[0];
-                if (file.type.match('image.*')) {
-                    const reader = new FileReader();
-                    
-                    reader.onload = function(e) {
-                        imagePreview.innerHTML = `
-                            <img src="${e.target.result}" alt="Preview" class="img-thumbnail">
-                            <button type="button" class="btn btn-sm btn-danger mt-2" onclick="document.getElementById('imagePreview').innerHTML=''; document.getElementById('imageInput').value='';">
-                                <i class="fas fa-times me-1"></i> Remove
-                            </button>
-                        `;
-                    };
-                    
-                    reader.readAsDataURL(file);
-                }
-            }
-        });
+        imageInput.addEventListener('change', handleImageUpload);
         
         // Drag and drop for images
         imageUploadArea.addEventListener('dragover', function(e) {
             e.preventDefault();
-            imageUploadArea.style.backgroundColor = 'rgba(42, 107, 156, 0.2)';
+            imageUploadArea.classList.add('drag-over');
         });
         
         imageUploadArea.addEventListener('dragleave', function() {
-            imageUploadArea.style.backgroundColor = 'transparent';
+            imageUploadArea.classList.remove('drag-over');
         });
         
         imageUploadArea.addEventListener('drop', function(e) {
             e.preventDefault();
-            imageUploadArea.style.backgroundColor = 'transparent';
+            imageUploadArea.classList.remove('drag-over');
             
             if (e.dataTransfer.files.length > 0) {
                 imageInput.files = e.dataTransfer.files;
-                const event = new Event('change');
-                imageInput.dispatchEvent(event);
+                handleImageUpload();
             }
         });
+        
+        function handleImageUpload() {
+            if (imageInput.files.length > 0) {
+                const files = Array.from(imageInput.files);
+                
+                files.forEach((file, index) => {
+                    if (file.type.match('image.*')) {
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(e) {
+                            const imageId = Date.now() + index;
+                            uploadedImages.push({
+                                id: imageId,
+                                src: e.target.result,
+                                file: file
+                            });
+                            
+                            displayImagePreview();
+                        };
+                        
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        }
+        
+        function displayImagePreview() {
+            imagePreview.innerHTML = '';
+            
+            uploadedImages.forEach((image, index) => {
+                const imageItem = document.createElement('div');
+                imageItem.className = 'image-preview-item';
+                imageItem.innerHTML = `
+                    <img src="${image.src}" alt="Preview ${index + 1}">
+                    <button type="button" class="remove-btn" data-index="${index}">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                imagePreview.appendChild(imageItem);
+            });
+            
+            // Add remove button event listeners
+            document.querySelectorAll('.remove-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const index = parseInt(this.getAttribute('data-index'));
+                    uploadedImages.splice(index, 1);
+                    
+                    // Update DataTransfer files
+                    const dataTransfer = new DataTransfer();
+                    uploadedImages.forEach(img => {
+                        if (img.file) {
+                            dataTransfer.items.add(img.file);
+                        }
+                    });
+                    imageInput.files = dataTransfer.files;
+                    
+                    displayImagePreview();
+                });
+            });
+        }
         
         // Form validation
         const form = document.getElementById('addProductForm');
         form.addEventListener('submit', function(e) {
-            let isValid = true;
-            
-            // Check required fields
-            const requiredFields = form.querySelectorAll('[required]');
-            requiredFields.forEach(field => {
-                if (!field.value.trim()) {
-                    field.classList.add('is-invalid');
-                    isValid = false;
-                } else {
-                    field.classList.remove('is-invalid');
-                }
-            });
-            
-            if (!isValid) {
+            if (!form.checkValidity()) {
                 e.preventDefault();
-                // Show error message
-                alert('Please fill in all required fields.');
+                e.stopPropagation();
+                
+                // Add validation styles
+                form.classList.add('was-validated');
+                
+                // Scroll to first error
+                const firstInvalid = form.querySelector('.is-invalid');
+                if (firstInvalid) {
+                    firstInvalid.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center' 
+                    });
+                }
+            } else {
+                // Prepare images for submission
+                const imageInputs = document.createElement('div');
+                uploadedImages.forEach((image, index) => {
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = `medicine_images[]`;
+                    hiddenInput.value = image.src.split(',')[1]; // Get base64 data
+                    imageInputs.appendChild(hiddenInput);
+                });
+                form.appendChild(imageInputs);
             }
         });
         
-        // Save draft functionality
-        document.getElementById('saveDraftBtn').addEventListener('click', function() {
-            // This would save form data temporarily without validation
-            alert('Draft saved successfully!');
+        // Real-time validation
+        const inputs = form.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                validateField(this);
+            });
+            
+            input.addEventListener('input', function() {
+                if (this.classList.contains('is-invalid')) {
+                    validateField(this);
+                }
+            });
+        });
+        
+        function validateField(field) {
+            if (field.hasAttribute('required') && !field.value.trim()) {
+                field.classList.add('is-invalid');
+            } else {
+                field.classList.remove('is-invalid');
+                field.classList.add('is-valid');
+                
+                // Remove valid class after animation
+                setTimeout(() => {
+                    field.classList.remove('is-valid');
+                }, 2000);
+            }
+        }
+        
+        // Reset form functionality
+        document.getElementById('resetForm').addEventListener('click', function() {
+            if (confirm('Are you sure you want to reset the form? All entered data will be lost.')) {
+                form.reset();
+                form.classList.remove('was-validated');
+                uploadedImages = [];
+                imagePreview.innerHTML = '';
+                imageInput.value = '';
+                
+                // Reset floating labels
+                initFloatingLabels();
+                
+                showNotification('Form has been reset', 'info');
+            }
+        });
+
+        function initFloatingLabels() {
+            const floatingInputs = document.querySelectorAll('.floating-input, .floating-textarea');
+            floatingInputs.forEach(input => {
+                // Set placeholder attribute for floating label detection
+                input.setAttribute('placeholder', ' ');
+                
+                // Initialize label position based on existing value
+                if (input.value.trim()) {
+                    const label = input.nextElementSibling;
+                    if (label && label.classList.contains('floating-label-text')) {
+                        label.classList.add('active');
+                    }
+                }
+                
+                // Add input event for dynamic updates
+                input.addEventListener('input', function() {
+                    const label = this.nextElementSibling;
+                    if (label && label.classList.contains('floating-label-text')) {
+                        if (this.value.trim()) {
+                            label.classList.add('active');
+                        } else {
+                            label.classList.remove('active');
+                        }
+                    }
+                });
+            });
+        }
+        
+        function showNotification(message, type = 'info', showRestore = false) {
+            // Remove existing notifications
+            const existingNotifications = document.querySelectorAll('.custom-notification');
+            existingNotifications.forEach(notification => notification.remove());
+            
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `custom-notification alert alert-${type} alert-dismissible fade show`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 9999;
+                min-width: 300px;
+                backdrop-filter: blur(10px);
+                background: ${type === 'success' ? 'rgba(40, 167, 69, 0.9)' : 
+                           type === 'warning' ? 'rgba(255, 193, 7, 0.9)' : 
+                           'rgba(23, 162, 184, 0.9)'};
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                color: #fff;
+                border-radius: 10px;
+            `;
+            
+            notification.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 
+                                  type === 'warning' ? 'exclamation-triangle' : 
+                                  'info-circle'} me-2"></i>
+                    <span>${message}</span>
+                    ${showRestore ? '<button class="btn btn-sm btn-outline-light ms-3 restore-draft-btn">Restore</button>' : ''}
+                    <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+        
+        // Add animation on form focus
+        const formControls = form.querySelectorAll('.floating-input, .floating-textarea');
+        formControls.forEach(control => {
+            control.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateY(-2px)';
+            });
+            
+            control.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0)';
+            });
         });
     });
 </script>
